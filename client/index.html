@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Babylon.js Simple Plane and FPS Controller</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<canvas id="renderCanvas"></canvas>
+<script src="https://cdn.babylonjs.com/babylon.js"></script>
+<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+<script type="module">
+    import Game from "./js/Game.js";
+    import { SceneDefault } from "./js/scenes/SceneDefault.js";
+
+    const game = new Game("renderCanvas");
+    SceneDefault.createScene(game.scenes.SCENE_DEFAULT.scene);
+    game.loadScene("SCENE_DEFAULT");
+    game.player.setPosition(0, 0, 0);
+</script>
+</body>
+</html>
