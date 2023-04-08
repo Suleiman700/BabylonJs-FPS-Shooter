@@ -320,9 +320,23 @@
                 bullet.position.x = camera.position.x;
                 bullet.position.y = camera.position.y;
                 bullet.position.z = camera.position.z;
-                // ball.parent = camera;
                 bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.25, restitution: 0 }, scene);
-                translate(bullet, camera.getForwardRay().direction, 0);
+                translate(bullet, camera.getForwardRay().direction, 1000);
+
+// Add a callback function to the onBeforeRenderObservable event
+                var hitTarget = false;
+                var callback = function() {
+                    // Check if the bullet intersects with the target mesh
+                    if (!hitTarget && bullet.intersectsMesh(target, false)) {
+                        console.log("Bullet hit the target!");
+                        bullet.dispose();
+                        // Remove the callback function from the observable
+                        scene.onBeforeRenderObservable.removeCallback(callback);
+                        hitTarget = true;
+                    }
+                };
+
+                scene.onBeforeRenderObservable.add(callback);
 
                 // var bullet = BABYLON.Mesh.CreateSphere("bullet", 12, 30, scene);
                 // var shootedball = bullet.createInstance("shootedball");
@@ -574,7 +588,7 @@
                     auti = 100;
                     auam--;
                 }
-        
+
                 if (auti >= 0) auti -= dT;
         
                 if (health < 0.01) {
