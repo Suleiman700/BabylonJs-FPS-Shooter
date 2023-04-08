@@ -136,16 +136,16 @@
             advancedTexture.addControl(ammocount1);
 
             // enemy health bar
-            var sheal = new BABYLON.GUI.Rectangle();
-            sheal.width = 0.2;
-            sheal.height = "25px";
-            sheal.cornerRadius = 20;
-            sheal.color = "black";
-            sheal.thickness = 3;
-            sheal.background = "green";
-            advancedTexture.addControl(sheal);
-            sheal.linkWithMesh(target);   
-            sheal.linkOffsetY = -80;
+            // var sheal = new BABYLON.GUI.Rectangle();
+            // sheal.width = 0.2;
+            // sheal.height = "25px";
+            // sheal.cornerRadius = 20;
+            // sheal.color = "black";
+            // sheal.thickness = 3;
+            // sheal.background = "green";
+            // advancedTexture.addControl(sheal);
+            // sheal.linkWithMesh(target);
+            // sheal.linkOffsetY = -80;
         
         
             canvas.onclick = function() {
@@ -297,13 +297,54 @@
             box5.checkCollisions = true;
         
             var health = 1;
+
             var target = BABYLON.Mesh.CreateSphere("target", 12, 5, scene);
+            target.name = 'target'
             target.position.y = 5;
-            target.position.x = 10;
+            target.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
+            target.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
             target.material = new BABYLON.StandardMaterial("mat", scene);
             target.material.emissiveColor = new BABYLON.Color3(health, health, health);
-            sheal.linkWithMesh(target);   
-            sheal.linkOffsetY = -80;
+
+            // var targetHealth = 100;
+            // // Create an array to store the target meshes
+            // var targets = [];
+            //
+            //
+            // // Create 5 targets
+            // for (var i = 0; i < 5; i++) {
+            //     var target = BABYLON.Mesh.CreateSphere("target" + i, 12, 5, scene);
+            //     target.name = 'target'
+            //     target.position.y = 5;
+            //     target.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
+            //     target.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
+            //     target.material = new BABYLON.StandardMaterial("mat", scene);
+            //     target.health = targetHealth
+            //     target.material.emissiveColor = new BABYLON.Color3(target.health, target.health, target.health);
+            //
+            //     // enemy health bar
+            //     var enemyHealthBar = new BABYLON.GUI.Rectangle();
+            //     enemyHealthBar.width = 0.2;
+            //     enemyHealthBar.height = "25px";
+            //     enemyHealthBar.cornerRadius = 20;
+            //     enemyHealthBar.color = "black";
+            //     enemyHealthBar.thickness = 3;
+            //     enemyHealthBar.background = "green";
+            //     advancedTexture.addControl(enemyHealthBar);
+            //     enemyHealthBar.linkWithMesh(target);
+            //     enemyHealthBar.linkOffsetY = -80;
+            //
+            //     targets.push(target); // Add target to the array
+            // }
+
+            // Link the shield to the first target in the array
+            // var target = BABYLON.Mesh.CreateSphere("target", 12, 5, scene);
+            // target.position.y = 5;
+            // target.position.x = 10;
+            // target.material = new BABYLON.StandardMaterial("mat", scene);
+            // target.material.emissiveColor = new BABYLON.Color3(health, health, health);
+            // sheal.linkWithMesh(target);
+            // sheal.linkOffsetY = -80;
 
             var translate = function (mesh, direction, power) {
                 mesh.physicsImpostor.setLinearVelocity(
@@ -313,7 +354,7 @@
             }
 
             function PEW() {
-                console.log('shoot')
+                console.log('shoot');
 
                 var bulletMesh = new BABYLON.Mesh("bulletMesh", scene);
                 var bullet = BABYLON.Mesh.CreateSphere("bullet", 12, 1, scene, false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
@@ -321,36 +362,29 @@
                 bullet.position.y = camera.position.y;
                 bullet.position.z = camera.position.z;
                 bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.25, restitution: 0 }, scene);
-                translate(bullet, camera.getForwardRay().direction, 1000);
+                translate(bullet, camera.getForwardRay().direction, 2000);
 
-// Add a callback function to the onBeforeRenderObservable event
-                var hitTarget = false;
-                var callback = function() {
-                    // Check if the bullet intersects with the target mesh
-                    if (!hitTarget && bullet.intersectsMesh(target, false)) {
-                        console.log("Bullet hit the target!");
-                        bullet.dispose();
-                        // Remove the callback function from the observable
-                        scene.onBeforeRenderObservable.removeCallback(callback);
-                        hitTarget = true;
-                    }
-                };
-
-                scene.onBeforeRenderObservable.add(callback);
-
-                // var bullet = BABYLON.Mesh.CreateSphere("bullet", 12, 30, scene);
-                // var shootedball = bullet.createInstance("shootedball");
-                // shootedball.position.x = camera.position.x;
-                // shootedball.position.y = camera.position.y;
-                // shootedball.position.z = camera.position.z;
-                // shootedball.physicsImpostor = new BABYLON.PhysicsImpostor(shootedball, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.25, restitution: 0 }, scene);
-                // shootedball.dispose()
-                // translate(shootedball, camera.getForwardRay().direction, 1000);
-
-                // delete bullet after time
+// delete bullet after time
                 setTimeout(() => {
                     bullet.dispose()
                 }, 3000)
+
+// Create a ray from the bullet's position and direction
+                var ray = new BABYLON.Ray(bullet.position, camera.getForwardRay().direction);
+
+// Check if the ray intersects with the target mesh
+                var hit = scene.pickWithRay(ray, function(mesh) {
+                    return mesh.name === "target";
+                });
+
+                if (hit.pickedMesh) {
+                    console.log("Bullet hit the target!");
+                    console.log(hit.pickedMesh.health);
+                    hit.pickedMesh.health -= 1;
+                    if (hit.pickedMesh.health <= 0) {
+                        hit.pickedMesh.dispose();
+                    }
+                }
 
 
 
@@ -559,7 +593,7 @@
             var contin = true;
         
             var update = function() {
-                sheal.width = health/10;
+                // sheal.width = health/10;
                 console.wipe();
                 //console.out();
                 camera.speed = speed + spood;
