@@ -217,6 +217,28 @@
                     ak.parent = akm;
                 }
             });
+
+
+
+
+
+// create a new asset manager to handle the model
+            var assetsManager = new BABYLON.AssetsManager(scene);
+
+// create a new task to load the model
+            var houseTask = assetsManager.addMeshTask("house task", "", "./assets/models/buildings/", "forest_house.glb");
+
+// set the callback function to be called when the model is loaded
+            houseTask.onSuccess = function (task) {
+                // get the loaded mesh
+                var houseMesh = task.loadedMeshes[0];
+
+                // set the position of the mesh
+                houseMesh.position = new BABYLON.Vector3(-5, 0, 0);
+            };
+
+// load all the assets in the asset manager
+            assetsManager.load();
         
             
         
@@ -264,7 +286,7 @@
             var ground0 = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, scene);
             ground0.material = new BABYLON.GridMaterial("gmat0", scene);
             ground0.checkCollisions = true;
-        
+
             var ground1 = BABYLON.Mesh.CreateGround("ground1", 250, 250, 2, scene);
             ground1.material = new BABYLON.GridMaterial("gmat1", scene);
             ground1.position.z = 125;
@@ -283,7 +305,7 @@
             box2.position.y = -1;
             box2.position.z = 2;
             box2.checkCollisions = true;
-            var box3 = new BABYLON.Mesh.CreateBox("box3", 5, scene);
+            var box3 = BABYLON.Mesh.CreateBox("box3", new BABYLON.Vector3(300, 200, 1), scene);
             box3.position.y = -0.5;
             box3.position.z = 3;
             box3.checkCollisions = true;
@@ -300,42 +322,111 @@
 
             var target = BABYLON.Mesh.CreateSphere("target", 12, 5, scene);
             target.name = 'target'
-            target.position.y = 5;
+            target.position.y = 50;
+            target.health = 500;
             target.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
             target.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
             target.material = new BABYLON.StandardMaterial("mat", scene);
             target.material.emissiveColor = new BABYLON.Color3(health, health, health);
 
-            // var targetHealth = 100;
-            // // Create an array to store the target meshes
-            // var targets = [];
-            //
-            //
-            // // Create 5 targets
-            // for (var i = 0; i < 5; i++) {
-            //     var target = BABYLON.Mesh.CreateSphere("target" + i, 12, 5, scene);
-            //     target.name = 'target'
-            //     target.position.y = 5;
-            //     target.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
-            //     target.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
-            //     target.material = new BABYLON.StandardMaterial("mat", scene);
-            //     target.health = targetHealth
-            //     target.material.emissiveColor = new BABYLON.Color3(target.health, target.health, target.health);
-            //
-            //     // enemy health bar
-            //     var enemyHealthBar = new BABYLON.GUI.Rectangle();
-            //     enemyHealthBar.width = 0.2;
-            //     enemyHealthBar.height = "25px";
-            //     enemyHealthBar.cornerRadius = 20;
-            //     enemyHealthBar.color = "black";
-            //     enemyHealthBar.thickness = 3;
-            //     enemyHealthBar.background = "green";
-            //     advancedTexture.addControl(enemyHealthBar);
-            //     enemyHealthBar.linkWithMesh(target);
-            //     enemyHealthBar.linkOffsetY = -80;
-            //
-            //     targets.push(target); // Add target to the array
-            // }
+            var targetHealth = 100;
+            // Create an array to store the target meshes
+            var zombies = [];
+
+            // Create 1 targets
+            for (var i = 0; i < 20; i++) {
+                // var zombie = BABYLON.Mesh.CreateSphere("zombie" + i, 12, 5, scene);
+                var zombie = BABYLON.MeshBuilder.CreateCylinder("zombie", {height: 4, diameter: 2, tessellation: 3}, scene);
+                // zombie.scaling.y = 0.5; // Set the scaling of the cylinder to make it half the original height
+
+                zombie.name = 'zombie'
+                // zombie.position.y = 5;
+                zombie.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
+                zombie.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
+                zombie.material = new BABYLON.StandardMaterial("mat", scene);
+                zombie.health = targetHealth
+                zombie.material.emissiveColor = new BABYLON.Color3(zombie.health, zombie.health, zombie.health);
+
+                // enemy health bar
+                var enemyHealthBar = new BABYLON.GUI.Rectangle();
+                enemyHealthBar.width = "100px";
+                enemyHealthBar.height = "10px";
+                enemyHealthBar.cornerRadius = 20;
+                enemyHealthBar.color = "black";
+                enemyHealthBar.thickness = 3;
+                enemyHealthBar.background = "green";
+                advancedTexture.addControl(enemyHealthBar);
+                enemyHealthBar.linkWithMesh(zombie);
+                enemyHealthBar.linkOffsetY = -80;
+
+                zombie.healthBar = enemyHealthBar
+
+                zombies.push(zombie);
+            }
+
+            var followRange = 100;
+            var zombieSpeed = 0.1;
+            var zombieGravity = -30;
+
+            // Add physics impostors to the zombies
+            // Set the mass and restitution of the zombies' physics impostors
+            for (var i = 0; i < zombies.length; i++) {
+                var zombie = zombies[i];
+                // zombie.physicsImpostor = new BABYLON.PhysicsImpostor(zombie, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 10, restitution: 0.1, friction: 0.5, applyGravity: true }, scene);
+                zombie.physicsImpostor = new BABYLON.PhysicsImpostor(zombie, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 0, friction: 0.5, applyGravity: true }, scene);
+                zombie.physicsImpostor.physicsBody.collisionFilterGroup = 0; // set collision group to 2 for zombies
+            }
+
+            scene.registerBeforeRender(function() {
+                const player = camera;
+                // Iterate over the zombies array and update their positions
+                // Update the direction of the zombie based on the player's position
+                for (var i = 0; i < zombies.length; i++) {
+                    var zombie = zombies[i];
+                    var direction = player.position.subtract(zombie.position);
+                    var distance = direction.length();
+
+                    // Check if the zombie is within the follow range
+                    if (distance < followRange) {
+                        // Calculate the angle between the zombie's forward vector and the direction to the player
+                        var forward = new BABYLON.Vector3(0, 0, 1);
+                        var angle = BABYLON.Vector3.GetAngleBetweenVectors(forward, direction, new BABYLON.Vector3(0, 1, 0));
+
+                        // Turn the zombie towards the player
+                        if (angle > Math.PI / 2) {
+                            zombie.rotation.y = -Math.atan2(direction.z, direction.x) - Math.PI / 2;
+                        } else {
+                            zombie.rotation.y = Math.atan2(direction.z, direction.x) + Math.PI / 2;
+                        }
+
+                        // Move the zombie towards the player
+                        var directionNormalized = direction.normalize();
+                        var moveVector = directionNormalized.scale(zombieSpeed);
+                        moveVector.y = zombie.physicsImpostor.getLinearVelocity().y; // keep the same Y velocity
+                        zombie.moveWithCollisions(moveVector);
+
+                        // Check if the zombie is on the ground
+                        var ray = new BABYLON.Ray(zombie.position.add(new BABYLON.Vector3(0, 0.1, 0)), new BABYLON.Vector3(0, -1, 0));
+                        var hit = scene.pickWithRay(ray, function (mesh) { return mesh == ground0; });
+                        if (hit.pickedMesh) {
+                            zombie.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0)); // Reset velocity on ground
+                        } else {
+                            zombie.physicsImpostor.applyForce(new BABYLON.Vector3(0, zombieGravity, 0), zombie.position); // Apply force instead of gravity
+                        }
+                    }
+                }
+            })
+
+            // make zombies follow player
+            // scene.registerBeforeRender(function() {
+            //     // Iterate over the zombies array and update their positions
+            //     for (var i = 0; i < zombies.length; i++) {
+            //         var zombie = zombies[i];
+            //         var direction = camera.position.subtract(zombie.position).normalize();
+            //         zombie.position.addInPlace(direction.scale(0.1)); // Adjust the speed of the zombie
+            //         zombie.lookAt(camera.position);
+            //     }
+            // });
 
             // Link the shield to the first target in the array
             // var target = BABYLON.Mesh.CreateSphere("target", 12, 5, scene);
@@ -372,10 +463,34 @@
 // Create a ray from the bullet's position and direction
                 var ray = new BABYLON.Ray(bullet.position, camera.getForwardRay().direction);
 
-// Check if the ray intersects with the target mesh
+                var hitZombie = scene.pickWithRay(ray, (mesh) => {
+                    return mesh.name === "zombie";
+                })
+
+                // Check if the ray intersects with the target mesh
                 var hit = scene.pickWithRay(ray, function(mesh) {
                     return mesh.name === "target";
                 });
+
+                if (hitZombie.pickedMesh) {
+                    console.log("Bullet hit the zombie!");
+                    console.log(hitZombie.pickedMesh)
+                    console.log(hitZombie.pickedMesh.health);
+                    hitZombie.pickedMesh.health -= 10;
+                    // hitZombie.pickedMesh.healthBar.background = "red";
+                    hitZombie.pickedMesh.healthBar.width = hitZombie.pickedMesh.health + "px";
+                    if (hitZombie.pickedMesh.health <= 0) {
+                        hitZombie.pickedMesh.dispose();
+                        hitZombie.pickedMesh.healthBar.dispose();
+
+                        // Remove the zombie from the scene and the zombies array
+                        var index = zombies.indexOf(hitZombie.pickedMesh);
+                        if (index > -1) {
+                            zombies.splice(index, 1);
+                            hitZombie.pickedMesh.dispose();
+                        }
+                    }
+                }
 
                 if (hit.pickedMesh) {
                     console.log("Bullet hit the target!");
@@ -606,7 +721,7 @@
         	    }
         
                 scene.gravity.y = grav;
-                
+
                 if (grav > -0.4) {
                     grav -= 0.05;
                 }
