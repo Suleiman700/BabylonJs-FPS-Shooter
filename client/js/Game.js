@@ -12,6 +12,26 @@ export default class Game {
         this.player = null;
         this.createScenes();
         this.run();
+        this.renderLoop()
+    }
+
+    renderLoop() {
+        this.engine.runRenderLoop(() => {
+            if (this.player && this.player.mesh && this.scenes[this.currentScene]) {
+                const scene = this.scenes[this.currentScene].scene;
+                const camera = this.scenes[this.currentScene].camera;
+                const player = this.player;
+
+                if (camera.followPlayer) {
+                    camera.follow(player); // update camera position to follow player
+                } else {
+                    // set the camera target to the player position
+                    camera.setTarget(player.mesh);
+                }
+
+                scene.render();
+            }
+        });
     }
 
     createScenes() {
@@ -22,8 +42,6 @@ export default class Game {
         const ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, defaultScene);
         const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), defaultScene);
         this.scenes.SCENE_DEFAULT = { scene: defaultScene, camera, player };
-
-        this.player = player
     }
 
     loadScene(sceneName) {

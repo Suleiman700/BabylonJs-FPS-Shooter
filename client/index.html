@@ -23,12 +23,17 @@
 <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 <script type="module">
     import Game from "./js/Game.js";
+    import Player from './js/Player.js';
     import { SceneDefault } from "./js/scenes/SceneDefault.js";
 
     const game = new Game("renderCanvas");
     SceneDefault.createScene(game.scenes.SCENE_DEFAULT.scene);
     game.loadScene("SCENE_DEFAULT");
-    game.player.setPosition(0, 0, 0);
+    const player = new Player(game.scenes.SCENE_DEFAULT.scene, game.scenes.SCENE_DEFAULT.camera)
+    player.createPlayer()
+    player.setPosition(10, 10, 10)
+
+    console.log(game.player)
 </script>
 </body>
 </html>
