@@ -35,7 +35,7 @@
                 height: 100%;
                 touch-action: none;
             }
-            
+
             #canvasZone {
                 width: 100%;
                 height: 100%;
@@ -43,6 +43,31 @@
         </style>
     </head>
 <body>
+    <style>
+        #slotbar {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            position: absolute;
+            bottom: 10px;
+            z-index: 9999;
+        }
+
+        .slot {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border: 2px solid transparent;
+        }
+
+        .selected {
+            border-color: #fff;
+        }
+    </style>
+    <div id="slotbar">
+        <img id="akm" class="slot" src="https://freepngimg.com/thumb/assault%20rifle/38-akm-kalash-russian-assault-rifle-png-thumb.png">
+        <img id="pistol" class="slot" src="https://garderoben.se/images/normal/glock-17-gen4-gbb-6-mm-side_26411-44720.png">
+    </div>
     <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
     <script>
         var canvas = document.getElementById("renderCanvas");
@@ -72,7 +97,7 @@
             sv.name = "mysv";
             sv.thickness = 3;
             sv.color = "green";
-            sv.width = 1;
+            sv.width = 0; // original: 1
             sv.height = 0.2;
             sv.background = "black";
             sv.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -195,11 +220,12 @@
             camera.ellipsoid = new BABYLON.Vector3(0.25, 1.5, 0.25);
             camera._needMoveForGravity = true;
 
+
             // gun
             var akm = new BABYLON.TransformNode();
             akm.parent = camera;
             camera.fov = 1;
-            akm.position = new BABYLON.Vector3(0.5, -0.7, 0.5);
+            akm.position = new BABYLON.Vector3(0.5, -9990.7, 0.5);
             akm.rotation.x = -0.01;
             // load gun model
             BABYLON.SceneLoader.ImportMesh("", "https://dl.dropbox.com/s/kqnda4k2aqx8pro/", "AKM.obj", scene, function (newMeshes) {
@@ -217,6 +243,31 @@
                     ak.parent = akm;
                 }
             });
+
+            // gun
+            var pistol = new BABYLON.TransformNode();
+            pistol.parent = camera;
+            camera.fov = 1;
+            pistol.position = new BABYLON.Vector3(4.0, -3.0, 4.0);
+            pistol.rotation.y = -1.7;
+            pistol.rotation.z = 0.01;
+            // load gun model
+            BABYLON.SceneLoader.ImportMesh("", "./assets/models/guns/", "G17.glb", scene, function (newMeshes) {
+                var mat = new BABYLON.StandardMaterial("", scene);
+                mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
+                for (var index = 0; index < newMeshes.length; index++) {
+                    let ak = newMeshes[index];
+                    ak.material = mat;
+                    ak.scaling.x = 0.2;
+                    ak.scaling.y = 0.2;
+                    ak.scaling.z = 0.2;
+                    ak.isPickable = false;
+                    ak.parent = pistol;
+                }
+            });
+
+
+
 
 
 
@@ -265,7 +316,6 @@
             recoilm.setKeys(remkeys);
             akm.animations.push(recoilm);
         
-        
             // regular: akm.position = new BABYLON.Vector3(0.5, -0.7, 0.5);
             //aim: akm.position = new BABYLON.Vector3(0, -0.4125, 0.2);
 
@@ -284,6 +334,7 @@
             var box = new BABYLON.Mesh.CreateBox("box", 5, scene);
             box.position.y = -2;
             box.checkCollisions = true;
+            box.type = "wall"
             var box1 = new BABYLON.Mesh.CreateBox("box1", 5, scene);
             box1.position.y = -1.5;
             box1.position.z = 1;
@@ -331,7 +382,7 @@
             }
 
             // Create 1 targets
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < 20; i++) {
                 var zombie = BABYLON.MeshBuilder.CreateCylinder("zombie", {height: 4, diameter: 2, tessellation: 10}, scene);
                 // zombie.scaling.y = 0.5; // Set the scaling of the cylinder to make it half the original height
 
@@ -365,7 +416,7 @@
             }
 
             var followRange = 100;
-            var zombieSpeed = 0.005;
+            var zombieSpeed = 0.00000005;
             var zombieGravity = -30;
 
 
@@ -475,6 +526,14 @@
                 var hit = scene.pickWithRay(ray, function(mesh) {
                     return mesh.name === "target";
                 });
+
+                var hitWall = scene.pickWithRay(ray, (mesh) => {
+                    return mesh.type === "wall";
+                })
+
+                if (hitWall.pickedMesh) {
+                    console.log('hit wall')
+                }
 
                 if (hitZombie.pickedMesh) {
                     console.log("Bullet hit the zombie!");
@@ -600,11 +659,27 @@
                 };
         
             }*/
-        
+
+            var akmSLOT = document.getElementById("akm");
+            var pistolSLOT = document.getElementById("pistol");
+
             var onKeyDown = function(event) {
         
                 switch (event.keyCode) {
-        
+                    case 49: // 1
+                        console.log('selected akm')
+                        akm.setEnabled(true);
+                        pistol.setEnabled(false);
+                        akmSLOT.classList.add("selected");
+                        pistolSLOT.classList.remove("selected");
+                        break
+                    case 50: // 2
+                        console.log('selected pistol')
+                        akm.setEnabled(false);
+                        pistol.setEnabled(true);
+                        pistolSLOT.classList.add("selected");
+                        akmSLOT.classList.remove("selected");
+                        break
                     case 32: // Space
                         if (wj == true) {
                         grav = 0.7;
