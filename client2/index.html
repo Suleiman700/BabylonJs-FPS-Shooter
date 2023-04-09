@@ -220,27 +220,14 @@
 
 
 
+            var box = BABYLON.MeshBuilder.CreateBox("box", {width: 10, height: 5, depth: 5}, scene);
+            box.position.z = 20;
+            box.checkCollisions = true;
+            var boxTexture = new BABYLON.StandardMaterial("boxTexture", scene);
+            boxTexture.diffuseTexture = new BABYLON.Texture("./assets/textures/wooden_box_01.jpg", scene);
 
-
-// create a new asset manager to handle the model
-            var assetsManager = new BABYLON.AssetsManager(scene);
-
-// create a new task to load the model
-            var houseTask = assetsManager.addMeshTask("house task", "", "./assets/models/buildings/", "forest_house.glb");
-
-// set the callback function to be called when the model is loaded
-            houseTask.onSuccess = function (task) {
-                // get the loaded mesh
-                var houseMesh = task.loadedMeshes[0];
-
-                // set the position of the mesh
-                houseMesh.position = new BABYLON.Vector3(-5, 0, 0);
-            };
-
-// load all the assets in the asset manager
-            assetsManager.load();
-        
-            
+            // assign the texture to the box
+            box.material = boxTexture;
         
             var recoilm = new BABYLON.Animation("recoilm", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
             var remkeys = [];
@@ -281,8 +268,8 @@
         
             // regular: akm.position = new BABYLON.Vector3(0.5, -0.7, 0.5);
             //aim: akm.position = new BABYLON.Vector3(0, -0.4125, 0.2);
-        
-        
+
+
             var ground0 = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, scene);
             ground0.material = new BABYLON.GridMaterial("gmat0", scene);
             ground0.checkCollisions = true;
@@ -305,7 +292,7 @@
             box2.position.y = -1;
             box2.position.z = 2;
             box2.checkCollisions = true;
-            var box3 = BABYLON.Mesh.CreateBox("box3", new BABYLON.Vector3(300, 200, 1), scene);
+            var box3 = new BABYLON.Mesh.CreateBox("box2", 5, scene);
             box3.position.y = -0.5;
             box3.position.z = 3;
             box3.checkCollisions = true;
@@ -333,19 +320,32 @@
             // Create an array to store the target meshes
             var zombies = [];
 
+            function checkObstacle(zombie, direction, distance) {
+                var ray = new BABYLON.Ray(zombie.position.add(new BABYLON.Vector3(0, 0.1, 0)), direction);
+                var hit = scene.pickWithRay(ray, function (mesh) { return mesh != zombie && mesh != ground0; }); // exclude the zombie and ground meshes from the collision check
+                if (hit.pickedMesh && hit.distance < distance) {
+                    return true; // there is an obstacle between the zombie and the player
+                } else {
+                    return false; // there is no obstacle between the zombie and the player
+                }
+            }
+
             // Create 1 targets
-            for (var i = 0; i < 20; i++) {
-                // var zombie = BABYLON.Mesh.CreateSphere("zombie" + i, 12, 5, scene);
-                var zombie = BABYLON.MeshBuilder.CreateCylinder("zombie", {height: 4, diameter: 2, tessellation: 3}, scene);
+            for (var i = 0; i < 10; i++) {
+                var zombie = BABYLON.MeshBuilder.CreateCylinder("zombie", {height: 4, diameter: 2, tessellation: 10}, scene);
                 // zombie.scaling.y = 0.5; // Set the scaling of the cylinder to make it half the original height
 
                 zombie.name = 'zombie'
-                // zombie.position.y = 5;
+                // zombie.position.y = 10;
+                zombie.position.y = 10
                 zombie.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
                 zombie.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
                 zombie.material = new BABYLON.StandardMaterial("mat", scene);
                 zombie.health = targetHealth
                 zombie.material.emissiveColor = new BABYLON.Color3(zombie.health, zombie.health, zombie.health);
+
+                zombie.physicsImpostor = new BABYLON.PhysicsImpostor(zombie, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0, restitution: 0, friction: 0.5, applyGravity: false }, scene);
+                zombie.physicsImpostor.physicsBody.collisionFilterGroup = 0; // set collision group to 2 for zombies
 
                 // enemy health bar
                 var enemyHealthBar = new BABYLON.GUI.Rectangle();
@@ -365,17 +365,10 @@
             }
 
             var followRange = 100;
-            var zombieSpeed = 0.1;
+            var zombieSpeed = 0.005;
             var zombieGravity = -30;
 
-            // Add physics impostors to the zombies
-            // Set the mass and restitution of the zombies' physics impostors
-            for (var i = 0; i < zombies.length; i++) {
-                var zombie = zombies[i];
-                // zombie.physicsImpostor = new BABYLON.PhysicsImpostor(zombie, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 10, restitution: 0.1, friction: 0.5, applyGravity: true }, scene);
-                zombie.physicsImpostor = new BABYLON.PhysicsImpostor(zombie, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 0, friction: 0.5, applyGravity: true }, scene);
-                zombie.physicsImpostor.physicsBody.collisionFilterGroup = 0; // set collision group to 2 for zombies
-            }
+
 
             scene.registerBeforeRender(function() {
                 const player = camera;
@@ -383,36 +376,26 @@
                 // Update the direction of the zombie based on the player's position
                 for (var i = 0; i < zombies.length; i++) {
                     var zombie = zombies[i];
-                    var direction = player.position.subtract(zombie.position);
-                    var distance = direction.length();
 
-                    // Check if the zombie is within the follow range
-                    if (distance < followRange) {
-                        // Calculate the angle between the zombie's forward vector and the direction to the player
-                        var forward = new BABYLON.Vector3(0, 0, 1);
-                        var angle = BABYLON.Vector3.GetAngleBetweenVectors(forward, direction, new BABYLON.Vector3(0, 1, 0));
+                    // Set the zombie's Y position to 0
+                    zombie.position.y = 1;
 
-                        // Turn the zombie towards the player
-                        if (angle > Math.PI / 2) {
-                            zombie.rotation.y = -Math.atan2(direction.z, direction.x) - Math.PI / 2;
-                        } else {
-                            zombie.rotation.y = Math.atan2(direction.z, direction.x) + Math.PI / 2;
-                        }
+                    // Calculate the distance between the zombie and the player
+                    var distance = BABYLON.Vector3.Distance(zombie.position, player.position);
+
+                    // If the distance is within the follow range, move the zombie towards the player
+                    if (distance <= followRange) {
+                        // Calculate the direction from the zombie to the player
+                        var direction = player.position.subtract(zombie.position);
+
+                        // Normalize the direction vector
+                        direction.normalize();
+
+                        // Multiply the direction by the zombie's speed and delta time
+                        direction.scaleInPlace(zombieSpeed * scene.getEngine().getDeltaTime());
 
                         // Move the zombie towards the player
-                        var directionNormalized = direction.normalize();
-                        var moveVector = directionNormalized.scale(zombieSpeed);
-                        moveVector.y = zombie.physicsImpostor.getLinearVelocity().y; // keep the same Y velocity
-                        zombie.moveWithCollisions(moveVector);
-
-                        // Check if the zombie is on the ground
-                        var ray = new BABYLON.Ray(zombie.position.add(new BABYLON.Vector3(0, 0.1, 0)), new BABYLON.Vector3(0, -1, 0));
-                        var hit = scene.pickWithRay(ray, function (mesh) { return mesh == ground0; });
-                        if (hit.pickedMesh) {
-                            zombie.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0)); // Reset velocity on ground
-                        } else {
-                            zombie.physicsImpostor.applyForce(new BABYLON.Vector3(0, zombieGravity, 0), zombie.position); // Apply force instead of gravity
-                        }
+                        zombie.moveWithCollisions(direction);
                     }
                 }
             })
@@ -443,6 +426,27 @@
                     )
                 );
             }
+
+            // create a blood texture
+            var bloodTexture = new BABYLON.StandardMaterial("bloodTexture", scene);
+            bloodTexture.diffuseTexture = new BABYLON.Texture("./assets/textures/blood_01.png", scene);
+            bloodTexture.diffuseTexture.hasAlpha = true; // enable transparency
+            bloodTexture.emissiveColor = BABYLON.Color3.Red();
+            bloodTexture.disableLighting = true; // disable lighting on the texture
+            bloodTexture.billboardMode = BABYLON.Material.BILLBOARDMODE_Y; // make sure texture faces up
+
+// create a blood splatter on the ground
+            function spawnBlood(position) {
+                var blood = BABYLON.MeshBuilder.CreateGround("blood", {width: 1, height: 1, subdivisions: 1}, scene);
+                blood.position.copyFrom(position);
+                blood.position.y = 0.05; // offset slightly above ground to prevent z-fighting
+                blood.material = bloodTexture;
+                blood.rotation.y = Math.random() * 20 - 1000
+                // blood.billboardMode = BABYLON.AbstractMesh.BILLBOARDMODE_Y; // make sure texture faces up
+            }
+
+
+            var bloodSprites = []
 
             function PEW() {
                 console.log('shoot');
@@ -479,6 +483,9 @@
                     hitZombie.pickedMesh.health -= 10;
                     // hitZombie.pickedMesh.healthBar.background = "red";
                     hitZombie.pickedMesh.healthBar.width = hitZombie.pickedMesh.health + "px";
+
+                    spawnBlood(zombie.position);
+
                     if (hitZombie.pickedMesh.health <= 0) {
                         hitZombie.pickedMesh.dispose();
                         hitZombie.pickedMesh.healthBar.dispose();
