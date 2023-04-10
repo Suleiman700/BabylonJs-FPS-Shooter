@@ -1,0 +1,10 @@
+
+#round-info {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: absolute;
+    top: 10px;
+    z-index: 9999;
+    color: white;
+}
