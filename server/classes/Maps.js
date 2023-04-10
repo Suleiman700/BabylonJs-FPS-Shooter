@@ -1,5 +1,5 @@
 
-const MAP_01_CONFIG = require('../maps/01/MAP_01_CONFIG.js')
+const MAP_01_CONFIG = require('../configs/maps/01/MAP_01_CONFIG.js')
 
 class Maps {
     constructor() {}

@@ -12,6 +12,14 @@ const Maps = require('./classes/Maps.js')
 const lobbies = [];
 const players = [];
 
+/**
+ * send required data when the game starts for the first time
+ * @param _roomId {string} example: 123
+ */
+function sendStartGameData(_roomId) {
+    
+}
+
 
 
 // Handle Socket.IO connections
@@ -38,17 +46,16 @@ io.on('connection', (socket) => {
         roomId: roomId,
         health: 100,
         money: 0,
+        holdingGunId: 'AKM',
         coords: {x: 0, y: 0, z: 0}
     }
     Players.addPlayer(newPlayerData)
 
-    // // create new player
-    // Players.addPlayer(newPlayerData)
-
-
     // join room
     socket.join(roomId)
     socket.roomId = roomId
+
+    sendStartGameData(roomId)
 
     // Handle disconnections
     socket.on('disconnect', () => {
@@ -87,7 +94,7 @@ setInterval(() => {
             ...roomData,
             players: roomPlayers
         }
-        io.to(roomID).emit('updateRoomData', roomData)
+        io.to(roomID).emit('updateRoomData', newRoomData)
     }
 }, 1000)
 

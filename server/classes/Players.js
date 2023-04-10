@@ -12,6 +12,7 @@ class Players {
         roomId: '', // string
         health: 0, // number
         money: 0, // number
+        holdingGunId: '', // string - example: AKM
         coords: {x: 0, y: 0, z: 0}
     }
 
