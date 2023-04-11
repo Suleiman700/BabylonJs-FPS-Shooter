@@ -10,6 +10,7 @@ class Scene {
         this.#scene.gravity = new BABYLON.Vector3(0, -0.6, 0);
         this.#scene.collisionsEnabled = true;
         this.#scene.enablePhysics()
+        this.#scene.gravity.y = -0.6
     }
 
     /**

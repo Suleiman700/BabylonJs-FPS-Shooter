@@ -1,4 +1,8 @@
 
+const { CONFIG_AKM } = require('../../weapons/CONFIG_AKM.js');
+
+CONFIG_AKM.ammo = 9
+
 const MAP_01_CONFIG = {
     id: 'MAP_01',
     name: 'MAP 01',
@@ -11,18 +15,19 @@ const MAP_01_CONFIG = {
     defaultZombieKillReward: 1, // default zombie kill reward (money)
     defaultZombieWalkSpeed: 1, // default zombie walk speed
 
-    defaultPlayerWalkSpeed: 2.5, // default player walk speed
-    defaultPlayerSprintSpeed: 5, // default player sprint speed
+    defaultPlayerWalkSpeed: 1.5, // default player walk speed
+    defaultPlayerSprintSpeed: 2.5, // default player sprint speed
     defaultPlayerHealth: 100, // default player health (1 ~ 100)
-    defaultPlayerJumpHeight: 1.5, // default player jump height
-    defaultPlayerGravity: -0.6, // default player gravity
+    defaultPlayerJumpHeight: 0.2, // default player jump height (uses less gravity)
+    defaultPlayerGravity: -0.1, // default player gravity
 
     // define players spawns in map
     playersSpawns: [
         {x: 10, y: 10, z: 10, pan: 10, roll: 10}
     ],
 
-    defaultPrimaryWeapon: 'AKM', // default primary weapon
+    // default primary weapon
+    defaultPrimaryWeapon: CONFIG_AKM,
     defaultSecondaryWeapon: 'G17', // default secondary weapon
 }
 

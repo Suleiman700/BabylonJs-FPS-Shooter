@@ -1,13 +1,16 @@
 import Camera from './Camera.js';
+import Scene from './Scene.js';
 
 class Player {
-    #debug = true
+    #debug = false
 
     coords = {x: 0, y: 0, z: 0}
     #heath = -1 // number (1 ~ 100)
     #walkSpeed = -1 // number
     #sprintSpeed = -1 // number
+    #jumpHeight = -1 // number
     #gravity = -0.6
+    #isOnGround = true // boolean
 
     constructor() {}
 
@@ -71,11 +74,29 @@ class Player {
     }
 
     /**
+     * set player jump height
+     * @param _jumpHeight {number} example: 1.5
+     */
+    set jumpHeight(_jumpHeight) {
+        this.#jumpHeight = _jumpHeight
+        if (this.#debug) console.log(`player jump height changed to: ${_jumpHeight}`)
+    }
+
+    /**
+     * get player jump height
+     * @return {number}
+     */
+    get jumpHeight() {
+        return this.#jumpHeight
+    }
+
+    /**
      * set player gravity
      * @param _gravity {number} example: -0.6
      */
     set gravity(_gravity) {
         this.#gravity = _gravity
+        Scene.getScene().gravity.y = _gravity
         if (this.#debug) console.log(`player gravity changed to: ${_gravity}`)
     }
 
@@ -84,7 +105,25 @@ class Player {
      * @return {number}
      */
     get gravity() {
+        Scene.getScene().gravity.y = this.#gravity
         return this.#gravity
+    }
+
+    /**
+     * set player is on ground or not
+     * @param _option {boolean}
+     */
+    set isOnGround(_option) {
+        this.#isOnGround = _option
+        if (this.#debug) console.log(`player on ground: ${_option}`)
+    }
+
+    /**
+     * get if player is on ground or not
+     * @return {boolean}
+     */
+    get isOnGround() {
+        return this.#isOnGround
     }
 
     /**
@@ -97,6 +136,19 @@ class Player {
         }
         else {
             Camera.getCamera().speed = this.#walkSpeed
+        }
+    }
+
+    /**
+     * set player is jumping or not
+     * @param _option {boolean}
+     */
+    setJumping(_option) {
+        if (_option) {
+            Scene.getScene().gravity.y = this.#jumpHeight
+        }
+        else {
+            Scene.getScene().gravity.y = this.#gravity
         }
     }
 }

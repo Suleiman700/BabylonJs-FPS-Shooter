@@ -34,6 +34,15 @@ class GUI {
         document.querySelector('#player-coords-y').innerHTML = _y.toFixed(3)
         document.querySelector('#player-coords-z').innerHTML = _z.toFixed(3)
     }
+
+    /**
+     * set ammo in UI
+     * @param _ammo {number} example: 30
+     * @constructor
+     */
+    UI_setAmmo(_ammo) {
+        document.querySelector('#ui-weapon-ammo').innerHTML = _ammo
+    }
 }
 
 export default new GUI()

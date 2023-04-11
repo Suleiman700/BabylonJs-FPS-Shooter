@@ -2,6 +2,7 @@
 import GUI from '../GUI.js';
 import Player from '../Player.js';
 import Camera from '../Camera.js';
+import Weapons from '../weapons/Weapons.js';
 
 class Socket {
 
@@ -29,10 +30,18 @@ class Socket {
             // set UI player health
             GUI.UI_setPlayerHealth(_mapData.defaultPlayerHealth)
 
+            console.log(_mapData)
+
+            // set primary weapon
+            Weapons.primaryWeaponId = _mapData.defaultPrimaryWeapon.id
+            Weapons.initPrimaryWeapon()
+
             // set player walk speed
             Player.walkSpeed = _mapData.defaultPlayerWalkSpeed
             // set player sprint speed
             Player.sprintSpeed = _mapData.defaultPlayerSprintSpeed
+            // set player jump height
+            Player.jumpHeight = _mapData.defaultPlayerJumpHeight
             // set player gravity
             Player.gravity = _mapData.defaultPlayerGravity
 

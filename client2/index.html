@@ -72,7 +72,7 @@
         <h4>Round: <span id="round-number">0</span></h4>
     </div>
     <div class="player left skewright small player-speed">
-        <h5 class="text-white">Ammo: 123</h5>
+        <h5 class="text-white">Ammo: <span id="ui-weapon-ammo">0</span></h5>
     </div>
 
     <div class="player right skewleft player-health">
@@ -597,39 +597,33 @@
             // // assign the texture to the box
             // box.material = boxTexture;
 
+            // ADDED
             var recoilm = new BABYLON.Animation("recoilm", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
             var remkeys = [];
-
             remkeys.push({
                 frame: 0,
                 value: 0.5
             });
-
             remkeys.push({
                 frame: 1,
                 value: -0.03
             });
-
             remkeys.push({
                 frame: 5,
                 value: 0.5
             });
-
             remkeys.push({
                 frame: 6,
                 value: 0.2
             });
-
             remkeys.push({
                 frame: 7,
                 value: -0.06
             });
-
             remkeys.push({
                 frame: 11,
                 value: 0.2
             });
-
             recoilm.setKeys(remkeys);
             akm.animations.push(recoilm);
 
@@ -1177,6 +1171,7 @@
                 camera.speed = speed + spood;
                 // console.out(dT);
 
+                // ADDED
                 camera.onCollide = function (colMesh) {
         		    if (colMesh.uniqueId === ground0.uniqueId) {
         			    wj = true;

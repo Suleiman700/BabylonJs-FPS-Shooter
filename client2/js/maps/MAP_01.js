@@ -10,13 +10,14 @@ export default function Map_01_createScene(_scene, _camera) {
     // assign the texture to the box
     box.material = boxTexture;
 
-    var ground0 = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, _scene);
+    var ground = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, _scene);
+    ground.structure = 'ground'
     var material = new BABYLON.StandardMaterial("ground0mat", _scene);
     material.diffuseTexture = new BABYLON.Texture("./assets/textures/ground/seamless_stone_02.jpg", _scene);
     material.diffuseTexture.uScale = 10;
     material.diffuseTexture.vScale = 10;
-    ground0.material = material;
-    ground0.checkCollisions = true;
+    ground.material = material;
+    ground.checkCollisions = true;
 
     // var ground1 = BABYLON.Mesh.CreateGround("ground1", 250, 250, 2, scene);
     // ground1.material = new BABYLON.GridMaterial("gmat1", scene);
@@ -51,27 +52,57 @@ export default function Map_01_createScene(_scene, _camera) {
     box5.checkCollisions = true;
 
     // gun
-    var akm = new BABYLON.TransformNode();
-    akm.parent = _camera;
-    _camera.fov = 1;
-    akm.position = new BABYLON.Vector3(0.5, -9990.7, 0.5);
-    akm.rotation.x = -0.01;
-    // load gun model
-    BABYLON.SceneLoader.ImportMesh("", "https://dl.dropbox.com/s/kqnda4k2aqx8pro/", "AKM.obj", _scene, function (newMeshes) {
-        var mat = new BABYLON.StandardMaterial("", _scene);
-        mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
-        mat.bumpTexture = new BABYLON.Texture("https://dl.dropbox.com/s/hiuhjsp4pckt9pu/akm_norm.tga");
-        mat.specularTexture = new BABYLON.Texture("https://dl.dropbox.com/s/f3samm7vuvl0ez4/akm_spec.tga");
-        for (var index = 0; index < newMeshes.length; index++) {
-            let ak = newMeshes[index];
-            ak.material = mat;
-            ak.scaling.x = 0.05;
-            ak.scaling.y = 0.05;
-            ak.scaling.z = 0.05;
-            ak.isPickable = false;
-            ak.parent = akm;
-        }
+    // var akm = new BABYLON.TransformNode();
+    // akm.parent = _camera;
+    // _camera.fov = 1;
+    // akm.position = new BABYLON.Vector3(0.5, -0.7, 0.5);
+    // akm.rotation.x = -0.01;
+    // // load gun model
+    // BABYLON.SceneLoader.ImportMesh("", "https://dl.dropbox.com/s/kqnda4k2aqx8pro/", "AKM.obj", _scene, function (newMeshes) {
+    //     var mat = new BABYLON.StandardMaterial("", _scene);
+    //     mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
+    //     mat.bumpTexture = new BABYLON.Texture("https://dl.dropbox.com/s/hiuhjsp4pckt9pu/akm_norm.tga");
+    //     mat.specularTexture = new BABYLON.Texture("https://dl.dropbox.com/s/f3samm7vuvl0ez4/akm_spec.tga");
+    //     for (var index = 0; index < newMeshes.length; index++) {
+    //         let ak = newMeshes[index];
+    //         ak.material = mat;
+    //         ak.scaling.x = 0.05;
+    //         ak.scaling.y = 0.05;
+    //         ak.scaling.z = 0.05;
+    //         ak.isPickable = false;
+    //         ak.parent = akm;
+    //     }
+    // });
+
+
+    var recoilm = new BABYLON.Animation("recoilm", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+    var remkeys = [];
+    remkeys.push({
+        frame: 0,
+        value: 0.5
     });
+    remkeys.push({
+        frame: 1,
+        value: -0.03
+    });
+    remkeys.push({
+        frame: 5,
+        value: 0.5
+    });
+    remkeys.push({
+        frame: 6,
+        value: 0.2
+    });
+    remkeys.push({
+        frame: 7,
+        value: -0.06
+    });
+    remkeys.push({
+        frame: 11,
+        value: 0.2
+    });
+    recoilm.setKeys(remkeys);
+    // akm.animations.push(recoilm);
 
     var pistol = new BABYLON.TransformNode();
     pistol.parent = _camera;

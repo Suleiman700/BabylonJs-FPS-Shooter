@@ -2,9 +2,11 @@
 import Game from './Game.js';
 import Scene from './Scene.js';
 import Player from './Player.js';
+import player from './Player.js';
 
 class Keys {
     #debug = true
+    #isSpaceDown = false
 
     constructor() {
     }
@@ -38,7 +40,16 @@ class Keys {
                 Player.isSprinting(true)
                 break
             case 32: // space
-                if (this.#debug) console.log('is jump')
+                // check if player is on ground
+                if (Player.isOnGround && !this.#isSpaceDown) {
+                    if (this.#debug) console.log('is jump')
+                    Player.setJumping(true)
+                    this.#isSpaceDown = true
+                    Player.isOnGround = false
+                    setTimeout(() => {
+                        player.setJumping(false)
+                    }, 100)
+                }
                 break
         }
     }
@@ -50,7 +61,11 @@ class Keys {
                 Player.isSprinting(false)
                 break
             case 32: // space
-                if (this.#debug) console.log('not jumping')
+                if (this.#isSpaceDown) {
+                    if (this.#debug) console.log('not jumping')
+                    Player.setJumping(false)
+                    this.#isSpaceDown = false
+                }
                 break
         }
     }

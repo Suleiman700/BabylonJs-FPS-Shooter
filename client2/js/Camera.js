@@ -26,10 +26,9 @@ class Camera {
         this.#camera.ellipsoid = new BABYLON.Vector3(0.25, 1.5, 0.25);
         this.#camera._needMoveForGravity = true;
 
-        // keep storing camera coords in player data
-        setInterval(() => {
-            Player.setCoords(this.#camera.position.x, this.#camera.position.y, this.#camera.position.z)
-        }, 0)
+        this.#camera.onCollide = _collideMesh => {
+            Player.isOnGround = _collideMesh.structure === 'ground'
+        }
 
 //         // define roll and pitch angles in radians
 //         const roll = Math.PI / 43;
