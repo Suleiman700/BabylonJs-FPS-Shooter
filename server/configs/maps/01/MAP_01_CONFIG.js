@@ -11,9 +11,9 @@ const MAP_01_CONFIG = {
     defaultZombieKillReward: 1, // default zombie kill reward (money)
     defaultZombieWalkSpeed: 1, // default zombie walk speed
 
-    defaultPlayerWalkSpeed: 1, // default player walk speed
-    defaultPlayerSprintSpeed: 2, // default player sprint speed
-    defaultPlayerHealth: 100, // default player health
+    defaultPlayerWalkSpeed: 2.5, // default player walk speed
+    defaultPlayerSprintSpeed: 5, // default player sprint speed
+    defaultPlayerHealth: 100, // default player health (1 ~ 100)
     defaultPlayerJumpHeight: 1.5, // default player jump height
 
     defaultPrimaryWeapon: 'AKM', // default primary weapon

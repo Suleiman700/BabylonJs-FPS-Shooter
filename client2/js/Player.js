@@ -1,7 +1,9 @@
+import Camera from './Camera.js';
 
 class Player {
     #coords = {x: 0, y: 0, z: 0}
-    #heath = undefined
+    #heath = undefined // number (1 ~ 100)
+    #walkSpeed = undefined // number
 
     constructor() {}
 
@@ -15,6 +17,23 @@ class Player {
         this.#coords.x = _x
         this.#coords.y = _y
         this.#coords._z = _z
+    }
+
+    /**
+     * get player walk speed
+     * @returns {number}
+     */
+    getWalkSpeed() {
+        return this.#walkSpeed
+    }
+
+    /**
+     * set player walk speed
+     * @param _walkSpeed {number} example: 2.5
+     */
+    setWalkSpeed(_walkSpeed) {
+        this.#walkSpeed = _walkSpeed
+        Camera.getCamera().speed = _walkSpeed
     }
 }
 

@@ -11,6 +11,8 @@ Camera.initCamera()
 import Scene from './Scene.js';
 Scene.createScene('MAP_01')
 
+import ModMenu from './ModMenu.js';
+
 
 window.initFunction = async function() {
     var asyncEngineCreation = async function() {

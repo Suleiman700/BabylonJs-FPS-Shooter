@@ -15,9 +15,18 @@ const players = [];
 /**
  * send required data when the game starts for the first time
  * @param _roomId {string} example: 123
+ * @param _socket {socket}
  */
-function sendStartGameData(_roomId) {
+function setStartGameData(_roomId, _socket) {
+    // get map id from room
+    const roomData = Rooms.getRoomData(_roomId)
+    const mapId = roomData.mapData.id
+    const mapData = Maps.getMapDataById(mapId)
 
+    console.log(mapData)
+
+    // io.to(roomID).emit('updateRoomData', newRoomData)
+    _socket.emit('setStartGameData', mapData)
 }
 
 
@@ -55,7 +64,7 @@ io.on('connection', (socket) => {
     socket.join(roomId)
     socket.roomId = roomId
 
-    sendStartGameData(roomId)
+    setStartGameData(roomId, socket)
 
     // Handle disconnections
     socket.on('disconnect', () => {
@@ -88,6 +97,10 @@ setInterval(() => {
         const roomID = roomData.roomId
         // get room players
         const roomPlayers = Players.getPlayersInRoom(roomID)
+        // get zombies
+        const zombies = [
+
+        ]
 
         // put room players into data
         const newRoomData = {

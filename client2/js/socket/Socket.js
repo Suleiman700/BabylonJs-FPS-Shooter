@@ -1,5 +1,6 @@
 
 import GUI from '../GUI.js';
+import Player from '../Player.js';
 
 class Socket {
 
@@ -20,9 +21,19 @@ class Socket {
             console.log('Disconnected from server!');
         });
 
+        /**
+         * set start game data like player health, speed...etc
+         */
+        this.socket.on('setStartGameData', (_data) => {
+            // set UI player health
+            GUI.UI_setPlayerHealth(_data.defaultPlayerHealth)
+            // set player walk speed
+            Player.setWalkSpeed(_data.defaultPlayerWalkSpeed)
+        })
+
         // update room data
         this.socket.on('updateRoomData', (_data) => {
-            console.log(_data.players[0].coords)
+            console.log(_data)
             // set round number UI text
             GUI.UI_setRoundNumber(_data.round)
         })

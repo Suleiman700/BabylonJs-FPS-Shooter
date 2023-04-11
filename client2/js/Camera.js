@@ -1,6 +1,7 @@
 
 import Scene from './Scene.js';
 import Game from './Game.js';
+import Player from './Player.js';
 
 class Camera {
     #camera = {}
@@ -22,7 +23,7 @@ class Camera {
         this.#camera.fov = 1.5;
         this.#camera.minZ = 0;
         this.#camera.angularSensibility = 500;
-        this.#camera.speed = 2.5;
+        this.#camera.speed = Player.getWalkSpeed(); // this will be set after client receives setStartGameData emit
         this.#camera.checkCollisions = true;
         this.#camera.applyGravity = true;
         this.#camera.ellipsoid = new BABYLON.Vector3(0.25, 1.5, 0.25);

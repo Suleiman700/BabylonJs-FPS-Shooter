@@ -40,6 +40,15 @@ class Rooms {
     }
 
     /**
+     * get room data
+     * @param _roomId {string} example: 123
+     * @returns {{}}
+     */
+    getRoomData(_roomId) {
+        return this.#rooms.find(room => room.roomId == _roomId)
+    }
+
+    /**
      * get rooms
      * @returns {[{}]}
      */
