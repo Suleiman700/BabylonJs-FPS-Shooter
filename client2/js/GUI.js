@@ -21,6 +21,19 @@ class GUI {
     UI_setPlayerHealth(_playerHealth) {
         document.querySelector(`#${this.#UI_playerHealth}`).style.width = _playerHealth + '%'
     }
+
+    /**
+     * set player coords in UI
+     * @param _x {number}
+     * @param _y {number}
+     * @param _z {number}
+     * @constructor
+     */
+    UI_setPlayerCoords(_x, _y, _z) {
+        document.querySelector('#player-coords-x').innerHTML = _x.toFixed(3)
+        document.querySelector('#player-coords-y').innerHTML = _y.toFixed(3)
+        document.querySelector('#player-coords-z').innerHTML = _z.toFixed(3)
+    }
 }
 
 export default new GUI()

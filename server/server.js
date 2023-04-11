@@ -23,8 +23,6 @@ function setStartGameData(_roomId, _socket) {
     const mapId = roomData.mapData.id
     const mapData = Maps.getMapDataById(mapId)
 
-    console.log(mapData)
-
     // io.to(roomID).emit('updateRoomData', newRoomData)
     _socket.emit('setStartGameData', mapData)
 }

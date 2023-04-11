@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="./assets/css/round-info.css">
     <link rel="stylesheet" href="./assets/css/weapon-info.css">
     <link rel="stylesheet" href="./assets/css/player-stats.css">
+    <link rel="stylesheet" href="./assets/css/player-coords.css">
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
@@ -40,7 +41,6 @@
     <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
     <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
     <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
-
     <style>
         html, body {
             overflow: hidden;
@@ -63,13 +63,14 @@
     </style>
 </head>
 <body class="bg-dark">
+    <div class="player-coords">
+        <span class="mx-1">x: <span id="player-coords-x">0</span></span>
+        <span class="mx-1">y: <span id="player-coords-y">0</span></span>
+        <span class="mx-1">z: <span id="player-coords-z">0</span></span>
+    </div>
     <div id="round-info">
         <h4>Round: <span id="round-number">0</span></h4>
     </div>
-<!--    <div id="weapon-info">-->
-<!--        <h4>Ammo: <span id="ammo-count">0</span></h4>-->
-<!--    </div>-->
-
     <div class="player left skewright small player-speed">
         <h5 class="text-white">Ammo: 123</h5>
     </div>
@@ -513,7 +514,7 @@
                 var demo = requestAnimationFrame(mousemoveCallback);
             }
 
-            // Lights
+            // Lights - ADDED
             var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
 
             // ADDED
@@ -963,14 +964,14 @@
             var onKeyDown = function(event) {
 
                 switch (event.keyCode) {
-                    case 49: // 1
+                    case 49: // 1 - ADDED
                         console.log('selected akm')
                         akm.setEnabled(true);
                         pistol.setEnabled(false);
                         akmSLOT.classList.add("selected");
                         pistolSLOT.classList.remove("selected");
                         break
-                    case 50: // 2
+                    case 50: // 2 - ADDED
                         console.log('selected pistol')
                         akm.setEnabled(false);
                         pistol.setEnabled(true);
@@ -1057,18 +1058,17 @@
                             grenade.dispose();
                         }, 500);
                     }
-
                         throwGrenade()
                         break
                     case 32: // Space
                         if (wj == true) {
-                        grav = 0.7;
-                        wj = false;
-                        spood += 0.5;
+                            grav = 0.7;
+                            wj = false;
+                            spood += 0.5;
                         }
                         break;
 
-                    case 16: // Shift
+                    case 16: // Shift - ADDED
                         speed = 5
                         break;
 

@@ -1,6 +1,7 @@
 
 import GUI from '../GUI.js';
 import Player from '../Player.js';
+import Camera from '../Camera.js';
 
 class Socket {
 
@@ -24,16 +25,28 @@ class Socket {
         /**
          * set start game data like player health, speed...etc
          */
-        this.socket.on('setStartGameData', (_data) => {
+        this.socket.on('setStartGameData', (_mapData) => {
             // set UI player health
-            GUI.UI_setPlayerHealth(_data.defaultPlayerHealth)
+            GUI.UI_setPlayerHealth(_mapData.defaultPlayerHealth)
+
             // set player walk speed
-            Player.setWalkSpeed(_data.defaultPlayerWalkSpeed)
+            Player.walkSpeed = _mapData.defaultPlayerWalkSpeed
+            // set player sprint speed
+            Player.sprintSpeed = _mapData.defaultPlayerSprintSpeed
+            // set player gravity
+            Player.gravity = _mapData.defaultPlayerGravity
+
+            // pick random spawn point and set player spawn
+            const randomSpawnPoint = _mapData.playersSpawns[Math.floor(Math.random() * _mapData.playersSpawns.length)];
+            Player.setCoords(randomSpawnPoint.x, randomSpawnPoint.y, randomSpawnPoint.z)
+            // set camera angles
+            // const cameraAngles =
         })
 
         // update room data
         this.socket.on('updateRoomData', (_data) => {
-            console.log(_data)
+            // console.log(_data)
+
             // set round number UI text
             GUI.UI_setRoundNumber(_data.round)
         })

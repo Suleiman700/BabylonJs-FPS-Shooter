@@ -11,8 +11,20 @@ Camera.initCamera()
 import Scene from './Scene.js';
 Scene.createScene('MAP_01')
 
+import Keys from './Keys.js';
+
 import ModMenu from './ModMenu.js';
 
+import Updater from './Updater.js';
+
+var startRenderLoop = function (engine, canvas) {
+    engine.runRenderLoop(function () {
+        if (sceneToRender && sceneToRender.activeCamera) {
+            sceneToRender.render();
+            Updater.runUpdater()
+        }
+    });
+}
 
 window.initFunction = async function() {
     var asyncEngineCreation = async function() {
@@ -28,6 +40,9 @@ window.initFunction = async function() {
     if (!engine) throw 'engine should not be null.';
     startRenderLoop(engine, canvas);
     window.scene = Scene.getScene()
+
+    // register canvas keys
+    Keys.registerKeys()
 };
 
 initFunction().then(() => {sceneToRender = scene});

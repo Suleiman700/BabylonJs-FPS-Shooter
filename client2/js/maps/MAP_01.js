@@ -11,14 +11,18 @@ export default function Map_01_createScene(_scene, _camera) {
     box.material = boxTexture;
 
     var ground0 = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, _scene);
-    ground0.material = new BABYLON.GridMaterial("gmat0", _scene);
+    var material = new BABYLON.StandardMaterial("ground0mat", _scene);
+    material.diffuseTexture = new BABYLON.Texture("./assets/textures/ground/seamless_stone_02.jpg", _scene);
+    material.diffuseTexture.uScale = 10;
+    material.diffuseTexture.vScale = 10;
+    ground0.material = material;
     ground0.checkCollisions = true;
 
-    var ground1 = BABYLON.Mesh.CreateGround("ground1", 250, 250, 2, scene);
-    ground1.material = new BABYLON.GridMaterial("gmat1", scene);
-    ground1.position.z = 125;
-    ground1.rotation.x = -Math.PI/6;
-    ground1.checkCollisions = true;
+    // var ground1 = BABYLON.Mesh.CreateGround("ground1", 250, 250, 2, scene);
+    // ground1.material = new BABYLON.GridMaterial("gmat1", scene);
+    // ground1.position.z = 125;
+    // ground1.rotation.x = -Math.PI/6;
+    // ground1.checkCollisions = true;
 
     // stairs
     var box = new BABYLON.Mesh.CreateBox("box", 5, scene);

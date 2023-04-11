@@ -15,6 +15,12 @@ const MAP_01_CONFIG = {
     defaultPlayerSprintSpeed: 5, // default player sprint speed
     defaultPlayerHealth: 100, // default player health (1 ~ 100)
     defaultPlayerJumpHeight: 1.5, // default player jump height
+    defaultPlayerGravity: -0.6, // default player gravity
+
+    // define players spawns in map
+    playersSpawns: [
+        {x: 10, y: 10, z: 10, pan: 10, roll: 10}
+    ],
 
     defaultPrimaryWeapon: 'AKM', // default primary weapon
     defaultSecondaryWeapon: 'G17', // default secondary weapon
