@@ -1,5 +1,5 @@
 
-class RoundInfo {
+class GUI {
     #UI_roundCountLblId = 'round-number' // display the number of round
 
     constructor() {}
@@ -11,6 +11,7 @@ class RoundInfo {
     UI_setRoundNumber(_roundNumber) {
         document.querySelector(`#${this.#UI_roundCountLblId}`).innerHTML = _roundNumber
     }
+
 }
 
-export default new RoundInfo()
+export default new GUI()

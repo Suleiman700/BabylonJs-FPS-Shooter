@@ -1,5 +1,5 @@
 
-import RoundInfo from './RoundInfo.js';
+import GUI from '../GUI.js';
 
 class Socket {
 
@@ -22,9 +22,9 @@ class Socket {
 
         // update room data
         this.socket.on('updateRoomData', (_data) => {
-            console.log(_data)
+            console.log(_data.players[0].coords)
             // set round number UI text
-            RoundInfo.UI_setRoundNumber(_data.round)
+            GUI.UI_setRoundNumber(_data.round)
         })
     }
 

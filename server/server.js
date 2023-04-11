@@ -17,7 +17,7 @@ const players = [];
  * @param _roomId {string} example: 123
  */
 function sendStartGameData(_roomId) {
-    
+
 }
 
 

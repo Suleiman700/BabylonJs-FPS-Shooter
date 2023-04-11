@@ -19,6 +19,8 @@
 
     <link rel="stylesheet" href="./assets/css/lobby.css">
     <link rel="stylesheet" href="./assets/css/round-info.css">
+    <link rel="stylesheet" href="./assets/css/weapon-info.css">
+    <link rel="stylesheet" href="./assets/css/player-stats.css">
 
     <!-- Babylon.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
@@ -61,31 +63,30 @@
     <div id="round-info">
         <h4>Round: <span id="round-number">0</span></h4>
     </div>
-    <style>
-        #slotbar {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            position: absolute;
-            bottom: 10px;
-            z-index: 9999;
-        }
+<!--    <div id="weapon-info">-->
+<!--        <h4>Ammo: <span id="ammo-count">0</span></h4>-->
+<!--    </div>-->
 
-        .slot {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-            border: 2px solid transparent;
-        }
-
-        .selected {
-            border-color: #fff;
-        }
-    </style>
-    <div id="slotbar">
-        <img id="akm" class="slot" src="https://freepngimg.com/thumb/assault%20rifle/38-akm-kalash-russian-assault-rifle-png-thumb.png">
-        <img id="pistol" class="slot" src="https://garderoben.se/images/normal/glock-17-gen4-gbb-6-mm-side_26411-44720.png">
+    <div class="player left skewright small player-speed">
+        <h5 class="text-white">Ammo: 123</h5>
     </div>
+
+    <div class="player right skewleft player-health">
+        <h5 class="skewright text-white">Health</h5>
+        <div class="health-bar skewright">
+            <div class="percentage" id="ptwo"></div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="ui text-center">
+            <div class="btn-wrapX">
+                <img id="akm" class="slot" width="2000" src="https://freepngimg.com/thumb/assault%20rifle/38-akm-kalash-russian-assault-rifle-png-thumb.png">
+                <img id="pistol" class="slot" src="https://garderoben.se/images/normal/glock-17-gen4-gbb-6-mm-side_26411-44720.png">
+            </div>
+        </div>
+    </div>
+
     <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
 
 <!--<div id="lobby">-->
@@ -354,67 +355,72 @@
         var engine = null;
         var scene = null;
         var sceneToRender = null;
+
         var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+
         var createScene = function () {
             var scene = new BABYLON.Scene(engine);
             let dT = engine.getDeltaTime();
             function updateDT() {
                 dT = engine.getDeltaTime();
             }
-        
-            var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-        
-            var sv = new BABYLON.GUI.ScrollViewer();
-            sv.name = "mysv";
-            sv.thickness = 3;
-            sv.color = "green";
-            sv.width = 0; // original: 1
-            sv.height = 0.2;
-            sv.background = "black";
-            sv.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-            sv.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-            // console.log(sv);
 
-            advancedTexture.addControl(sv);
+            {
+                var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
 
-            var tb = new BABYLON.GUI.TextBlock();
-            tb.name = "mytb";
-            tb.textWrapping = BABYLON.GUI.TextWrapping.WordWrap;
-            tb.resizeToFit = true;
-            tb.paddingTop = "0%";
-            tb.paddingLeft = "10px";
-            tb.paddingRight = "5px"
-            tb.paddingBottom = "0%";
-            tb.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-            tb.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-            tb.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-            tb.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-            tb.fontSize = "13px";
-            tb.fontFamily = "Courier New";
-            tb.color = "red";
-            tb.background = "yellow";
+                // HIDDEN - NOT USED ANY MORE
+                // var sv = new BABYLON.GUI.ScrollViewer();
+                // sv.name = 'mysv';
+                // sv.thickness = 3;
+                // sv.color = 'green';
+                // sv.width = 0; // original: 1
+                // sv.height = 0.2;
+                // sv.background = 'black';
+                // sv.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+                // sv.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+                // // console.log(sv);
+                //
+                // advancedTexture.addControl(sv);
 
-            sv.addControl(tb);
+                // var tb = new BABYLON.GUI.TextBlock();
+                // tb.name = 'mytb';
+                // tb.textWrapping = BABYLON.GUI.TextWrapping.WordWrap;
+                // tb.resizeToFit = true;
+                // tb.paddingTop = '0%';
+                // tb.paddingLeft = '10px';
+                // tb.paddingRight = '5px'
+                // tb.paddingBottom = '0%';
+                // tb.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+                // tb.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                // tb.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+                // tb.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                // tb.fontSize = '13px';
+                // tb.fontFamily = 'Courier New';
+                // tb.color = 'red';
+                // tb.background = 'yellow';
 
-            // build our own console.log() replacement... called console.out()
-            console.out = function(text) {
-                tb.text += "\n\n" + "> " + text;
-                if (sv.verticalBar) {
-                    var vbar = sv.verticalBar;
-                    console.log(sv.vbar);
-                    vbar.color = "cornflowerblue";
-                    vbar._value = 1;
-                }
+                // sv.addControl(tb);
+
+                // // build our own console.log() replacement... called console.out()
+                // console.out = function (text) {
+                //     tb.text += '\n\n' + '> ' + text;
+                //     if (sv.verticalBar) {
+                //         var vbar = sv.verticalBar;
+                //         console.log(sv.vbar);
+                //         vbar.color = 'cornflowerblue';
+                //         vbar._value = 1;
+                //     }
+                // }
+                // // replacement for console.clear()... console.wipe()
+                // console.wipe = function () {
+                //     // sv.verticalBar.value = 0;
+                //     tb.text = '';
+                // }
+
+                // sv.onReadyObservable.add(console.log("sv ORO"));
+                // sv.onAfterDrawObservable.add(console.log('sv drawn'));
+                // sv.verticalBar.onValueChangedObservable.add(console.log('vb change'));
             }
-            // replacement for console.clear()... console.wipe()
-            console.wipe = function() {
-                // sv.verticalBar.value = 0;
-                tb.text = "";
-            }
-
-            // sv.onReadyObservable.add(console.log("sv ORO"));
-            sv.onAfterDrawObservable.add(console.log("sv drawn"));
-            sv.verticalBar.onValueChangedObservable.add(console.log("vb change"));
 
             // ammo label
             var ammocount = new BABYLON.GUI.TextBlock();
@@ -426,7 +432,7 @@
 
             // crosshair
             var ammocount1 = new BABYLON.GUI.TextBlock();
-            ammocount1.text = ".";
+            ammocount1.text = "+";
             ammocount1.color = "pink";
             ammocount1.fontSize = 24;
             advancedTexture.addControl(ammocount1);
@@ -442,15 +448,17 @@
             // advancedTexture.addControl(sheal);
             // sheal.linkWithMesh(target);
             // sheal.linkOffsetY = -80;
-        
-        
+
+
+            // ADDED
             canvas.onclick = function() {
                 canvas.requestPointerLock();
-        
             }
-        
+
+            // ADDED
             canvas.addEventListener('pointerlockchange', lockChangeLog, false);
-        
+
+            // ADDED
             function lockChangeLog() {
                 if (canvas.pointerLockElement === canvas) {
                     control = true;
@@ -462,16 +470,18 @@
                     canvas.removeEventListener("mousemove", mousemoveCallback, false);
                 }
             }
-        
-        
-        
+
+
+
             function mousemoveCallback(event) {
+                console.log('here')
                 var demo = requestAnimationFrame(mousemoveCallback);
             }
-        
+
             // Lights
             var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-        
+
+            // ADDED
             var camera = new BABYLON.FreeCamera("camera", new BABYLON.Vector3(0, 25, 0), scene);
             camera.attachControl(canvas, true);
             camera.keysUp = [87];
@@ -492,7 +502,7 @@
             camera._needMoveForGravity = true;
 
 
-            // gun
+            // gun - ADDED
             var akm = new BABYLON.TransformNode();
             akm.parent = camera;
             camera.fov = 1;
@@ -515,7 +525,7 @@
                 }
             });
 
-            // gun
+            // gun - ADDED
             var pistol = new BABYLON.TransformNode();
             pistol.parent = camera;
             camera.fov = 1;
@@ -542,91 +552,92 @@
 
 
 
-            var box = BABYLON.MeshBuilder.CreateBox("box", {width: 10, height: 5, depth: 5}, scene);
-            box.position.z = 20;
-            box.checkCollisions = true;
-            var boxTexture = new BABYLON.StandardMaterial("boxTexture", scene);
-            boxTexture.diffuseTexture = new BABYLON.Texture("./assets/textures/wooden_box_01.jpg", scene);
+            // ADDED
+            // var box = BABYLON.MeshBuilder.CreateBox("box", {width: 10, height: 5, depth: 5}, scene);
+            // box.position.z = 20;
+            // box.checkCollisions = true;
+            // var boxTexture = new BABYLON.StandardMaterial("boxTexture", scene);
+            // boxTexture.diffuseTexture = new BABYLON.Texture("./assets/textures/wooden_box_01.jpg", scene);
+            // // assign the texture to the box
+            // box.material = boxTexture;
 
-            // assign the texture to the box
-            box.material = boxTexture;
-        
             var recoilm = new BABYLON.Animation("recoilm", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
             var remkeys = [];
-        
+
             remkeys.push({
                 frame: 0,
                 value: 0.5
             });
-        
+
             remkeys.push({
                 frame: 1,
                 value: -0.03
             });
-        
+
             remkeys.push({
                 frame: 5,
                 value: 0.5
             });
-        
+
             remkeys.push({
                 frame: 6,
                 value: 0.2
             });
-        
+
             remkeys.push({
                 frame: 7,
                 value: -0.06
             });
-        
+
             remkeys.push({
                 frame: 11,
                 value: 0.2
             });
-        
+
             recoilm.setKeys(remkeys);
             akm.animations.push(recoilm);
-        
+
             // regular: akm.position = new BABYLON.Vector3(0.5, -0.7, 0.5);
             //aim: akm.position = new BABYLON.Vector3(0, -0.4125, 0.2);
 
+            // // ADDED
+            // var ground0 = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, scene);
+            // ground0.material = new BABYLON.GridMaterial("gmat0", scene);
+            // ground0.checkCollisions = true;
 
-            var ground0 = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, scene);
-            ground0.material = new BABYLON.GridMaterial("gmat0", scene);
-            ground0.checkCollisions = true;
+            // // ADDED
+            // var ground1 = BABYLON.Mesh.CreateGround("ground1", 250, 250, 2, scene);
+            // ground1.material = new BABYLON.GridMaterial("gmat1", scene);
+            // ground1.position.z = 125;
+            // ground1.rotation.x = -Math.PI/6;
+            // ground1.checkCollisions = true;
 
-            var ground1 = BABYLON.Mesh.CreateGround("ground1", 250, 250, 2, scene);
-            ground1.material = new BABYLON.GridMaterial("gmat1", scene);
-            ground1.position.z = 125;
-            ground1.rotation.x = -Math.PI/6;
-            ground1.checkCollisions = true;
+            // // stairs - ADDED
+            // var box = new BABYLON.Mesh.CreateBox("box", 5, scene);
+            // box.position.y = -2;
+            // box.checkCollisions = true;
+            // box.type = "wall"
+            // var box1 = new BABYLON.Mesh.CreateBox("box1", 5, scene);
+            // box1.position.y = -1.5;
+            // box1.position.z = 1;
+            // box1.checkCollisions = true;
+            // var box2 = new BABYLON.Mesh.CreateBox("box2", 5, scene);
+            // box2.position.y = -1;
+            // box2.position.z = 2;
+            // box2.checkCollisions = true;
+            // var box3 = new BABYLON.Mesh.CreateBox("box2", 5, scene);
+            // box3.position.y = -0.5;
+            // box3.position.z = 3;
+            // box3.checkCollisions = true;
+            // var box4 = new BABYLON.Mesh.CreateBox("box4", 5, scene);
+            // box4.position.y = 0;
+            // box4.position.z = 4;
+            // box4.checkCollisions = true;
+            // var box5 = new BABYLON.Mesh.CreateBox("box5", 5, scene);
+            // box5.position.y = 0.5;
+            // box5.position.z = 5;
+            // box5.checkCollisions = true;
 
-            // stairs
-            var box = new BABYLON.Mesh.CreateBox("box", 5, scene);
-            box.position.y = -2;
-            box.checkCollisions = true;
-            box.type = "wall"
-            var box1 = new BABYLON.Mesh.CreateBox("box1", 5, scene);
-            box1.position.y = -1.5;
-            box1.position.z = 1;
-            box1.checkCollisions = true;
-            var box2 = new BABYLON.Mesh.CreateBox("box2", 5, scene);
-            box2.position.y = -1;
-            box2.position.z = 2;
-            box2.checkCollisions = true;
-            var box3 = new BABYLON.Mesh.CreateBox("box2", 5, scene);
-            box3.position.y = -0.5;
-            box3.position.z = 3;
-            box3.checkCollisions = true;
-            var box4 = new BABYLON.Mesh.CreateBox("box4", 5, scene);
-            box4.position.y = 0;
-            box4.position.z = 4;
-            box4.checkCollisions = true;
-            var box5 = new BABYLON.Mesh.CreateBox("box5", 5, scene);
-            box5.position.y = 0.5;
-            box5.position.z = 5;
-            box5.checkCollisions = true;
-        
             var health = 1;
 
             var target = BABYLON.Mesh.CreateSphere("target", 12, 5, scene);
@@ -722,26 +733,6 @@
                 }
             })
 
-            // make zombies follow player
-            // scene.registerBeforeRender(function() {
-            //     // Iterate over the zombies array and update their positions
-            //     for (var i = 0; i < zombies.length; i++) {
-            //         var zombie = zombies[i];
-            //         var direction = camera.position.subtract(zombie.position).normalize();
-            //         zombie.position.addInPlace(direction.scale(0.1)); // Adjust the speed of the zombie
-            //         zombie.lookAt(camera.position);
-            //     }
-            // });
-
-            // Link the shield to the first target in the array
-            // var target = BABYLON.Mesh.CreateSphere("target", 12, 5, scene);
-            // target.position.y = 5;
-            // target.position.x = 10;
-            // target.material = new BABYLON.StandardMaterial("mat", scene);
-            // target.material.emissiveColor = new BABYLON.Color3(health, health, health);
-            // sheal.linkWithMesh(target);
-            // sheal.linkOffsetY = -80;
-
             var translate = function (mesh, direction, power) {
                 mesh.physicsImpostor.setLinearVelocity(
                     mesh.physicsImpostor.getLinearVelocity().add(direction.scale(power)
@@ -757,7 +748,7 @@
             bloodTexture.disableLighting = true; // disable lighting on the texture
             bloodTexture.billboardMode = BABYLON.Material.BILLBOARDMODE_Y; // make sure texture faces up
 
-// create a blood splatter on the ground
+            // create a blood splatter on the ground
             function spawnBlood(position) {
                 var blood = BABYLON.MeshBuilder.CreateGround("blood", {width: 1, height: 1, subdivisions: 1}, scene);
                 blood.position.copyFrom(position);
@@ -882,13 +873,13 @@
                 //     //camera.position = ray.origin.clone().add(ray.direction.scale(100));
                 // }
             }
-        
+
             var wj = true;
             var grav = -0.6;
             var speed = 2.5;
             var spood = 0;
             var care = true;
-        
+
             /*var map = {};
             scene.actionManager = new BABYLON.ActionManager(scene);
             scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyDownTrigger, function (evt) {
@@ -909,9 +900,9 @@
             scene.actionManager.registerAction(new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnKeyUpTrigger, function (evt) {
                 map[evt.sourceEvent.key] = evt.sourceEvent.type == "keydown";
             }));
-        
+
             function keypress() {
-        
+
                 if (map[" "]) {
                     if (wj == true) {
                         grav = 0.7;
@@ -919,7 +910,7 @@
                         spood += 0.5;
                     }
                 };
-        
+
                 if ((map["r"] || map ["R"])) {
                     if (care == true && aure == 0) {
                         aure = 100;
@@ -928,14 +919,14 @@
                         reload.play();
                     }
                 };
-        
+
             }*/
 
             var akmSLOT = document.getElementById("akm");
             var pistolSLOT = document.getElementById("pistol");
 
             var onKeyDown = function(event) {
-        
+
                 switch (event.keyCode) {
                     case 49: // 1
                         console.log('selected akm')
@@ -1041,11 +1032,11 @@
                         spood += 0.5;
                         }
                         break;
-        
+
                     case 16: // Shift
                         speed = 5
                         break;
-        
+
                     case 82: // R
                         if (care == true && aure == 0) {
                             aure = 100;
@@ -1054,38 +1045,38 @@
                             reload.play();
                         }
                         break;
-        
+
                 }
-        
+
             };
-        
+
             var onKeyUp = function(event) {
-        
+
                 switch (event.keyCode) {
-        
+
                     case 32: // Space
                         break;
-        
+
                     case 16: // Shift
                         speed = 2.5;
                         break;
-        
+
                     case 82: // R
                         care = true;
                         break;
-        
+
                 }
-        
+
             };
-        
+
             canvas.addEventListener('keydown', onKeyDown, false);
             canvas.addEventListener('keyup', onKeyUp, false);
-        
+
             scene.onDispose = function() {
                 canvas.removeEventListener('keydown', onKeyDown);
                 canvas.removeEventListener('keyup', onKeyUp);
             }
-        
+
             var left, right;
             left = 0;
             right = 2;
@@ -1101,9 +1092,9 @@
             var auti = 1;
             auti /= (1000/60);
             var kickback = 0.02;
-        
-            
-        
+
+
+
             scene.onPointerDown = (e) => {
                 if (e.button === left) {
                     aufi = true;
@@ -1126,43 +1117,44 @@
                     }
                 }
             }
-            
+
             scene.onPointerUp = (e) => {
                 if (e.button === left) {
                     aufi = false;
                 }
                 if (e.button === right) {
-                    
+
                 }
             }
-        
+
             var shoot = new BABYLON.Sound("gunshot", "gunshot.mp3", scene);
             var reload = new BABYLON.Sound("reload", "reload.mp3", scene);
-        
+
             var si = 0;
             var sf = 0;
             var contin = true;
-        
+
             var update = function() {
+                console.log('update')
                 // sheal.width = health/10;
-                console.wipe();
+                // console.wipe();
                 //console.out();
                 camera.speed = speed + spood;
-                console.out(dT);
-        
+                // console.out(dT);
+
                 camera.onCollide = function (colMesh) {
         		    if (colMesh.uniqueId === ground0.uniqueId) {
         			    wj = true;
         		    }
         	    }
-        
+
                 scene.gravity.y = grav;
 
                 if (grav > -0.4) {
                     grav -= 0.05;
                 }
 
-                
+
                 target.material.emissiveColor = new BABYLON.Color3(health, health, health);
 
                 if (aufi == true && auti <= 0 && auam != 0 && aure == 0) {
@@ -1175,21 +1167,21 @@
                 }
 
                 if (auti >= 0) auti -= dT;
-        
+
                 if (health < 0.01) {
                     health = 1;
                     target.position.x += 5;
                 }
-        
+
                 if (aure != 0) aure--;
                 if (aure == 1) auam = 30;
-        
+
                 ammocount.text = auam+"";
                 ammocount.leftInPixels = canvas.width/2.1;
-        
+
             }
 
-        
+
             scene.registerBeforeRender(function() {
                 update();
                 updateDT();
@@ -1197,34 +1189,34 @@
 
                 // bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 1, restitution: 0.1, friction: 0.2 }, scene);
             });
-        
+
             canvas.focus();
-        
+
             return scene;
         }
-                window.initFunction = async function() {
-                    
-                    
-                    var asyncEngineCreation = async function() {
-                        try {
-                        return createDefaultEngine();
-                        } catch(e) {
-                        console.log("the available createEngine function failed. Creating the default engine instead");
-                        return createDefaultEngine();
-                        }
-                    }
+    window.initFunction = async function() {
+        var asyncEngineCreation = async function() {
+            try {
+            return createDefaultEngine();
+            } catch(e) {
+            console.log("the available createEngine function failed. Creating the default engine instead");
+            return createDefaultEngine();
+            }
+        }
 
-                    window.engine = await asyncEngineCreation();
+        window.engine = await asyncEngineCreation();
         if (!engine) throw 'engine should not be null.';
         startRenderLoop(engine, canvas);
-        window.scene = createScene();};
-        initFunction().then(() => {sceneToRender = scene                    
-        });
+        // window.scene = createScene();
+    };
 
-        // Resize
-        window.addEventListener("resize", function () {
-            engine.resize();
-        });
+    initFunction().then(() => {sceneToRender = scene});
+
+    // Resize
+    window.addEventListener("resize", function () {
+        engine.resize();
+    });
+
 
 </script>
 </body>
