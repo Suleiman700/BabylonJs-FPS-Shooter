@@ -37,11 +37,13 @@ class GUI {
 
     /**
      * set ammo in UI
-     * @param _ammo {number} example: 30
+     * @param _weaponMagSize {number} example: 30
+     * @param _weaponAmmoCapacity {number} example: 180
      * @constructor
      */
-    UI_setAmmo(_ammo) {
-        document.querySelector('#ui-weapon-ammo').innerHTML = _ammo
+    UI_setAmmo(_weaponMagSize, _weaponAmmoCapacity) {
+        const ammoLeft = parseInt(_weaponAmmoCapacity) - parseInt(_weaponMagSize)
+        document.querySelector('#ui-weapon-ammo').innerHTML = `${_weaponMagSize}/${ammoLeft}`
     }
 }
 

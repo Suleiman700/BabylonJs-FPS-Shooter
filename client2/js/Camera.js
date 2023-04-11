@@ -27,7 +27,8 @@ class Camera {
         this.#camera._needMoveForGravity = true;
 
         this.#camera.onCollide = _collideMesh => {
-            Player.isOnGround = _collideMesh.structure === 'ground'
+            // Player.isOnGround = _collideMesh.structure === 'ground'
+            Player.isOnGround = _collideMesh.jumpAble
         }
 
 //         // define roll and pitch angles in radians

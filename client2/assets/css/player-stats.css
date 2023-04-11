@@ -139,6 +139,7 @@ h3 {
 .player-speed {
     z-index: 999999;
     display: flex;
+    width: 200px;
     position: absolute;
     bottom: 0;
     right: 0;

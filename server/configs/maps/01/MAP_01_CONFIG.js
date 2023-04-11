@@ -27,7 +27,7 @@ const MAP_01_CONFIG = {
     ],
 
     // default primary weapon
-    defaultPrimaryWeapon: CONFIG_AKM,
+    defaultPrimaryWeaponId: 'AKM',
     defaultSecondaryWeapon: 'G17', // default secondary weapon
 }
 

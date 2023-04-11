@@ -33,8 +33,8 @@ class Socket {
             console.log(_mapData)
 
             // set primary weapon
-            Weapons.primaryWeaponId = _mapData.defaultPrimaryWeapon.id
-            Weapons.initPrimaryWeapon()
+            Weapons.primaryWeaponId = _mapData.defaultPrimaryWeaponId
+            Weapons.pickupPrimaryWeapon()
 
             // set player walk speed
             Player.walkSpeed = _mapData.defaultPlayerWalkSpeed

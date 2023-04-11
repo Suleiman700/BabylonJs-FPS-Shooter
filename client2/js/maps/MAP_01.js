@@ -5,13 +5,14 @@ export default function Map_01_createScene(_scene, _camera) {
     var box = BABYLON.MeshBuilder.CreateBox("box", {width: 10, height: 5, depth: 5}, _scene);
     box.position.z = 20;
     box.checkCollisions = true;
+    box.jumpAble = true
     var boxTexture = new BABYLON.StandardMaterial("boxTexture", _scene);
     boxTexture.diffuseTexture = new BABYLON.Texture("./assets/textures/wooden_box_01.jpg", _scene);
     // assign the texture to the box
     box.material = boxTexture;
 
     var ground = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, _scene);
-    ground.structure = 'ground'
+    ground.jumpAble = true
     var material = new BABYLON.StandardMaterial("ground0mat", _scene);
     material.diffuseTexture = new BABYLON.Texture("./assets/textures/ground/seamless_stone_02.jpg", _scene);
     material.diffuseTexture.uScale = 10;
