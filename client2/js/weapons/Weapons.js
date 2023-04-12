@@ -73,20 +73,20 @@ class Weapons {
         let currentAmmoInMag = 0
         let currentAmmoInCapacity = 0
         // check if mag size exists in capacity
-        if (this.#primaryWeaponInstance.ammoCapacity >= this.#primaryWeaponInstance.magSize) {
+        if (this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity >= this.#primaryWeaponInstance.WEAPON_SETTINGS.magSize) {
             // take mag size from capacity
-            currentAmmoInMag = this.#primaryWeaponInstance.magSize
+            currentAmmoInMag = this.#primaryWeaponInstance.WEAPON_SETTINGS.magSize
             this.#primaryWeaponInstance.ammoLeftInLag = currentAmmoInMag
 
-            this.#primaryWeaponInstance.ammoCapacity -= currentAmmoInMag
-            currentAmmoInCapacity = this.#primaryWeaponInstance.ammoCapacity
+            this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity -= currentAmmoInMag
+            currentAmmoInCapacity = this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity
         }
         // capacity does not have mag size
         else {
             // set capacity as the current ammo in mag
-            currentAmmoInMag = this.#primaryWeaponInstance.ammoCapacity
+            currentAmmoInMag = this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity
             // set capacity to 0
-            this.#primaryWeaponInstance.ammoCapacity = 0
+            this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity = 0
         }
         GUI.UI_setAmmo(currentAmmoInMag, currentAmmoInCapacity)
     }
@@ -97,7 +97,7 @@ class Weapons {
      */
     fire() {
         // check if weapon has ammo left in mag
-        if (this.#primaryWeaponInstance.ammoLeftInMag > 0) {
+        if (this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoLeftInMag > 0) {
 
             // fire bullet and decrease ammo
             this.#primaryWeaponInstance.fireBullet();
@@ -106,19 +106,19 @@ class Weapons {
             this.COUNT_bulletsFired++;
 
             // update ammo text in UI
-            const currentAmmoInMag = this.#primaryWeaponInstance.ammoLeftInMag;
-            const currentAmmoCapacity = this.#primaryWeaponInstance.ammoCapacity;
+            const currentAmmoInMag = this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoLeftInMag;
+            const currentAmmoCapacity = this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity;
             GUI.UI_setAmmo(currentAmmoInMag, currentAmmoCapacity);
 
             // play gunshot sound
-            const gunshotSound = new BABYLON.Sound("gunshot", this.#primaryWeaponInstance.SOUND_shot, Scene.getScene(), null, {
+            const gunshotSound = new BABYLON.Sound("gunshot", this.#primaryWeaponInstance.SOUNDS.shoot, Scene.getScene(), null, {
                 loop: false,
                 autoplay: true,
             });
 
         } else {
             // play out of ammo sound
-            const outOfAmmoSound = new BABYLON.Sound("sound", this.#primaryWeaponInstance.SOUND_no_ammo_left, Scene.getScene(), null, {
+            const outOfAmmoSound = new BABYLON.Sound("sound", this.#primaryWeaponInstance.SOUNDS.noAmmoLeft, Scene.getScene(), null, {
                 loop: false,
                 autoplay: true,
             });
@@ -131,38 +131,38 @@ class Weapons {
      */
     reload() {
         // play weapon reload sound
-        const music = new BABYLON.Sound("sound", this.#primaryWeaponInstance.SOUND_reload, Scene.getScene(), null, {
+        const music = new BABYLON.Sound("sound", this.#primaryWeaponInstance.SOUNDS.reload, Scene.getScene(), null, {
             loop: false,
             autoplay: true,
         });
         setTimeout(() => {
             // check if capacity have mag
-            if (this.#primaryWeaponInstance.ammoCapacity >= this.#primaryWeaponInstance.magSize) {
+            if (this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity >= this.#primaryWeaponInstance.WEAPON_SETTINGS.magSize) {
                 // take the amount of bullets fired from capacity and put it into the mag
-                this.#primaryWeaponInstance.ammoCapacity -= this.COUNT_bulletsFired
-                this.#primaryWeaponInstance.ammoLeftInMag += this.COUNT_bulletsFired
+                this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity -= this.COUNT_bulletsFired
+                this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoLeftInMag += this.COUNT_bulletsFired
             }
             else {
                 // check if capacity have the amount of fired bullets
-                if (this.#primaryWeaponInstance.ammoCapacity >= this.COUNT_bulletsFired) {
+                if (this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity >= this.COUNT_bulletsFired) {
                     // take the amount of bullets fired from capacity into mag
-                    this.#primaryWeaponInstance.ammoCapacity -= this.COUNT_bulletsFired
+                    this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity -= this.COUNT_bulletsFired
 
-                    this.#primaryWeaponInstance.ammoLeftInMag += this.COUNT_bulletsFired
+                    this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoLeftInMag += this.COUNT_bulletsFired
                 }
                 else {
                     // take all ammo capacity and put it in mag
-                    this.#primaryWeaponInstance.ammoLeftInMag += this.#primaryWeaponInstance.ammoCapacity
+                    this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoLeftInMag += this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity
 
-                    this.#primaryWeaponInstance.ammoCapacity = 0
+                    this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity = 0
                 }
             }
 
-            GUI.UI_setAmmo(this.#primaryWeaponInstance.ammoLeftInMag, this.#primaryWeaponInstance.ammoCapacity)
+            GUI.UI_setAmmo(this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoLeftInMag, this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity)
             this.COUNT_bulletsFired = 0
             this.#isReloading = false
             GUI.UI_showReloadingText(false)
-        }, this.#primaryWeaponInstance.reloadSpeed)
+        }, this.#primaryWeaponInstance.WEAPON_SETTINGS.reloadSpeed)
     }
 
     /**
@@ -177,7 +177,7 @@ class Weapons {
             this.#primaryWeaponInstance.drawOnUI()
         }
         else if (this.#selectedWeaponLoadout === 'secondary') {
-
+            this.#primaryWeaponInstance.isShown = false
         }
     }
 
@@ -185,9 +185,9 @@ class Weapons {
         this.#isReloading = _option;
         if (_option) {
             // check if mag is not full
-            if (this.#primaryWeaponInstance.ammoLeftInMag < this.#primaryWeaponInstance.magSize) {
+            if (this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoLeftInMag < this.#primaryWeaponInstance.WEAPON_SETTINGS.magSize) {
                 // check if no ammo capacity
-                if (this.#primaryWeaponInstance.ammoCapacity == 0) {
+                if (this.#primaryWeaponInstance.WEAPON_SETTINGS.ammoCapacity == 0) {
                     if (this.#debug) console.log('[Weapons] Cant reload weapon, there are no more bullets in capacity')
                     this.#isReloading = false
                     return
@@ -221,7 +221,7 @@ class Weapons {
             // this will keep firing based on weapon fire rate
             this.#fireIntervalId = setInterval(() => {
                 this.fire();
-            }, this.#primaryWeaponInstance.fireRate);
+            }, this.#primaryWeaponInstance.WEAPON_SETTINGS.fireRate);
         } else {
             clearInterval(this.#fireIntervalId);
         }

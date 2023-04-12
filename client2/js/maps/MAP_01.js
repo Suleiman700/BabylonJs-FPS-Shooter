@@ -112,7 +112,7 @@ export default function Map_01_createScene(_scene, _camera) {
     pistol.rotation.y = -1.7;
     pistol.rotation.z = 0.01;
     // load gun model
-    BABYLON.SceneLoader.ImportMesh("", "./assets/models/guns/", "G17.glb", _scene, function (newMeshes) {
+    BABYLON.SceneLoader.ImportMesh("", "./assets/models/weapons/", "G17.glb", _scene, function (newMeshes) {
         var mat = new BABYLON.StandardMaterial("", _scene);
         mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
         for (var index = 0; index < newMeshes.length; index++) {

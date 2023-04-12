@@ -1,4 +1,7 @@
 
+import Loader from './Loader.js';
+await Loader.loadWeapons()
+
 import Socket from './socket/Socket.js';
 Socket.connect()
 
@@ -12,9 +15,7 @@ import Scene from './Scene.js';
 Scene.createScene('MAP_01')
 
 import Keys from './Keys.js';
-
 import ModMenu from './ModMenu.js';
-
 import Updater from './Updater.js';
 
 var startRenderLoop = function (engine, canvas) {
