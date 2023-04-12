@@ -8,17 +8,19 @@ class AKM {
     name = 'AKM'
     damage = 10 // weapon damage
     recoil = 10 // weapon recoil
-    reloadSpeed = 1000 // in ms
+    reloadSpeed = 2000 // in ms
     fireRate = 100 // in ms
-    ammoLeft = 180 // ammo left in weapon - this will be updated on weapon pickup and on shoot
-    magSize = 30 // magazine size
-    ammoCapacity = 180 // the ammo capacity weapon can hold
+
+    ammoLeftInMag = 200 // ammo left in mag
+    magSize = 200 // magazine size
+    ammoCapacity = 400 // total ammo in weapon
 
     bulletDecay = 1000 // decay bullet in ms
     bulletSpeed = 1000
 
-    #SOUND_reload = './assets/sounds/weapons/weapon_reload.mp3'
+    SOUND_reload = './assets/sounds/weapons/weapon_reload.mp3'
     SOUND_shot = './assets/sounds/weapons/gun_shot.mp3'
+    SOUND_no_ammo_left = './assets/sounds/weapons/no_ammo_left.mp3'
     #MODEL_weaponModel = 'https://dl.dropbox.com/s/kqnda4k2aqx8pro/AKM.obj'
 
     constructor() {}
@@ -56,7 +58,9 @@ class AKM {
         }
 
         var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
+        bulletMesh.renderOrder = 1;
         var bullet = BABYLON.Mesh.CreateSphere("bullet", 12, 1, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
+        // bullet.depthTest = false;
         bullet.position.x = Camera.getCamera().position.x
         bullet.position.y = Camera.getCamera().position.y
         bullet.position.z = Camera.getCamera().position.z
@@ -68,7 +72,9 @@ class AKM {
         }, this.bulletDecay)
 
         // play firing sound
-        new BABYLON.Sound("gunshot", "gunshot.mp3", Scene.getScene()).play()
+        // new BABYLON.Sound("gunshot", "gunshot.mp3", Scene.getScene()).play()
+
+        this.ammoLeftInMag--
     }
 }
 

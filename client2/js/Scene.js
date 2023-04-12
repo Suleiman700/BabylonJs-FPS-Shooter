@@ -16,7 +16,10 @@ class Scene {
 
         this.#scene.onPointerDown = _event => {
             if (_event.button === KEY_BINDINGS.LEFT_MOUSE) {
-                Weapons.isFiring = true;
+                // fire only if weapon is not in reloading progress
+                if (!Weapons.isReloading) {
+                    Weapons.isFiring = true;
+                }
             }
         }
 

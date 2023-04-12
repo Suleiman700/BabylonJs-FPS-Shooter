@@ -2,6 +2,7 @@
 class GUI {
     #UI_roundCountLblId = 'round-number' // display the number of round
     #UI_playerHealth = 'UI-player-health' // display player health
+    #UI_reloadingIndicator = 'UI-reloading-indicator'
 
     constructor() {}
 
@@ -42,8 +43,15 @@ class GUI {
      * @constructor
      */
     UI_setAmmo(_weaponMagSize, _weaponAmmoCapacity) {
-        const ammoLeft = parseInt(_weaponAmmoCapacity) - parseInt(_weaponMagSize)
-        document.querySelector('#ui-weapon-ammo').innerHTML = `${_weaponMagSize}/${ammoLeft}`
+        document.querySelector('#ui-weapon-ammo').innerHTML = `${_weaponMagSize}/${_weaponAmmoCapacity}`
+    }
+
+    /**
+     * show or hide reloading text
+     * @param _option {boolean}
+     */
+    UI_showReloadingText(_option) {
+        document.querySelector(`#${this.#UI_reloadingIndicator}`).style.display = _option?'flex':'none'
     }
 }
 

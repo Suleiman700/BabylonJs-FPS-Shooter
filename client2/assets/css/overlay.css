@@ -1,0 +1,12 @@
+
+#UI-reloading-indicator {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    color: red;
+    top: 100px;
+    font-size: 28px;
+    font-style: italic;
+}

@@ -3,9 +3,11 @@ import Game from './Game.js';
 import Scene from './Scene.js';
 import Player from './Player.js';
 import player from './Player.js';
+import { KEY_BINDINGS } from './CONTROLS.js';
+import Weapons from './weapons/Weapons.js';
 
 class Keys {
-    #debug = true
+    #debug = false
     #isSpaceDown = false
 
     constructor() {
@@ -30,14 +32,21 @@ class Keys {
     #onKeyDown(_event) {
         switch (_event.keyCode) {
             case 49: // 1
+                Weapons.selectedWeaponLoadout = 'primary'
                 if (this.#debug) console.log('selected primary weapon')
                 break
             case 50: // 2
+                Weapons.selectedWeaponLoadout = 'secondary'
                 if (this.#debug) console.log('selected secondary weapon')
                 break
             case 16: // shift
                 if (this.#debug) console.log('is sprinting')
                 Player.isSprinting(true)
+                break
+            case KEY_BINDINGS.WEAPON_RELOAD: // R
+                if (!Weapons.isReloading) {
+                    Weapons.isReloading = true
+                }
                 break
             case 32: // space
                 // check if player is on ground
@@ -59,6 +68,9 @@ class Keys {
             case 16: // shift
                 if (this.#debug) console.log('is not sprinting')
                 Player.isSprinting(false)
+                break
+            case KEY_BINDINGS.WEAPON_RELOAD:
+                // Weapons.isReloading = false
                 break
             case 32: // space
                 if (this.#isSpaceDown) {
