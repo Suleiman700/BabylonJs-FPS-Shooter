@@ -11,10 +11,12 @@ class AKM {
 
     #isShown = false // if weapon is shown or not
 
+    animations = []
+
     WEAPON_SETTINGS = {
         reloadSpeed: 2000, // weapon reload speed in ms
         fireRate: 100, // weapon fire rate in ms
-        recoil: 10, // weapon recoil
+        recoil: 0.02, // weapon recoil
         fov: 1, // weapon field of view
         magSize: 30, // total amount of ammo magazine can hold
         ammoLeftInMag: 30, // set same as magSize
@@ -32,17 +34,23 @@ class AKM {
         noAmmoLeft: './assets/sounds/weapons/no_ammo_left.mp3'
     }
 
-
     WEAPON_MESH = {
         // filePath: 'https://dl.dropbox.com/s/kqnda4k2aqx8pro/',
         // fileName: 'AKM.obj'
         filePath: './assets/models/weapons/',
-        fileName: 'AKM.obj'
+        fileName: 'AKM.glb'
     }
 
-    #CONFIG_posOnScreen = {
-        position: {x: 0.5, y: -0.7, z: 0.5},
-        rotation: {x: -0.01, y: 0, z: 0,}
+    MEASUREMENTS = {
+        position: {x: 1.0, y: -0.7, z: 1.5},
+        rotation: {x: 80, y: 0, z: 4.5},
+        scale: {x: 0.02, y: 0.02, z: 0.02}
+    }
+
+    SCOPE = {
+        fov: 0.5,
+        position: {x: 0.02, y: -0.4, z: 1.0},
+        rotation: {x: 80, y: 0, z: 4.7},
     }
 
     MODEL_weaponModel = undefined
@@ -58,17 +66,11 @@ class AKM {
         this.#isShown = false
 
         await BABYLON.SceneLoader.ImportMeshAsync("", this.WEAPON_MESH.filePath, this.WEAPON_MESH.fileName, Scene.getScene()).then((result) => {
-            // this.MODEL_weaponModel = result.meshes[0]
-            var mat = new BABYLON.StandardMaterial("", Scene.getScene());
-            mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
-            mat.bumpTexture = new BABYLON.Texture("https://dl.dropbox.com/s/hiuhjsp4pckt9pu/akm_norm.tga");
-            mat.specularTexture = new BABYLON.Texture("https://dl.dropbox.com/s/f3samm7vuvl0ez4/akm_spec.tga");
             for (var index = 0; index < result.meshes.length; index++) {
                 let ak = result.meshes[index];
-                ak.material = mat;
-                ak.scaling.x = 0.05;
-                ak.scaling.y = 0.05;
-                ak.scaling.z = 0.05;
+                ak.scaling.x = this.MEASUREMENTS.scale.x;
+                ak.scaling.y = this.MEASUREMENTS.scale.y;
+                ak.scaling.z = this.MEASUREMENTS.scale.z;
                 ak.isPickable = false;
                 ak.parent = akm;
             }
@@ -82,8 +84,10 @@ class AKM {
     drawOnUI() {
         this.MODEL_weaponModel.parent = Camera.getCamera()
         this.MODEL_weaponModel.visibility = 1
-        this.MODEL_weaponModel.position = new BABYLON.Vector3(this.#CONFIG_posOnScreen.position.x, this.#CONFIG_posOnScreen.position.y, this.#CONFIG_posOnScreen.position.z)
-        this.MODEL_weaponModel.rotation.x = this.#CONFIG_posOnScreen.rotation.x
+        this.MODEL_weaponModel.position = new BABYLON.Vector3(this.MEASUREMENTS.position.x, this.MEASUREMENTS.position.y, this.MEASUREMENTS.position.z)
+        this.MODEL_weaponModel.rotation.x = this.MEASUREMENTS.rotation.x
+        this.MODEL_weaponModel.rotation.y = this.MEASUREMENTS.rotation.y
+        this.MODEL_weaponModel.rotation.z = this.MEASUREMENTS.rotation.z
         Camera.getCamera().fov = this.WEAPON_SETTINGS.fov
 
         // update flag
@@ -100,7 +104,7 @@ class AKM {
 
         var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
         bulletMesh.renderOrder = 1;
-        var bullet = BABYLON.Mesh.CreateSphere("bullet", 12, 1, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
+        var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, 1, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
         // bullet.depthTest = false;
         bullet.position.x = Camera.getCamera().position.x
         bullet.position.y = Camera.getCamera().position.y

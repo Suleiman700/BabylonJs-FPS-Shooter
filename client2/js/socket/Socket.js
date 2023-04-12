@@ -32,9 +32,9 @@ class Socket {
 
             console.log(_mapData)
 
-            // set primary weapon
-            Weapons.primaryWeaponId = _mapData.defaultPrimaryWeaponId
-            Weapons.pickupPrimaryWeapon()
+            // set selected weapon
+            const selectedWeaponId = _mapData.defaultWeaponId
+            Weapons.pickupWeapon(selectedWeaponId)
 
             // set player walk speed
             Player.walkSpeed = _mapData.defaultPlayerWalkSpeed
@@ -48,8 +48,6 @@ class Socket {
             // pick random spawn point and set player spawn
             const randomSpawnPoint = _mapData.playersSpawns[Math.floor(Math.random() * _mapData.playersSpawns.length)];
             Player.setCoords(randomSpawnPoint.x, randomSpawnPoint.y, randomSpawnPoint.z)
-            // set camera angles
-            // const cameraAngles =
         })
 
         // update room data

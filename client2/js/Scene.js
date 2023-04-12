@@ -15,17 +15,27 @@ class Scene {
         this.#scene.gravity.y = -0.6
 
         this.#scene.onPointerDown = _event => {
-            if (_event.button === KEY_BINDINGS.LEFT_MOUSE) {
-                // fire only if weapon is not in reloading progress
-                if (!Weapons.isReloading) {
-                    Weapons.isFiring = true;
-                }
+            switch (_event.button) {
+                case KEY_BINDINGS.WEAPON_FIRE:
+                    // fire only if weapon is not in reloading progress
+                    if (!Weapons.isReloading) {
+                        Weapons.isFiring = true;
+                    }
+                    break
+                case KEY_BINDINGS.WEAPON_USE_SCORE:
+                    Weapons.isUsingWeaponScore = true
+                    break
             }
         }
 
         this.#scene.onPointerUp = _event => {
-            if (_event.button === KEY_BINDINGS.LEFT_MOUSE) {
-                Weapons.isFiring = false
+            switch (_event.button) {
+                case KEY_BINDINGS.WEAPON_FIRE:
+                    Weapons.isFiring = false
+                    break
+                case KEY_BINDINGS.WEAPON_USE_SCORE:
+                    Weapons.isUsingWeaponScore = false
+                    break
             }
         }
     }

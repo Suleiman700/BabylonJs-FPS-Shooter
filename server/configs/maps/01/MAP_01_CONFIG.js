@@ -26,9 +26,7 @@ const MAP_01_CONFIG = {
         {x: 10, y: 10, z: 10, pan: 10, roll: 10}
     ],
 
-    // default primary weapon
-    defaultPrimaryWeaponId: 'AKM',
-    defaultSecondaryWeapon: 'G17', // default secondary weapon
+    defaultWeaponId: 'G17', // default weapon id
 }
 
 module.exports = { MAP_01_CONFIG }

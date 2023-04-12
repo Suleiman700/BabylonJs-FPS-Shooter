@@ -1,5 +1,6 @@
 
 export const KEY_BINDINGS = {
-    LEFT_MOUSE: 0,
+    WEAPON_FIRE: 0, // MOUSE LEFT
+    WEAPON_USE_SCORE: 2, // MOUSE RIGHT
     WEAPON_RELOAD: 82, // R
 }

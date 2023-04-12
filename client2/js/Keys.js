@@ -31,16 +31,6 @@ class Keys {
 
     #onKeyDown(_event) {
         switch (_event.keyCode) {
-            case 49: // 1
-                Weapons.selectedWeaponLoadout = 'primary'
-                Weapons.switchToSelectedWeaponLoadout()
-                if (this.#debug) console.log('selected primary weapon')
-                break
-            case 50: // 2
-                Weapons.selectedWeaponLoadout = 'secondary'
-                Weapons.switchToSelectedWeaponLoadout()
-                if (this.#debug) console.log('selected secondary weapon')
-                break
             case 16: // shift
                 if (this.#debug) console.log('is sprinting')
                 Player.isSprinting(true)

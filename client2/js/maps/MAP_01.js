@@ -105,26 +105,26 @@ export default function Map_01_createScene(_scene, _camera) {
     recoilm.setKeys(remkeys);
     // akm.animations.push(recoilm);
 
-    var pistol = new BABYLON.TransformNode();
-    pistol.parent = _camera;
-    _camera.fov = 1;
-    pistol.position = new BABYLON.Vector3(4.0, -3.0, 4.0);
-    pistol.rotation.y = -1.7;
-    pistol.rotation.z = 0.01;
-    // load gun model
-    BABYLON.SceneLoader.ImportMesh("", "./assets/models/weapons/", "G17.glb", _scene, function (newMeshes) {
-        var mat = new BABYLON.StandardMaterial("", _scene);
-        mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
-        for (var index = 0; index < newMeshes.length; index++) {
-            let ak = newMeshes[index];
-            ak.material = mat;
-            ak.scaling.x = 0.2;
-            ak.scaling.y = 0.2;
-            ak.scaling.z = 0.2;
-            ak.isPickable = false;
-            ak.parent = pistol;
-        }
-    });
+    // var pistol = new BABYLON.TransformNode();
+    // pistol.parent = _camera;
+    // _camera.fov = 1;
+    // pistol.position = new BABYLON.Vector3(4.0, -3.0, 4.0);
+    // pistol.rotation.y = -1.7;
+    // pistol.rotation.z = 0.01;
+    // // load gun model
+    // BABYLON.SceneLoader.ImportMesh("", "./assets/models/weapons/", "G17.glb", _scene, function (newMeshes) {
+    //     var mat = new BABYLON.StandardMaterial("", _scene);
+    //     mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
+    //     for (var index = 0; index < newMeshes.length; index++) {
+    //         let ak = newMeshes[index];
+    //         ak.material = mat;
+    //         ak.scaling.x = 0.2;
+    //         ak.scaling.y = 0.2;
+    //         ak.scaling.z = 0.2;
+    //         ak.isPickable = false;
+    //         ak.parent = pistol;
+    //     }
+    // });
 
     
 }
