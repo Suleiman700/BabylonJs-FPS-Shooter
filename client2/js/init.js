@@ -1,14 +1,15 @@
 
 
 import Game from './Game.js';
+import Scene from './Scene.js';
+import Camera from './Camera.js';
+
 Game.initCanvas()
 Game.createDefaultEngine()
 
-import Scene from './Scene.js';
 Scene.initScene()
 Scene.createScene('MAP_01')
 
-import Camera from './Camera.js';
 Camera.initCamera()
 
 import Loader from './Loader.js';
@@ -30,18 +31,29 @@ import Keys from './Keys.js';
 import ModMenu from './ModMenu.js';
 import Updater from './Updater.js';
 
+Keys.registerKeys()
 
 var startRenderLoop = function (_engine, _canvas, _scene) {
     _engine.runRenderLoop(function () {
         if (_scene && _scene.activeCamera) {
             Scene.getScene().render();
-            // Updater.runUpdater()
+            Updater.runUpdater()
 
             // draw players
-            // Players.drawPlayers()
+            Players.drawPlayers()
         }
     });
 }
+
+startRenderLoop(Game.getEngine(), Game.getCanvas(), Scene.getScene());
+
+// Resize
+window.addEventListener("resize", function () {
+    Game.getEngine().resize();
+});
+
+
+
 
 window.initFunction = async function() {
     var asyncEngineCreation = async function() {
@@ -61,13 +73,9 @@ window.initFunction = async function() {
     // window.scene = Scene.getScene()
 
     // register canvas keys
-    Keys.registerKeys()
+    // Keys.registerKeys()
 };
 
 // initFunction().then(() => {sceneToRender = scene});
-initFunction().then();
+// initFunction();
 
-// Resize
-window.addEventListener("resize", function () {
-    Game.getEngine().resize();
-});

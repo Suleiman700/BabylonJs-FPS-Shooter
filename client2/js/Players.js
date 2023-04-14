@@ -13,7 +13,7 @@ class Players {
             const playerData = this.#players[i];
 
             // Check if player is already drawn on the scene
-            const existingPlayerMesh = scene.getMeshByName(`player-${playerData.socketId}`);
+            const existingPlayerMesh = Scene.getScene().getMeshByName(`player-${playerData.socketId}`);
             if (existingPlayerMesh && existingPlayerMesh.type === 'player') {
                 existingPlayerMesh.dispose();
             }

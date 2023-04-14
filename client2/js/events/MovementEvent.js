@@ -23,7 +23,7 @@ class MovementEvent {
         Player.setCoords(newX, newY, newZ)
 
         // emit to server
-        // Socket.socket.emit('playerMoved', {x: newX, y: newY, z: newZ})
+        Socket.socket.emit('playerMoved', {x: newX, y: newY, z: newZ})
     }
 
     /**

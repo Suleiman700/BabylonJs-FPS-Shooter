@@ -41,6 +41,10 @@ class Scene {
                     break
             }
         }
+
+        // this.#scene.registerBeforeRender(() => {
+        //     console.log('here')
+        // })
     }
 
     /**

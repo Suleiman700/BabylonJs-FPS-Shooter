@@ -6,7 +6,31 @@ import Player from './Player.js';
 class Camera {
     #camera = {}
 
-    constructor() {}
+    constructor() {
+        // some of these settings will be overwritten after client receives setStartGameData emit
+        if (Scene.getScene() !== null) {
+            this.#camera = new BABYLON.FreeCamera("camera", new BABYLON.Vector3(0, 25, 0), Scene.getScene()); // position can be changed on setStartGameData emit
+            this.#camera.attachControl(Game.getCanvas(), true);
+            this.#camera.keysUp = [87];
+            this.#camera.keysDown = [83];
+            this.#camera.keysLeft = [65];
+            this.#camera.keysRight = [68];
+            this.#camera.inertia = 0.2;
+            this.#camera.fov = 1;
+            this.#camera.minZ = 0;
+            this.#camera.angularSensibility = 500;
+            this.#camera.speed = Player.walkSpeed; // speed can be changed on setStartGameData emit
+            this.#camera.checkCollisions = true;
+            this.#camera.applyGravity = true;
+            this.#camera.ellipsoid = new BABYLON.Vector3(0.25, 1.5, 0.25);
+            this.#camera._needMoveForGravity = true;
+
+            this.#camera.onCollide = _collideMesh => {
+                // Player.isOnGround = _collideMesh.structure === 'ground'
+                Player.isOnGround = _collideMesh.jumpAble
+            }
+        }
+    }
 
     initCamera() {
         // some of these settings will be overwritten after client receives setStartGameData emit
@@ -30,6 +54,8 @@ class Camera {
             // Player.isOnGround = _collideMesh.structure === 'ground'
             Player.isOnGround = _collideMesh.jumpAble
         }
+
+
 
 //         // define roll and pitch angles in radians
 //         const roll = Math.PI / 43;
