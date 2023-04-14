@@ -1,7 +1,7 @@
 
 import Scene from './Scene.js';
 import Game from './Game.js';
-import Player from './Player.js';
+import Player from './ClientPlayer.js';
 
 class Camera {
     #camera = {}

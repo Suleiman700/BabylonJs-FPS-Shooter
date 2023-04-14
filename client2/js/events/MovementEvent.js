@@ -5,7 +5,7 @@
 
 import Camera from '../Camera.js';
 import Scene from '../Scene.js';
-import Player from '../Player.js';
+import Player from '../ClientPlayer.js';
 import Socket from '../socket/Socket.js';
 
 class MovementEvent {

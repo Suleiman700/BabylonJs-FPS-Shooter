@@ -1,6 +1,6 @@
 
 import Camera from './Camera.js';
-import Player from './Player.js';
+import Player from './ClientPlayer.js';
 
 class ModMenu {
 

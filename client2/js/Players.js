@@ -1,6 +1,6 @@
 
 import Scene from './Scene.js';
-import Player from './Player.js';
+import Player from './ClientPlayer.js';
 
 class Players {
     #players = [] // store other players
@@ -18,22 +18,18 @@ class Players {
                 existingPlayerMesh.dispose();
             }
 
+            // dont render client player
+            if (playerData.socketId === Player.socketId) continue
+
             // Create new player mesh
-            const playerMesh = BABYLON.MeshBuilder.CreateCylinder(`player-${playerData.socketId}`, { diameter: 2, height: 2 }, Scene.getScene());
-            playerMesh.position = new BABYLON.Vector3(playerData.coords.x, playerData.coords.y, playerData.coords.z);
+            const playerMesh = BABYLON.MeshBuilder.CreateCylinder(`player-${playerData.socketId}`, { diameter: 2, height: 3 }, Scene.getScene());
+            playerMesh.position = new BABYLON.Vector3(playerData.coords.x, playerData.coords.y - 1.5, playerData.coords.z);
             playerMesh.type = 'player';
             // playerMesh.rotation.y = playerData.camera.pan;
             // playerMesh.rotation.x = playerData.camera.tilt;
 
             // Add player mesh to the scene
             Scene.getScene().addMesh(playerMesh);
-        }
-
-        // Remove all meshes with type 'player'
-        const playerMeshes = Scene.getScene().getMeshesByTags('player');
-        for (let i = 0; i < playerMeshes.length; i++) {
-            const playerMesh = playerMeshes[i];
-            playerMesh.dispose();
         }
     }
 

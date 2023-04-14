@@ -4,6 +4,7 @@ import G17 from './G17.js';
 import GUI from '../GUI.js';
 import Scene from '../Scene.js';
 import Camera from '../Camera.js';
+import ShootEvent from '../events/ShootEvent.js';
 
 class Weapons {
     #debug = true
@@ -89,6 +90,9 @@ class Weapons {
     fire() {
         // check if weapon has ammo left in mag
         if (this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag > 0) {
+
+            // shoot event
+            ShootEvent.fireEvent()
 
             // fire bullet and decrease ammo
             this.#weaponInstance.fireBullet();
@@ -306,6 +310,22 @@ class Weapons {
      */
     get isUsingWeaponScore() {
         return this.#isUsingWeaponScore
+    }
+
+    /**
+     * set current weapon id
+     * @param _weaponId {string} example: AKM
+     */
+    set weaponID(_weaponId) {
+        this.#weaponId = _weaponId
+    }
+
+    /**
+     * get current weapon id
+     * @return {string} example: AKM
+     */
+    get weaponId() {
+        return this.#weaponId
     }
 }
 

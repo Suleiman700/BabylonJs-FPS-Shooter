@@ -1,6 +1,6 @@
 
 import GUI from '../GUI.js';
-import Player from '../Player.js';
+import ClientPlayer from '../ClientPlayer.js';
 import Camera from '../Camera.js';
 import Weapons from '../weapons/Weapons.js';
 import Sky from '../Environment/Sky.js';
@@ -39,20 +39,22 @@ class Socket {
             Weapons.pickupWeapon(selectedWeaponId)
 
             // set player socket id
-            Player.socketId = _mapData.socketId
+            ClientPlayer.socketId = _mapData.socketId
 
             // set player walk speed
-            Player.walkSpeed = _mapData.defaultPlayerWalkSpeed
+            ClientPlayer.walkSpeed = _mapData.defaultPlayerWalkSpeed
             // set player sprint speed
-            Player.sprintSpeed = _mapData.defaultPlayerSprintSpeed
+            ClientPlayer.sprintSpeed = _mapData.defaultPlayerSprintSpeed
             // set player jump height
-            Player.jumpHeight = _mapData.defaultPlayerJumpHeight
+            ClientPlayer.jumpHeight = _mapData.defaultPlayerJumpHeight
             // set player gravity
-            Player.gravity = _mapData.defaultPlayerGravity
+            ClientPlayer.gravity = _mapData.defaultPlayerGravity
+            // set player money - this also sets the UI
+            ClientPlayer.money = _mapData.defaultPlayerMoney
 
             // pick random spawn point and set player spawn
             const randomSpawnPoint = _mapData.playersSpawns[Math.floor(Math.random() * _mapData.playersSpawns.length)];
-            Player.setCoords(randomSpawnPoint.x, randomSpawnPoint.y, randomSpawnPoint.z)
+            ClientPlayer.setCoords(randomSpawnPoint.x, randomSpawnPoint.y, randomSpawnPoint.z)
 
             // set sky
             const skyType = _mapData.skySettings.type
@@ -68,9 +70,6 @@ class Socket {
 
             // store players
             Players.players = _data.players
-
-            // draw players
-            // Players.drawPlayers()
         })
     }
 

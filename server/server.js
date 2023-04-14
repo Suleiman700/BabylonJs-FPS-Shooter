@@ -65,12 +65,19 @@ io.on('connection', (socket) => {
 
     setStartGameData(roomId, socket)
 
+    // event when player moves
     socket.on('playerMoved', (_newCoords) => {
         const newX = _newCoords.x
         const newY = _newCoords.y
         const newZ = _newCoords.z
 
+        // update player coords
         Players.updatePlayerCoords(socket.id, _newCoords)
+    })
+
+    // event when player shoots bullet
+    socket.on('bulletFired', (_data) => {
+        io.to(socket.roomId).emit('bulletFired', _data)
     })
 
     // Handle disconnections

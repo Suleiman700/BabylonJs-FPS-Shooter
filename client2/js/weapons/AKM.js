@@ -1,7 +1,7 @@
 
 import Camera from '../Camera.js';
 import Scene from '../Scene.js';
-import Player from '../Player.js';
+import Player from '../ClientPlayer.js';
 
 class AKM {
     #debug = true
@@ -104,7 +104,13 @@ class AKM {
 
         var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
         bulletMesh.renderOrder = 1;
+
+        // create material with black color
+        var material = new BABYLON.StandardMaterial("bulletMaterial", Scene.getScene());
+        material.diffuseColor = BABYLON.Color3.Black();
+
         var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, 0.5, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
+        bullet.material = material;
         // bullet.depthTest = false;
         bullet.position.x = Camera.getCamera().position.x
         bullet.position.y = Camera.getCamera().position.y

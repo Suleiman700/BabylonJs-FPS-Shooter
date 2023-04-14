@@ -1,7 +1,8 @@
 import Camera from './Camera.js';
 import Scene from './Scene.js';
+import GUI from './GUI.js';
 
-class Player {
+class ClientPlayer {
     #debug = false
     socketId = '' // the socketId of the player
 
@@ -12,6 +13,7 @@ class Player {
     #jumpHeight = -1 // number
     #gravity = -0.6
     #isOnGround = true // boolean
+    #money = 0 // number
 
     constructor() {}
 
@@ -128,6 +130,26 @@ class Player {
     }
 
     /**
+     * set player money - also sets the UI
+     * @param _money {number} example: 150.65
+     * @constructor
+     */
+    set money(_money) {
+        this.#money = _money
+
+        // set money in UI
+        GUI.UI_setMoney(_money)
+    }
+
+    /**
+     * get player money
+     * @return {number} example: 150.65
+     */
+    get money() {
+        return this.#money
+    }
+
+    /**
      * set is player is sprinting or not
      * @param _option {boolean}
      */
@@ -154,4 +176,4 @@ class Player {
     }
 }
 
-export default new Player()
+export default new ClientPlayer()

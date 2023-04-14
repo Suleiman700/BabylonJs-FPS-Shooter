@@ -136,11 +136,20 @@ h3 {
     overflow: hidden;
 }
 
-.player-speed {
+.weapon-ammo {
     z-index: 999999;
     display: flex;
     width: 200px;
     position: absolute;
     bottom: 0;
+    right: 0;
+}
+
+.player-money {
+    z-index: 999999;
+    display: flex;
+    width: 200px;
+    position: absolute;
+    bottom: 70px;
     right: 0;
 }

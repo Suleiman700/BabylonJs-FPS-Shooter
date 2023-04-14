@@ -1,7 +1,7 @@
 
 import GUI from './GUI.js';
 import Camera from './Camera.js';
-import Player from './Player.js';
+import Player from './ClientPlayer.js';
 
 class Updater {
     #cameraCoords = {x: 0, y: 0, z: 0}

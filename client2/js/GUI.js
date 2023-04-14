@@ -3,6 +3,7 @@ class GUI {
     #UI_roundCountLblId = 'round-number' // display the number of round
     #UI_playerHealth = 'UI-player-health' // display player health
     #UI_reloadingIndicator = 'UI-reloading-indicator'
+    #UI_playerMoney = 'ui-player-money' // display player money
 
     constructor() {}
 
@@ -52,6 +53,15 @@ class GUI {
      */
     UI_showReloadingText(_option) {
         document.querySelector(`#${this.#UI_reloadingIndicator}`).style.display = _option?'flex':'none'
+    }
+
+    /**
+     * set money UI
+     * @param _money {number} example: 150.65
+     * @constructor
+     */
+    UI_setMoney(_money) {
+        document.querySelector(`#${this.#UI_playerMoney}`).innerHTML = _money
     }
 }
 
