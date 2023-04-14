@@ -54,7 +54,8 @@ io.on('connection', (socket) => {
         health: 100,
         money: 0,
         holdingGunId: 'AKM',
-        coords: {x: 0, y: 0, z: 0}
+        coords: {x: 0, y: 0, z: 0},
+        camera: {tilt: 0, pan: 0}
     }
     Players.addPlayer(newPlayerData)
 

@@ -1,4 +1,9 @@
 
+import Camera from './Camera.js';
+
+// events
+import CameraRotateEvent from './events/CameraRotateEvent.js';
+
 class Game {
     #canvas = null
     #engine = null
@@ -30,6 +35,10 @@ class Game {
                 canvas.removeEventListener("mousemove", mousemoveCallback, false);
             }
         }, false);
+
+        this.#canvas.addEventListener("pointermove", function () {
+            CameraRotateEvent.eventFired()
+        });
     }
 }
 

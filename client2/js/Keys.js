@@ -6,6 +6,8 @@ import player from './Player.js';
 import { KEY_BINDINGS } from './CONTROLS.js';
 import Weapons from './weapons/Weapons.js';
 
+import Sky from './Environment/Sky.js';
+
 class Keys {
     #debug = false
     #isSpaceDown = false

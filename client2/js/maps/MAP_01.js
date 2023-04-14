@@ -1,15 +1,6 @@
-export default function Map_01_createScene(_scene, _camera) {
+export default function Map_02_createScene(_scene, _camera) {
     // Lights
     var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), _scene);
-
-    var box = BABYLON.MeshBuilder.CreateBox("box", {width: 10, height: 5, depth: 5}, _scene);
-    box.position.z = 20;
-    box.checkCollisions = true;
-    box.jumpAble = true
-    var boxTexture = new BABYLON.StandardMaterial("boxTexture", _scene);
-    boxTexture.diffuseTexture = new BABYLON.Texture("./assets/textures/wooden_box_01.jpg", _scene);
-    // assign the texture to the box
-    box.material = boxTexture;
 
     var ground = BABYLON.Mesh.CreateGround("ground0", 250, 250, 2, _scene);
     ground.jumpAble = true
@@ -20,111 +11,58 @@ export default function Map_01_createScene(_scene, _camera) {
     ground.material = material;
     ground.checkCollisions = true;
 
-    // var ground1 = BABYLON.Mesh.CreateGround("ground1", 250, 250, 2, scene);
-    // ground1.material = new BABYLON.GridMaterial("gmat1", scene);
-    // ground1.position.z = 125;
-    // ground1.rotation.x = -Math.PI/6;
-    // ground1.checkCollisions = true;
+    var wall1 = BABYLON.Mesh.CreateBox("wall1", 10, _scene);
+    wall1.position.x = -100;
+    wall1.position.y = 10;
+    wall1.scaling.y = 22; // width
+    wall1.scaling.z = 3; // height
+    wall1.rotation.x = 4.715;
+    wall1.checkCollisions = true;
+    var wall1Material = new BABYLON.StandardMaterial("wall1Material", _scene);
+    wall1Material.diffuseTexture = new BABYLON.Texture("./assets/textures/structure/brick_01.png", _scene);
+    wall1Material.diffuseTexture.uScale = 5; // adjust texture scaling
+    wall1Material.diffuseTexture.vScale = 1;
+    wall1.material = wall1Material;
 
-    // stairs
-    var box = new BABYLON.Mesh.CreateBox("box", 5, scene);
-    box.position.y = -2;
-    box.checkCollisions = true;
-    box.type = "wall"
-    var box1 = new BABYLON.Mesh.CreateBox("box1", 5, scene);
-    box1.position.y = -1.5;
-    box1.position.z = 1;
+
+    var wall2 = wall1.clone("wall2");
+    wall2.position.x = 100;
+
+    var wall3 = BABYLON.Mesh.CreateBox("wall3", 10, _scene);
+    wall3.position.z = -100;
+    wall3.position.y = 10;
+    wall3.scaling.y = 3; // height
+    wall3.scaling.x = 25; // width
+    wall3.checkCollisions = true;
+    var wall3Material = new BABYLON.StandardMaterial("wall3Material", _scene);
+    wall3Material.diffuseTexture = new BABYLON.Texture("./assets/textures/structure/brick_01.png", _scene);
+    wall3.material = wall3Material;
+    wall3Material.diffuseTexture.uScale = 5; // adjust texture scaling
+    wall3Material.diffuseTexture.vScale = 1;
+
+    var wall4 = wall3.clone("wall4");
+    wall4.position.z = 100;
+
+    // boxes
+    const box1 = BABYLON.Mesh.CreateBox("box1", 5, _scene);
+    box1.jumpAble = true
+    box1.position.x = 50;
+    box1.position.z = 50;
+    box1.position.y = 2;
     box1.checkCollisions = true;
-    var box2 = new BABYLON.Mesh.CreateBox("box2", 5, scene);
-    box2.position.y = -1;
-    box2.position.z = 2;
-    box2.checkCollisions = true;
-    var box3 = new BABYLON.Mesh.CreateBox("box2", 5, scene);
-    box3.position.y = -0.5;
-    box3.position.z = 3;
-    box3.checkCollisions = true;
-    var box4 = new BABYLON.Mesh.CreateBox("box4", 5, scene);
-    box4.position.y = 0;
-    box4.position.z = 4;
-    box4.checkCollisions = true;
-    var box5 = new BABYLON.Mesh.CreateBox("box5", 5, scene);
-    box5.position.y = 0.5;
-    box5.position.z = 5;
-    box5.checkCollisions = true;
+    const boxMaterial = new BABYLON.StandardMaterial("boxMaterial1", _scene);
+    boxMaterial.diffuseTexture = new BABYLON.Texture("./assets/textures/material/wooden_box_01.jpg", _scene);
+    box1.material = boxMaterial;
 
-    // gun
-    // var akm = new BABYLON.TransformNode();
-    // akm.parent = _camera;
-    // _camera.fov = 1;
-    // akm.position = new BABYLON.Vector3(0.5, -0.7, 0.5);
-    // akm.rotation.x = -0.01;
-    // // load gun model
-    // BABYLON.SceneLoader.ImportMesh("", "https://dl.dropbox.com/s/kqnda4k2aqx8pro/", "AKM.obj", _scene, function (newMeshes) {
-    //     var mat = new BABYLON.StandardMaterial("", _scene);
-    //     mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
-    //     mat.bumpTexture = new BABYLON.Texture("https://dl.dropbox.com/s/hiuhjsp4pckt9pu/akm_norm.tga");
-    //     mat.specularTexture = new BABYLON.Texture("https://dl.dropbox.com/s/f3samm7vuvl0ez4/akm_spec.tga");
-    //     for (var index = 0; index < newMeshes.length; index++) {
-    //         let ak = newMeshes[index];
-    //         ak.material = mat;
-    //         ak.scaling.x = 0.05;
-    //         ak.scaling.y = 0.05;
-    //         ak.scaling.z = 0.05;
-    //         ak.isPickable = false;
-    //         ak.parent = akm;
-    //     }
-    // });
+    var box2 = box1.clone("box2");
+    box2.position.x = -50;
+    box2.position.z = -50;
 
+    var box3 = box1.clone("box3");
+    box3.position.x = -50;
+    box3.position.z = 50;
 
-    var recoilm = new BABYLON.Animation("recoilm", "position.z", 30, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    var remkeys = [];
-    remkeys.push({
-        frame: 0,
-        value: 0.5
-    });
-    remkeys.push({
-        frame: 1,
-        value: -0.03
-    });
-    remkeys.push({
-        frame: 5,
-        value: 0.5
-    });
-    remkeys.push({
-        frame: 6,
-        value: 0.2
-    });
-    remkeys.push({
-        frame: 7,
-        value: -0.06
-    });
-    remkeys.push({
-        frame: 11,
-        value: 0.2
-    });
-    recoilm.setKeys(remkeys);
-    // akm.animations.push(recoilm);
-
-    // var pistol = new BABYLON.TransformNode();
-    // pistol.parent = _camera;
-    // _camera.fov = 1;
-    // pistol.position = new BABYLON.Vector3(4.0, -3.0, 4.0);
-    // pistol.rotation.y = -1.7;
-    // pistol.rotation.z = 0.01;
-    // // load gun model
-    // BABYLON.SceneLoader.ImportMesh("", "./assets/models/weapons/", "G17.glb", _scene, function (newMeshes) {
-    //     var mat = new BABYLON.StandardMaterial("", _scene);
-    //     mat.diffuseTexture = new BABYLON.Texture("https://dl.dropbox.com/s/isvd4dggvp3vks2/akm_diff.tga");
-    //     for (var index = 0; index < newMeshes.length; index++) {
-    //         let ak = newMeshes[index];
-    //         ak.material = mat;
-    //         ak.scaling.x = 0.2;
-    //         ak.scaling.y = 0.2;
-    //         ak.scaling.z = 0.2;
-    //         ak.isPickable = false;
-    //         ak.parent = pistol;
-    //     }
-    // });
-
-    
+    var box4 = box1.clone("box4");
+    box4.position.x = 50;
+    box4.position.z = -50;
 }

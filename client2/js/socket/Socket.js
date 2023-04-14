@@ -3,6 +3,7 @@ import GUI from '../GUI.js';
 import Player from '../Player.js';
 import Camera from '../Camera.js';
 import Weapons from '../weapons/Weapons.js';
+import Sky from '../Environment/Sky.js';
 
 class Socket {
 
@@ -39,7 +40,7 @@ class Socket {
             // set player walk speed
             Player.walkSpeed = _mapData.defaultPlayerWalkSpeed
             // set player sprint speed
-            Player.sprintSpeed = _mapData.defaultPlayerSprintSpeed
+            Player.sprintSpeed = 20 // _mapData.defaultPlayerSprintSpeed
             // set player jump height
             Player.jumpHeight = _mapData.defaultPlayerJumpHeight
             // set player gravity
@@ -48,6 +49,10 @@ class Socket {
             // pick random spawn point and set player spawn
             const randomSpawnPoint = _mapData.playersSpawns[Math.floor(Math.random() * _mapData.playersSpawns.length)];
             Player.setCoords(randomSpawnPoint.x, randomSpawnPoint.y, randomSpawnPoint.z)
+
+            // set sky
+            const skyType = _mapData.skySettings.type
+            Sky.showSky(skyType, Sky.ANIMATION_SPEED_SETTINGS.NORMAL)
         })
 
         // update room data

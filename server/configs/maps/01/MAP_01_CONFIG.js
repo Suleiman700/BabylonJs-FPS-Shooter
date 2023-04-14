@@ -21,12 +21,16 @@ const MAP_01_CONFIG = {
     defaultPlayerJumpHeight: 0.2, // default player jump height (uses less gravity)
     defaultPlayerGravity: -0.1, // default player gravity
 
+    skySettings: {
+        type: 3, // types can be found in client Sky class under SKY_TYPES
+    },
+
     // define players spawns in map
     playersSpawns: [
         {x: 10, y: 10, z: 10, pan: 10, roll: 10}
     ],
 
-    defaultWeaponId: 'G17', // default weapon id
+    defaultWeaponId: 'AKM', // default weapon id
 }
 
 module.exports = { MAP_01_CONFIG }
