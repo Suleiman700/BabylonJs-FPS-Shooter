@@ -17,7 +17,7 @@ class Camera {
         this.#camera.keysLeft = [65];
         this.#camera.keysRight = [68];
         this.#camera.inertia = 0.2;
-        this.#camera.fov = 1.5;
+        this.#camera.fov = 1;
         this.#camera.minZ = 0;
         this.#camera.angularSensibility = 500;
         this.#camera.speed = Player.walkSpeed; // speed can be changed on setStartGameData emit

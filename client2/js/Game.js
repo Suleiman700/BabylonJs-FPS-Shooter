@@ -18,7 +18,7 @@ class Game {
         return this.#canvas
     }
 
-    initGame() {
+    initCanvas() {
         this.#canvas = document.getElementById("renderCanvas")
 
         this.#canvas.onclick = () => {
@@ -39,6 +39,10 @@ class Game {
         this.#canvas.addEventListener("pointermove", function () {
             CameraRotateEvent.eventFired()
         });
+    }
+
+    createDefaultEngine() {
+        this.#engine = new BABYLON.Engine(this.#canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false});
     }
 }
 

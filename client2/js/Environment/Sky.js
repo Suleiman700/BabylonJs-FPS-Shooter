@@ -26,7 +26,9 @@ class Sky {
         VERY_FAST: 9,
     }
 
-    constructor() {
+    constructor() {}
+
+    initSky() {
         // Sky material
         this.#skyboxMaterial = new BABYLON.SkyMaterial("skyMaterial", Scene.getScene());
         this.#skyboxMaterial.backFaceCulling = false;

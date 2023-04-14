@@ -25,7 +25,7 @@ class AKM {
 
     BULLET_SETTINGS = {
         decayTimer: 1000, // decay bullet in ms
-        speed: 1000, // bullet speed in ms
+        speed: 2000, // bullet speed in ms
     }
 
     SOUNDS = {
@@ -104,7 +104,7 @@ class AKM {
 
         var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
         bulletMesh.renderOrder = 1;
-        var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, 1, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
+        var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, 0.5, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
         // bullet.depthTest = false;
         bullet.position.x = Camera.getCamera().position.x
         bullet.position.y = Camera.getCamera().position.y

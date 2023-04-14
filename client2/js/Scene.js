@@ -8,7 +8,9 @@ import { KEY_BINDINGS } from './CONTROLS.js';
 class Scene {
     #scene = null
 
-    constructor() {
+    constructor() {}
+
+    initScene() {
         this.#scene = new BABYLON.Scene(Game.getEngine())
         this.#scene.gravity = new BABYLON.Vector3(0, -0.6, 0);
         this.#scene.collisionsEnabled = true;
