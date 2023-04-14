@@ -2,6 +2,7 @@
 import Game from './Game.js';
 import Camera from './Camera.js';
 import Weapons from './weapons/Weapons.js';
+import Players from './Players.js';
 import { KEY_BINDINGS } from './CONTROLS.js';
 
 class Scene {

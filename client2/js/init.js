@@ -18,11 +18,20 @@ import Keys from './Keys.js';
 import ModMenu from './ModMenu.js';
 import Updater from './Updater.js';
 
+
+// register events
+import MovementEvent from './events/MovementEvent.js';
+import Players from './Players.js';
+MovementEvent.register()
+
 var startRenderLoop = function (engine, canvas) {
     engine.runRenderLoop(function () {
         if (sceneToRender && sceneToRender.activeCamera) {
             sceneToRender.render();
-            Updater.runUpdater()
+            // Updater.runUpdater()
+
+            // draw players
+            Players.drawPlayers()
         }
     });
 }

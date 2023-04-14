@@ -3,6 +3,7 @@ import Scene from './Scene.js';
 
 class Player {
     #debug = false
+    socketId = '' // the socketId of the player
 
     coords = {x: 0, y: 0, z: 0}
     #heath = -1 // number (1 ~ 100)

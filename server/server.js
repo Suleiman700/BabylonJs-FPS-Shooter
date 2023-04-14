@@ -24,7 +24,7 @@ function setStartGameData(_roomId, _socket) {
     const mapData = Maps.getMapDataById(mapId)
 
     // io.to(roomID).emit('updateRoomData', newRoomData)
-    _socket.emit('setStartGameData', mapData)
+    _socket.emit('setStartGameData', {...mapData, socketId: _socket.id})
 }
 
 
@@ -64,6 +64,14 @@ io.on('connection', (socket) => {
     socket.roomId = roomId
 
     setStartGameData(roomId, socket)
+
+    socket.on('playerMoved', (_newCoords) => {
+        const newX = _newCoords.x
+        const newY = _newCoords.y
+        const newZ = _newCoords.z
+
+        Players.updatePlayerCoords(socket.id, _newCoords)
+    })
 
     // Handle disconnections
     socket.on('disconnect', () => {
@@ -108,7 +116,7 @@ setInterval(() => {
         }
         io.to(roomID).emit('updateRoomData', newRoomData)
     }
-}, 1000)
+}, 10)
 
 
 

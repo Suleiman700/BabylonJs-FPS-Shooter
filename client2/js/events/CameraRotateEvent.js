@@ -10,7 +10,6 @@ class CameraRotateEvent {
 
     eventFired() {
         // console.log(Camera.getCamera().rotation)
-        console.log('event fired')
     }
 }
 

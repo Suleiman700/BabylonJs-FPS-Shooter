@@ -4,6 +4,7 @@ import Player from '../Player.js';
 import Camera from '../Camera.js';
 import Weapons from '../weapons/Weapons.js';
 import Sky from '../Environment/Sky.js';
+import Players from '../Players.js';
 
 class Socket {
 
@@ -37,10 +38,13 @@ class Socket {
             const selectedWeaponId = _mapData.defaultWeaponId
             Weapons.pickupWeapon(selectedWeaponId)
 
+            // set player socket id
+            Player.socketId = _mapData.socketId
+
             // set player walk speed
             Player.walkSpeed = _mapData.defaultPlayerWalkSpeed
             // set player sprint speed
-            Player.sprintSpeed = 20 // _mapData.defaultPlayerSprintSpeed
+            Player.sprintSpeed = _mapData.defaultPlayerSprintSpeed
             // set player jump height
             Player.jumpHeight = _mapData.defaultPlayerJumpHeight
             // set player gravity
@@ -61,6 +65,12 @@ class Socket {
 
             // set round number UI text
             GUI.UI_setRoundNumber(_data.round)
+
+            // store players
+            Players.players = _data.players
+
+            // draw players
+            // Players.drawPlayers()
         })
     }
 

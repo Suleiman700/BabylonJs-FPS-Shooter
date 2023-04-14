@@ -19,7 +19,7 @@ const MAP_01_CONFIG = {
     defaultPlayerSprintSpeed: 2.5, // default player sprint speed
     defaultPlayerHealth: 100, // default player health (1 ~ 100)
     defaultPlayerJumpHeight: 0.2, // default player jump height (uses less gravity)
-    defaultPlayerGravity: -0.1, // default player gravity
+    defaultPlayerGravity: -0.09, // default player gravity
 
     skySettings: {
         type: 3, // types can be found in client Sky class under SKY_TYPES

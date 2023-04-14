@@ -79,6 +79,17 @@ class Players {
         return this.#players.filter(player => player.roomId == _roomId);
     }
 
+    updatePlayerCoords(_socketId, _newCoords) {
+        // get player index
+        const index = this.#players.findIndex((player) => player.socketId === _socketId);
+
+        if (index === -1) {
+            // throw new Error(`[Remove Player] Player with socketId ${socketId} not found`);
+        }
+
+        this.#players[index].coords = {x: _newCoords.x, y: _newCoords.y, z: _newCoords.z};
+    }
+
     /**
      * count players in room
      * @param _roomId {string} example: 123
