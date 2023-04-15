@@ -55,7 +55,8 @@ io.on('connection', (socket) => {
         money: 0,
         holdingGunId: 'AKM',
         coords: {x: 0, y: 0, z: 0},
-        camera: {tilt: 0, pan: 0}
+        cameraRotation: {x: 0, y: 0, z: 0},
+        // camera: {tilt: 0, pan: 0},
     }
     Players.addPlayer(newPlayerData)
 
@@ -76,8 +77,31 @@ io.on('connection', (socket) => {
     })
 
     // event when player shoots bullet
-    socket.on('bulletFired', (_data) => {
-        io.to(socket.roomId).emit('bulletFired', _data)
+    /**
+     * event when player shoot bullet
+     * @param _bulletData {object}
+     * {
+     *     "weaponId": "AKM",
+     *     "shooterId": "PZXS_j4uyPoV2VkAAAAN",
+     *     "bulletDirection": {
+     *         "x": 0.988952772804412,
+     *         "y": -0.01605881308671595,
+     *         "z": 0.14735850055124486
+     *     },
+     *     "bulletCords": {
+     *         "x": 10,
+     *         "y": 3.015,
+     *         "z": 10
+     *     }
+     * }
+     */
+    socket.on('bulletFired', (_bulletData) => {
+        socket.broadcast.to(socket.roomId).emit('bulletFired', _bulletData)
+    })
+
+    socket.on('playerRotateCamera', (_rotationData) => {
+        // update player camera coords
+        Players.updatePlayerCameraRotation(socket.id, _rotationData)
     })
 
     // Handle disconnections
@@ -123,7 +147,7 @@ setInterval(() => {
         }
         io.to(roomID).emit('updateRoomData', newRoomData)
     }
-}, 10)
+}, 1)
 
 
 

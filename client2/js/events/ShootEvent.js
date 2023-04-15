@@ -20,16 +20,14 @@ class ShootEvent {
 
         // get bullet direction
         const { direction: { x, y, z } } = Camera.getCamera().getForwardRay();
-        const bulletDirection = { x, y, z };
+        const bulletDirection = {x, y, z};
+        // const bulletDirection = Camera.getCamera().getForwardRay().direction;
 
-        // get bullet coords
-        const bulletCords = {
-            x: 0,
-            y: 0,
-            z: 0,
-        }
 
-        Socket.socket.emit('bulletFired', {weaponId, shooterId, bulletDirection, bulletCords})
+        const { x: xPos, y: yPos, z: zPos } = Camera.getCamera().position;
+        const bulletCords = { x: xPos, y: yPos, z: zPos };
+
+        Socket.socket.emit('bulletFired', {weaponId, shooterId, bulletCords, bulletDirection})
     }
 
 }

@@ -13,7 +13,8 @@ class Players {
         health: 0, // number
         money: 0, // number
         holdingGunId: '', // string - example: AKM
-        coords: {x: 0, y: 0, z: 0}
+        coords: {x: 0, y: 0, z: 0},
+        cameraRotation: {x: 0, y: 0, z: 0},
     }
 
     constructor() {}
@@ -88,6 +89,17 @@ class Players {
         }
 
         this.#players[index].coords = {x: _newCoords.x, y: _newCoords.y, z: _newCoords.z};
+    }
+
+    updatePlayerCameraRotation(_socketId, _rotationData) {
+        // get player index
+        const index = this.#players.findIndex((player) => player.socketId === _socketId);
+
+        if (index === -1) {
+            // throw new Error(`[Remove Player] Player with socketId ${socketId} not found`);
+        }
+
+        this.#players[index].cameraRotation = {x: _rotationData._x, y: _rotationData._y, z: _rotationData._z};
     }
 
     /**

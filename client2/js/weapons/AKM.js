@@ -103,7 +103,7 @@ class AKM {
         }
 
         var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
-        bulletMesh.renderOrder = 1;
+        // bulletMesh.renderOrder = 1;
 
         // create material with black color
         var material = new BABYLON.StandardMaterial("bulletMaterial", Scene.getScene());

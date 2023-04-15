@@ -71,6 +71,10 @@ class Socket {
             // store players
             Players.players = _data.players
         })
+
+        this.socket.on('bulletFired', (_bulletData) => {
+            Weapons.fireFromOther(_bulletData.bulletCords, _bulletData.bulletDirection)
+        })
     }
 
     receiveEmits() {

@@ -1,4 +1,5 @@
 import Camera from '../Camera.js';
+import Socket from '../socket/Socket.js';
 
 /*
     event fired when player rotates the camera
@@ -10,6 +11,7 @@ class CameraRotateEvent {
 
     eventFired() {
         // console.log(Camera.getCamera().rotation)
+        Socket.socket.emit('playerRotateCamera', Camera.getCamera().rotation)
     }
 }
 

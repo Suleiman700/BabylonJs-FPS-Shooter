@@ -32,7 +32,7 @@ const MAP_01_CONFIG = {
         {x: 30, y: 10, z: 30, pan: 10, roll: 10},
     ],
 
-    defaultWeaponId: 'AKM', // default weapon id
+    defaultWeaponId: 'G17', // default weapon id
 }
 
 module.exports = { MAP_01_CONFIG }

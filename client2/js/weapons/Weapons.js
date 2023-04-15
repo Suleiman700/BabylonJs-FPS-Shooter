@@ -152,8 +152,38 @@ class Weapons {
         }
     }
 
-    #playWeaponFiringAnimation() {
+    fireFromOther(_bulletCoords, _bulletDirection) {
+        var translate = function (mesh, direction, power) {
+            mesh.physicsImpostor.setLinearVelocity(
+                mesh.physicsImpostor.getLinearVelocity().add(direction.scale(power)
+                )
+            );
+        }
 
+        var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
+        bulletMesh.renderOrder = 1;
+
+        // create material with black color
+        var material = new BABYLON.StandardMaterial("bulletMaterial", Scene.getScene());
+        material.diffuseColor = BABYLON.Color3.Black();
+
+        var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, 0.5, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
+        bullet.material = material;
+
+        // bullet.depthTest = false;
+        bullet.position.x = _bulletCoords.x
+        bullet.position.y = _bulletCoords.y
+        bullet.position.z = _bulletCoords.z
+
+        bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.25, restitution: 0 }, Scene.getScene());
+
+        // Convert bullet direction to Vector3
+        var bulletDirectionVector = new BABYLON.Vector3(_bulletDirection.x, _bulletDirection.y, _bulletDirection.z);
+        translate(bullet, bulletDirectionVector, this.#weaponInstance.BULLET_SETTINGS.speed);
+
+        setTimeout(() => {
+            bullet.dispose()
+        }, this.#weaponInstance.BULLET_SETTINGS.decayTimer)
     }
 
     /**
