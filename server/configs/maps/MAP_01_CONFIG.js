@@ -1,7 +1,7 @@
 
-const { CONFIG_AKM } = require('../../weapons/CONFIG_AKM.js');
-
-CONFIG_AKM.ammo = 9
+// const { CONFIG_AKM } = require('../../weapons/CONFIG_AKM.js');
+//
+// CONFIG_AKM.ammo = 9
 
 const MAP_01_CONFIG = {
     id: 'MAP_01',
@@ -32,7 +32,7 @@ const MAP_01_CONFIG = {
         {x: 30, y: 10, z: 30, pan: 10, roll: 10},
     ],
 
-    defaultWeaponId: 'G17', // default weapon id
+    defaultWeaponId: 'AKM', // default weapon id
 }
 
 module.exports = { MAP_01_CONFIG }

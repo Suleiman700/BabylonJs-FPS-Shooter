@@ -17,12 +17,11 @@ const players = [];
  * @param _roomId {string} example: 123
  * @param _socket {socket}
  */
-function setStartGameData(_roomId, _socket) {
+async function setStartGameData(_roomId, _socket) {
     // get map id from room
     const roomData = Rooms.getRoomData(_roomId)
     const mapId = roomData.mapData.id
-    const mapData = Maps.getMapDataById(mapId)
-
+    const mapData = await Maps.getMapConfig(mapId)
     // io.to(roomID).emit('updateRoomData', newRoomData)
     _socket.emit('setStartGameData', {...mapData, socketId: _socket.id})
 }
@@ -30,7 +29,7 @@ function setStartGameData(_roomId, _socket) {
 
 
 // Handle Socket.IO connections
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('A new client connected');
 
     // create new room
@@ -38,7 +37,7 @@ io.on('connection', (socket) => {
     const mapId = 'MAP_01'
 
     // get map data
-    const mapData = Maps.getMapDataById(mapId)
+    const mapData = await Maps.getMapConfig(mapId)
     const newRoomData = {
         roomId: roomId,
         round: 1,
@@ -53,10 +52,9 @@ io.on('connection', (socket) => {
         roomId: roomId,
         health: 100,
         money: 0,
-        holdingGunId: 'AKM',
+        holdingGunId: mapData.defaultWeaponId,
         coords: {x: 0, y: 0, z: 0},
         cameraRotation: {x: 0, y: 0, z: 0},
-        // camera: {tilt: 0, pan: 0},
     }
     Players.addPlayer(newPlayerData)
 
@@ -66,17 +64,15 @@ io.on('connection', (socket) => {
 
     setStartGameData(roomId, socket)
 
-    // event when player moves
+    /**
+     * event when player moves
+     * @param _newCoords {object} example: { x: 10.289480511656688, y: 3.015, z: 11.974716675241892 }
+     */
     socket.on('playerMoved', (_newCoords) => {
-        const newX = _newCoords.x
-        const newY = _newCoords.y
-        const newZ = _newCoords.z
-
         // update player coords
         Players.updatePlayerCoords(socket.id, _newCoords)
     })
 
-    // event when player shoots bullet
     /**
      * event when player shoot bullet
      * @param _bulletData {object}
@@ -99,6 +95,10 @@ io.on('connection', (socket) => {
         socket.broadcast.to(socket.roomId).emit('bulletFired', _bulletData)
     })
 
+    /**
+     * event when player rotates camera
+     * @param _rotationData {object} example: {_x: 0, _y: 0, _z: 0}
+     */
     socket.on('playerRotateCamera', (_rotationData) => {
         // update player camera coords
         Players.updatePlayerCameraRotation(socket.id, _rotationData)

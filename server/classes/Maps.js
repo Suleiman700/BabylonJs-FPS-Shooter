@@ -1,21 +1,15 @@
-
-const { MAP_01_CONFIG } = require('../configs/maps/01/MAP_01_CONFIG.js')
-
 class Maps {
     constructor() {}
 
     /**
-     * get map data by id
-     * @param _mapID {string} example: MAP_01
-     * @returns {object}}
+     * get map config by its id
+     * @param _mapId {string} example: MAP_01
+     * @return {object}
      */
-    getMapDataById(_mapID) {
-        switch (_mapID) {
-            case 'MAP_01':
-                return MAP_01_CONFIG
-            default:
-                throw new Error(`[Get Map Data By Id] Unable to find map with id ${_mapID}`);
-        }
+    async getMapConfig(_mapId) {
+        // const configModule = await import(`../configs/maps/MAP_01_CONFIG.js`);
+        const configModule = await import(`../configs/maps/${_mapId}_CONFIG.js`);
+        return configModule.default[`${_mapId}_CONFIG`];
     }
 }
 

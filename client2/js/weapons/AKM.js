@@ -26,6 +26,7 @@ class AKM {
     BULLET_SETTINGS = {
         decayTimer: 1000, // decay bullet in ms
         speed: 2000, // bullet speed in ms
+        diameter: 0.5, // bullet diameter
     }
 
     SOUNDS = {
@@ -92,40 +93,6 @@ class AKM {
 
         // update flag
         this.isShown = true
-    }
-
-    fireBullet() {
-        var translate = function (mesh, direction, power) {
-            mesh.physicsImpostor.setLinearVelocity(
-                mesh.physicsImpostor.getLinearVelocity().add(direction.scale(power)
-                )
-            );
-        }
-
-        var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
-        // bulletMesh.renderOrder = 1;
-
-        // create material with black color
-        var material = new BABYLON.StandardMaterial("bulletMaterial", Scene.getScene());
-        material.diffuseColor = BABYLON.Color3.Black();
-
-        var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, 0.5, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
-        bullet.material = material;
-        // bullet.depthTest = false;
-        bullet.position.x = Camera.getCamera().position.x
-        bullet.position.y = Camera.getCamera().position.y
-        bullet.position.z = Camera.getCamera().position.z
-        bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.25, restitution: 0 }, Scene.getScene());
-        translate(bullet, Camera.getCamera().getForwardRay().direction, this.BULLET_SETTINGS.speed);
-
-        setTimeout(() => {
-            bullet.dispose()
-        }, this.BULLET_SETTINGS.decayTimer)
-
-        // play firing sound
-        // new BABYLON.Sound("gunshot", "gunshot.mp3", Scene.getScene()).play()
-
-        this.WEAPON_SETTINGS.ammoLeftInMag--
     }
 
     /**

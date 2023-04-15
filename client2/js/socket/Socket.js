@@ -35,8 +35,7 @@ class Socket {
             console.log(_mapData)
 
             // set selected weapon
-            const selectedWeaponId = _mapData.defaultWeaponId
-            Weapons.pickupWeapon(selectedWeaponId)
+            Weapons.pickupWeapon(_mapData.defaultWeaponId)
 
             // set player socket id
             ClientPlayer.socketId = _mapData.socketId

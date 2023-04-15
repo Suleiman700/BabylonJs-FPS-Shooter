@@ -20,40 +20,24 @@ class Weapons {
     COUNT_firedBullets = 0 // count selected weapon fired bullets
 
     constructor() {}
-    
-    // /**
-    //  * set selected weapon loadout
-    //  * @param _loadoutName {string} example: primary|secondary
-    //  */
-    // set selectedWeaponLoadout(_loadoutName) {
-    //     if (_loadoutName !== 'primary' && _loadoutName !== 'secondary') {
-    //         throw new Error(`[Weapons] Cannot set selected weapon loadout of ${_loadoutName}, please use primary or secondary`);
-    //     }
-    //
-    //     this.#selectedWeaponLoadout = _loadoutName
-    //
-    //     if (this.#debug) console.log(`[Weapons] selected weapon loadout: ${_loadoutName}`)
-    // }
-    //
-    // /**
-    //  * get the selected weapon loadout name
-    //  * @return {string} example: primary|secondary
-    //  */
-    // get selectedWeaponLoadout() {
-    //     return this.#selectedWeaponLoadout
-    // }
 
-    pickupWeapon(_weaponId) {
+    /**
+     * get weapon instance by its id
+     * @param _weaponId {string} example: AKM
+     * @return {instance} weapon instance
+     */
+    getWeaponInstanceById(_weaponId) {
         switch (_weaponId) {
             case 'AKM':
-                this.#weaponInstance = AKM
-                this.#weaponId = 'AKM'
-                break
+                return AKM
             case 'G17':
-                this.#weaponInstance = G17
-                this.#weaponId = 'G17'
-                break
+                return G17
         }
+    }
+
+    pickupWeapon(_weaponId) {
+        this.#weaponId = _weaponId
+        this.#weaponInstance = this.getWeaponInstanceById(_weaponId)
 
         // reset fired bullets on weapon pickup
         this.COUNT_firedBullets = 0
@@ -90,12 +74,41 @@ class Weapons {
     fire() {
         // check if weapon has ammo left in mag
         if (this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag > 0) {
-
             // shoot event
             ShootEvent.fireEvent()
 
-            // fire bullet and decrease ammo
-            this.#weaponInstance.fireBullet();
+            var translate = function (mesh, direction, power) {
+                mesh.physicsImpostor.setLinearVelocity(
+                    mesh.physicsImpostor.getLinearVelocity().add(direction.scale(power)
+                    )
+                );
+            }
+
+            var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
+            // bulletMesh.renderOrder = 1;
+
+            // create material with black color
+            var material = new BABYLON.StandardMaterial("bulletMaterial", Scene.getScene());
+            material.diffuseColor = BABYLON.Color3.Black();
+
+            var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, this.#weaponInstance.BULLET_SETTINGS.diameter, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
+            bullet.material = material;
+            // bullet.depthTest = false;
+            bullet.position.x = Camera.getCamera().position.x
+            bullet.position.y = Camera.getCamera().position.y
+            bullet.position.z = Camera.getCamera().position.z
+            bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.25, restitution: 0 }, Scene.getScene());
+            translate(bullet, Camera.getCamera().getForwardRay().direction, this.#weaponInstance.BULLET_SETTINGS.speed);
+
+            setTimeout(() => {
+                bullet.dispose()
+            }, this.#weaponInstance.BULLET_SETTINGS.decayTimer)
+
+            // play firing sound
+            // new BABYLON.Sound("gunshot", "gunshot.mp3", Scene.getScene()).play()
+
+            this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag--
+
 
             // count bullets fired
             this.COUNT_firedBullets++;
@@ -225,26 +238,6 @@ class Weapons {
             GUI.UI_showReloadingText(false)
         }, this.#weaponInstance.WEAPON_SETTINGS.reloadSpeed)
     }
-
-    // /**
-    //  * switch between selected weapons loadouts
-    //  */
-    // switchToSelectedWeaponLoadout() {
-    //     // if primary is selected
-    //     if (this.#selectedWeaponLoadout === 'primary') {
-    //         // hide secondary weapon from UI
-    //         this.#secondaryWeaponInstance.isShown = false
-    //
-    //         // draw primary weapon on UI
-    //         this.#primaryWeaponInstance.drawOnUI()
-    //     }
-    //     else if (this.#selectedWeaponLoadout === 'secondary') {
-    //         // hide primary weapon from UI
-    //         this.#primaryWeaponInstance.isShown = false
-    //
-    //         this.#secondaryWeaponInstance.drawOnUI()
-    //     }
-    // }
 
     set isReloading(_option) {
         this.#isReloading = _option;
