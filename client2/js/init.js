@@ -3,39 +3,37 @@
 import Game from './Game.js';
 import Scene from './Scene.js';
 import Camera from './Camera.js';
+import Loader from './Loader.js';
+import Sky from './Environment/Sky.js';
+import Socket from './socket/Socket.js';
+import Keys from './Keys.js';
+import ModMenu from './ModMenu.js';
+import Updater from './Updater.js';
+import AKM from './weapons/AKM.js';
+import MovementEvent from './events/MovementEvent.js';
+import Players from './Players.js';
 
 Game.initCanvas()
 Game.createDefaultEngine()
 
 Scene.initScene()
+await Loader.loadWeapons()
 Scene.createScene('MAP_01')
 
+await Loader.loadWeapons()
 Camera.initCamera()
 
-import Loader from './Loader.js';
-await Loader.loadWeapons()
 
 // Environment
-import Sky from './Environment/Sky.js';
 Sky.initSky()
 
 // register events
-import MovementEvent from './events/MovementEvent.js';
-import Players from './Players.js';
 MovementEvent.register()
 
-import Socket from './socket/Socket.js';
 Socket.connect()
 
-import Keys from './Keys.js';
-import ModMenu from './ModMenu.js';
-import Updater from './Updater.js';
-import AKM from './weapons/AKM.js';
 
 Keys.registerKeys()
-
-import WallGuns from './weapons/WallGuns.js';
-WallGuns.test()
 
 var startRenderLoop = function (_engine, _canvas, _scene) {
     _engine.runRenderLoop(function () {

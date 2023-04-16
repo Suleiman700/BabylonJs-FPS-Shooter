@@ -63,6 +63,21 @@ class GUI {
     UI_setMoney(_money) {
         document.querySelector(`#${this.#UI_playerMoney}`).innerHTML = _money
     }
+
+    /**
+     * set the wall shop buy text (Hold X to buy X for $X)
+     * @param _visible {boolean} show or hide the UI text
+     * @param _buyKey {string} example: F
+     * @param _itemName {string} example: AKM
+     * @param _itemCost {number} example: 500
+     * @constructor
+     */
+    UI_setWallShopBuyText(_visible, _buyKey, _itemName, _itemCost) {
+        document.querySelector('#UI-hold-f-to-buy').style.display = _visible? 'flex':'none'
+        document.querySelector('#UI-hold-f-to-buy #KEYBINDINGS_BUY_WEAPON').innerHTML = _buyKey
+        document.querySelector('#UI-hold-f-to-buy #item-to-buy').innerHTML = _itemName
+        document.querySelector('#UI-hold-f-to-buy #item-cost').innerHTML = _itemCost
+    }
 }
 
 export default new GUI()

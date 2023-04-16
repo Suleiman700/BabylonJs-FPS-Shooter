@@ -10,3 +10,15 @@
     font-size: 28px;
     font-style: italic;
 }
+
+#UI-hold-f-to-buy {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    color: green;
+    font-size: 28px;
+    font-style: italic;
+    bottom: 250px;
+}

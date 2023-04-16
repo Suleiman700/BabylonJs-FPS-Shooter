@@ -2,6 +2,7 @@
 import Scene from './Scene.js';
 import Game from './Game.js';
 import Player from './ClientPlayer.js';
+import Weapons from './weapons/Weapons.js';
 
 class Camera {
     #camera = {}

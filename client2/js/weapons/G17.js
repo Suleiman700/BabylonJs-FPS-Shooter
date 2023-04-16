@@ -24,7 +24,7 @@ class G17 {
     BULLET_SETTINGS = {
         decayTimer: 1000, // decay bullet in ms
         speed: 1000, // bullet speed in ms
-        diameter: 0.5, // bullet diameter
+        diameter: 100.5, // bullet diameter
     }
 
     SOUNDS = {

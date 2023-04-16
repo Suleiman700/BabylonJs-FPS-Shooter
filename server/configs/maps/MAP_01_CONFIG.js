@@ -15,7 +15,7 @@ const MAP_01_CONFIG = {
     defaultZombieKillReward: 1, // default zombie kill reward (money)
     defaultZombieWalkSpeed: 1, // default zombie walk speed
 
-    defaultPlayerWalkSpeed: 2, // default player walk speed
+    defaultPlayerWalkSpeed: 7, // default player walk speed
     defaultPlayerSprintSpeed: 3.5, // default player sprint speed
     defaultPlayerHealth: 100, // default player health (1 ~ 100)
     defaultPlayerJumpHeight: 0.2, // default player jump height (uses less gravity)
@@ -28,8 +28,8 @@ const MAP_01_CONFIG = {
 
     // define players spawns in map
     playersSpawns: [
-        {x: 10, y: 10, z: 10, pan: 10, roll: 10},
-        {x: 30, y: 10, z: 30, pan: 10, roll: 10},
+        {x: 23, y: 10, z: 74, pan: 10, roll: 10},
+        // {x: 30, y: 10, z: 30, pan: 10, roll: 10},
     ],
 
     defaultWeaponId: 'AKM', // default weapon id

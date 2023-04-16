@@ -8,6 +8,7 @@ class AKM {
 
     id = 'AKM'
     name = 'AKM'
+    wallShopPrice = 150 // weapon price in wall shop
 
     #isShown = false // if weapon is shown or not
 

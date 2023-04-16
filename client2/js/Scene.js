@@ -44,6 +44,7 @@ class Scene {
         }
 
         // this.#scene.registerBeforeRender(() => {
+        //     var player = this.#scene.activeCamera.position;
         //     console.log('here')
         // })
     }
