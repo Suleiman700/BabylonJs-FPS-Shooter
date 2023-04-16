@@ -52,6 +52,13 @@ class G17 {
         rotation: {x: 0, y: 0, z: 4.7},
     }
 
+    SHOPS = {
+        WALL_SHOP: {
+            COST: 150,
+            HOLD_BUY_KEY_FOR: 1000, // hold buy key for X ms to buy the weapon
+        }
+    }
+
     MODEL_weaponModel = undefined
 
 

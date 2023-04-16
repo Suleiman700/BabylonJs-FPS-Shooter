@@ -28,7 +28,8 @@ const MAP_01_CONFIG = {
 
     // define players spawns in map
     playersSpawns: [
-        {x: 23, y: 10, z: 74, pan: 10, roll: 10},
+        // {x: 23, y: 10, z: 74, pan: 10, roll: 10},
+        {x: 16, y: 10, z: 85, pan: 10, roll: 10},
         // {x: 30, y: 10, z: 30, pan: 10, roll: 10},
     ],
 

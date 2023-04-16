@@ -5,15 +5,26 @@ import Player from './ClientPlayer.js';
 import player from './ClientPlayer.js';
 import { KEY_BINDINGS } from './CONTROLS.js';
 import Weapons from './weapons/Weapons.js';
+import WallShop from './weapons/WallShop.js';
 
 import Sky from './Environment/Sky.js';
+import AKM from './weapons/AKM.js';
+import ClientPlayer from './ClientPlayer.js';
+
+// events
+import BuyItemFromWallShop from './events/BuyItemFromWallShop.js';
 
 class Keys {
-    #debug = false
+    #debug = true
+
     #isSpaceDown = false
 
-    constructor() {
+    #BUY_FROM_WALL_SHOP = {
+        isBuyKeyDown: false, // indicates if the key to buy weapon from wall shop is down or not
+        buyWeaponTimeout: null, // timeout for time player holds the buy key
     }
+
+    constructor() {}
 
     registerKeys() {
         const canvas = Game.getCanvas()
@@ -42,8 +53,22 @@ class Keys {
                     Weapons.isReloading = true
                 }
                 break
-            case 70: // F
-                console.log('Pressed F')
+            // buy weapon from wall shop - F
+            case KEY_BINDINGS.BUY_FROM_WALL_SHOP:
+                // check if player is at wall shop
+                if (ClientPlayer.isAtWallShop.state) {
+                    if (this.#debug) console.log('[Keys] Pressed Buy Weapon INSIDE Wall Shop')
+                    if (!this.#BUY_FROM_WALL_SHOP.isBuyKeyDown) {
+                        this.#BUY_FROM_WALL_SHOP.isBuyKeyDown = true
+                        this.#BUY_FROM_WALL_SHOP.buyWeaponTimeout = setTimeout(() => {
+                            if (this.#debug) console.log('[Keys] Bought weapon from wall shop!')
+                            BuyItemFromWallShop.fireEvent()
+                        }, Weapons.weaponInstance.SHOPS.WALL_SHOP.HOLD_BUY_KEY_FOR);
+                    }
+                }
+                else {
+                    if (this.#debug) console.log('[Keys] Pressed Buy Weapon OUTSIDE Wall Shop')
+                }
                 break
             case 32: // space
                 // check if player is on ground
@@ -68,6 +93,13 @@ class Keys {
                 break
             case KEY_BINDINGS.WEAPON_RELOAD:
                 // Weapons.isReloading = false
+                break
+            // buy weapon from wall shop - F
+            case KEY_BINDINGS.BUY_FROM_WALL_SHOP:
+                if (this.#BUY_FROM_WALL_SHOP.isBuyKeyDown) {
+                    clearTimeout(this.#BUY_FROM_WALL_SHOP.buyWeaponTimeout);
+                    this.#BUY_FROM_WALL_SHOP.isBuyKeyDown = false;
+                }
                 break
             case 32: // space
                 if (this.#isSpaceDown) {

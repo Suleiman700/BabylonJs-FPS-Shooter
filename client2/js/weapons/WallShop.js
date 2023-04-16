@@ -4,8 +4,10 @@ import Camera from '../Camera.js';
 import GUI from '../GUI.js';
 import ClientPlayer from '../ClientPlayer.js';
 
-export default class WallShop {
+class WallShop {
     #showBounding = true
+
+    constructor() {}
 
     /**
      * @param _shopPosition {object} example: {x: 23, y: 0, z: 95}
@@ -15,8 +17,8 @@ export default class WallShop {
      * @param _itemRotation {object} example: {x: 0, y: 0, z: 0}
      * @param _itemInstance
      */
-    constructor(_shopPosition, _shopMeasurement, _itemInstance, _itemCost, _itemPosition, _itemRotation) {
-        const weaponClone = AKM.MODEL_weaponModel.clone("AKM Clone");
+    createNewWallShop(_shopPosition, _shopMeasurement, _itemInstance, _itemCost, _itemPosition, _itemRotation) {
+        const weaponClone = _itemInstance.MODEL_weaponModel.clone("AKM Clone");
         weaponClone.position.x = _itemPosition.x
         weaponClone.position.y = _itemPosition.y
         weaponClone.position.z = _itemPosition.z
@@ -52,7 +54,7 @@ export default class WallShop {
             if (boundingBox.intersectsPoint(player)) {
                 if (!isPlayerAtWallShop) {
                     // player has entered the bounding box
-                    GUI.UI_setWallShopBuyText(true, 'F', _itemInstance.name, _itemCost);
+                    GUI.UI_setWallShopBuyText(true, `Hold F to buy ${_itemInstance.name} for $${_itemCost}`);
 
                     ClientPlayer.isAtWallShop = {
                         state: true,
@@ -79,3 +81,5 @@ export default class WallShop {
         });
     }
 }
+
+export default new WallShop()

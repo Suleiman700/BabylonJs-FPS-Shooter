@@ -54,8 +54,11 @@ class AKM {
         rotation: {x: 80, y: 0, z: 4.7},
     }
 
-    PRICES = {
-        WALL_SHOP: 150, // weapon price in wall shop
+    SHOPS = {
+        WALL_SHOP: {
+            COST: 150,
+            HOLD_BUY_KEY_FOR: 1000, // hold buy key for X ms to buy the weapon
+        }
     }
 
     MODEL_weaponModel = undefined

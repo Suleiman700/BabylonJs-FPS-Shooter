@@ -350,6 +350,14 @@ class Weapons {
     get weaponId() {
         return this.#weaponId
     }
+
+    /**
+     * get current player weapon instance
+     * @return {object}} example: AKM instance
+     */
+    get weaponInstance() {
+        return this.#weaponInstance
+    }
 }
 
 export default new Weapons()

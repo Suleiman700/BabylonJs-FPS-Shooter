@@ -67,16 +67,12 @@ class GUI {
     /**
      * set the wall shop buy text (Hold X to buy X for $X)
      * @param _visible {boolean} show or hide the UI text
-     * @param _buyKey {string} example: F
-     * @param _itemName {string} example: AKM
-     * @param _itemCost {number} example: 500
+     * @param _text {string} example: Hold F to buy AKM for $150
      * @constructor
      */
-    UI_setWallShopBuyText(_visible, _buyKey, _itemName, _itemCost) {
+    UI_setWallShopBuyText(_visible, _text) {
         document.querySelector('#UI-hold-f-to-buy').style.display = _visible? 'flex':'none'
-        document.querySelector('#UI-hold-f-to-buy #KEYBINDINGS_BUY_WEAPON').innerHTML = _buyKey
-        document.querySelector('#UI-hold-f-to-buy #item-to-buy').innerHTML = _itemName
-        document.querySelector('#UI-hold-f-to-buy #item-cost').innerHTML = _itemCost
+        document.querySelector('#UI-hold-f-to-buy #buy-text').innerHTML = _text
     }
 }
 
