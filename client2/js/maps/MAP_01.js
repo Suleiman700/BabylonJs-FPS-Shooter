@@ -2,7 +2,7 @@ import Camera from '../Camera.js';
 import WallShop from '../weapons/WallShop.js';
 import AKM from '../weapons/AKM.js';
 
-export default function Map_02_createScene(_scene, _camera) {
+export default function Map_01_createScene(_scene, _camera) {
     // Lights
     var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), _scene);
 
@@ -74,5 +74,5 @@ export default function Map_02_createScene(_scene, _camera) {
     const shopMeasurement = {width: 5, height: 10, depth: 9}
     const itemPosition = {x: shopPosition.x, y: shopPosition.y + 3, z: shopPosition.z}
     const itemRotation = {x: -7.8, y: 0, z: 0}
-    new WallShop(shopPosition, shopMeasurement, AKM, AKM.wallShopPrice, itemPosition, itemRotation)
+    new WallShop(shopPosition, shopMeasurement, AKM, AKM.PRICES.WALL_SHOP, itemPosition, itemRotation)
 }

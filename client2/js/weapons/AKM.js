@@ -8,7 +8,6 @@ class AKM {
 
     id = 'AKM'
     name = 'AKM'
-    wallShopPrice = 150 // weapon price in wall shop
 
     #isShown = false // if weapon is shown or not
 
@@ -53,6 +52,10 @@ class AKM {
         fov: 0.5,
         position: {x: 0.02, y: -0.4, z: 1.0},
         rotation: {x: 80, y: 0, z: 4.7},
+    }
+
+    PRICES = {
+        WALL_SHOP: 150, // weapon price in wall shop
     }
 
     MODEL_weaponModel = undefined

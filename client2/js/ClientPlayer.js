@@ -15,6 +15,13 @@ class ClientPlayer {
     #isOnGround = true // boolean
     #money = 0 // number
 
+    // sets if player is at wall shop
+    #isAtWallShop = {
+        state: false,
+        itemId: '', // string | wall shop item id - example: AKM
+        itemCost: 0, // number | wall shop item cost - example: 150
+    }
+
     constructor() {}
 
     /**
@@ -147,6 +154,17 @@ class ClientPlayer {
      */
     get money() {
         return this.#money
+    }
+
+    /**
+     * set if player is at wall shop or now
+     * @param _data {object}
+     * example #1 if player enters wall shop: {"state": true, "itemId": "AKM", "itemCost": 150}
+     * example #2 if player leaves wall shop: {"state": false, "itemId": "", "itemCost": 0}
+     */
+    set isAtWallShop(_data) {
+        this.#isAtWallShop = _data
+        console.log(_data)
     }
 
     /**

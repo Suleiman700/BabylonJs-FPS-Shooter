@@ -42,6 +42,9 @@ class Keys {
                     Weapons.isReloading = true
                 }
                 break
+            case 70: // F
+                console.log('Pressed F')
+                break
             case 32: // space
                 // check if player is on ground
                 if (Player.isOnGround && !this.#isSpaceDown) {

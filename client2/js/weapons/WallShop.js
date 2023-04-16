@@ -2,11 +2,10 @@ import AKM from './AKM.js';
 import Scene from '../Scene.js';
 import Camera from '../Camera.js';
 import GUI from '../GUI.js';
+import ClientPlayer from '../ClientPlayer.js';
 
 export default class WallShop {
     #showBounding = true
-    #isInShop = false
-    #price = 0
 
     /**
      * @param _shopPosition {object} example: {x: 23, y: 0, z: 95}
@@ -17,8 +16,6 @@ export default class WallShop {
      * @param _itemInstance
      */
     constructor(_shopPosition, _shopMeasurement, _itemInstance, _itemCost, _itemPosition, _itemRotation) {
-        this.#price = _itemCost
-
         const weaponClone = AKM.MODEL_weaponModel.clone("AKM Clone");
         weaponClone.position.x = _itemPosition.x
         weaponClone.position.y = _itemPosition.y
@@ -45,18 +42,40 @@ export default class WallShop {
         // create a bounding box around the box mesh
         var boundingBox = shopBox.getBoundingInfo().boundingBox;
 
+
         // check if player is within the bounding box continuously
+        let isPlayerAtWallShop = false;
+
         Scene.getScene().registerBeforeRender(() => {
             var player = Scene.getScene().activeCamera.position;
-            if (boundingBox.intersectsPoint(player)) {
-                // player is within the bounding box
-                this.#isInShop = true
-                GUI.UI_setWallShopBuyText(true, 'F', _itemInstance.name, _itemCost)
-            } else {
-                this.#isInShop = false
-                GUI.UI_setWallShopBuyText(false)
-            }
 
+            if (boundingBox.intersectsPoint(player)) {
+                if (!isPlayerAtWallShop) {
+                    // player has entered the bounding box
+                    GUI.UI_setWallShopBuyText(true, 'F', _itemInstance.name, _itemCost);
+
+                    ClientPlayer.isAtWallShop = {
+                        state: true,
+                        itemId: _itemInstance.id,
+                        itemCost: _itemCost,
+                    };
+
+                    isPlayerAtWallShop = true;
+                }
+            } else {
+                if (isPlayerAtWallShop) {
+                    // player has left the bounding box
+                    GUI.UI_setWallShopBuyText(false);
+
+                    ClientPlayer.isAtWallShop = {
+                        state: false,
+                        itemId: '',
+                        itemCost: 0,
+                    };
+
+                    isPlayerAtWallShop = false;
+                }
+            }
         });
     }
 }
