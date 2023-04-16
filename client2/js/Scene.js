@@ -4,6 +4,7 @@ import Camera from './Camera.js';
 import Weapons from './weapons/Weapons.js';
 import Players from './Players.js';
 import { KEY_BINDINGS } from './CONTROLS.js';
+import AKM from './weapons/AKM.js';
 
 class Scene {
     #scene = null

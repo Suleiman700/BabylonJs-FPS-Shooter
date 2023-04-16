@@ -30,8 +30,12 @@ Socket.connect()
 import Keys from './Keys.js';
 import ModMenu from './ModMenu.js';
 import Updater from './Updater.js';
+import AKM from './weapons/AKM.js';
 
 Keys.registerKeys()
+
+import WallGuns from './weapons/WallGuns.js';
+WallGuns.test()
 
 var startRenderLoop = function (_engine, _canvas, _scene) {
     _engine.runRenderLoop(function () {
