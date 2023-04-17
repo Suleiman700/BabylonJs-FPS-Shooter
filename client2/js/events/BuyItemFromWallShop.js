@@ -3,6 +3,7 @@ import GUI from '../GUI.js';
 import ClientPlayer from '../ClientPlayer.js';
 import Weapons from '../weapons/Weapons.js';
 import Socket from '../socket/Socket.js';
+import Particles from '../Environment/Particles.js';
 
 class BuyItemFromWallShop {
     constructor() {}
@@ -41,7 +42,6 @@ class BuyItemFromWallShop {
             }
             Socket.socket.emit('playerPurchasedWeaponFromWallShop', purchasedWeaponData)
         }
-
     }
 }
 

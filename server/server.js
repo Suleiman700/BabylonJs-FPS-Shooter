@@ -116,6 +116,10 @@ io.on('connection', async (socket) => {
     socket.on('playerPurchasedWeaponFromWallShop', (_purchasedWeaponData) => {
         // update player holding weapon id
         Players.purchasedWeapon(socket.id, _purchasedWeaponData.weaponId, _purchasedWeaponData.weaponCost)
+
+        // emit to all players to play wall shop purchase particle
+        const particleCoords = Players.getPlayerCoords(socket.id)
+        io.sockets.in(socket.roomId).emit('playWallShopPurchaseParticle', particleCoords)
     })
 
     // Handle disconnections

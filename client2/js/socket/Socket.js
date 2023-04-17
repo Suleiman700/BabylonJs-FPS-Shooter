@@ -5,6 +5,7 @@ import Camera from '../Camera.js';
 import Weapons from '../weapons/Weapons.js';
 import Sky from '../Environment/Sky.js';
 import Players from '../Players.js';
+import Particles from '../Environment/Particles.js';
 
 class Socket {
 
@@ -73,6 +74,16 @@ class Socket {
 
         this.socket.on('bulletFired', (_bulletData) => {
             Weapons.fireFromOther(_bulletData.weaponId, _bulletData.bulletCords, _bulletData.bulletDirection)
+        })
+
+        /**
+         * play wall shop purchase particles
+         * @param _particleCoords {object} example: {x: 15, y: 3.015, z: 90}
+         */
+        this.socket.on('playWallShopPurchaseParticle', (_particleCoords) => {
+            console.log('here')
+            // play purchase from wall shop particles
+            Particles.playWallShopPurchaseParticle(_particleCoords)
         })
     }
 

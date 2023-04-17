@@ -83,6 +83,22 @@ class Players {
         return this.#players.filter(player => player.roomId == _roomId);
     }
 
+    /**
+     * get player coords
+     * @param _socketId
+     * @return {object}
+     */
+    getPlayerCoords(_socketId) {
+        // get player index
+        const index = this.#players.findIndex((player) => player.socketId === _socketId);
+
+        if (index === -1) {
+            // throw new Error(`[Remove Player] Player with socketId ${socketId} not found`);
+        }
+
+        return this.#players[index].coords
+    }
+
     updatePlayerCoords(_socketId, _newCoords) {
         // get player index
         const index = this.#players.findIndex((player) => player.socketId === _socketId);
@@ -106,7 +122,7 @@ class Players {
     }
 
     updatePlayerStats(_socketId, _newStats) {
-        
+
     }
 
 
