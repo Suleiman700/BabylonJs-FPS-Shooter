@@ -4,4 +4,5 @@ export const KEY_BINDINGS = {
     WEAPON_USE_SCORE: 2, // MOUSE RIGHT
     WEAPON_RELOAD: 82, // R
     BUY_FROM_WALL_SHOP: 70, // F
+    OPEN_STATS_LIST: 89, // Y
 }

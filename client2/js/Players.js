@@ -3,17 +3,24 @@ import Scene from './Scene.js';
 import Player from './ClientPlayer.js';
 import AKM from './weapons/AKM.js';
 import G17 from './weapons/G17.js';
+import PlayersStatsTable from './stats/PlayersStatsTable.js';
 
 class Players {
     #players = [] // store other players
 
     constructor() {}
 
-    drawPlayers() {
+    updatePlayersData() {
+        // clear players stats table
+        PlayersStatsTable.clearRows()
+
         // Loop through players received from the emit
         for (let i = 0; i < this.#players.length; i++) {
             const playerData = this.#players[i];
             const playerId = playerData.socketId;
+
+            // update players stats table
+            PlayersStatsTable.rowAdd(playerData)
 
             // Skip the current player
             if (playerId === Player.socketId) {

@@ -15,6 +15,9 @@ class Players {
         holdingGunId: '', // string - example: AKM
         coords: {x: 0, y: 0, z: 0},
         cameraRotation: {x: 0, y: 0, z: 0},
+        stats: {
+            bulletsFired: 0
+        }
     }
 
     constructor() {}
@@ -101,6 +104,11 @@ class Players {
 
         this.#players[index].cameraRotation = {x: _rotationData._x, y: _rotationData._y, z: _rotationData._z};
     }
+
+    updatePlayerStats(_socketId, _newStats) {
+        
+    }
+
 
     /**
      * player purchased weapon

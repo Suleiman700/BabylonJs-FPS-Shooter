@@ -5,6 +5,7 @@ import GUI from '../GUI.js';
 import Scene from '../Scene.js';
 import Camera from '../Camera.js';
 import ShootEvent from '../events/ShootEvent.js';
+import Sounds from '../Environment/Sounds.js';
 
 class Weapons {
     #debug = true
@@ -161,12 +162,10 @@ class Weapons {
             // weapon recoil
             Camera.getCamera().rotation.x -= this.#weaponInstance.WEAPON_SETTINGS.recoil;
 
-            // play gunshot sound
-            const gunshotSound = new BABYLON.Sound("gunshot", this.#weaponInstance.SOUNDS.shoot, Scene.getScene(), null, {
-                loop: false,
-                autoplay: true,
-            });
 
+            // play bullet firing sound
+            const soundCoords = {x: Camera.getCamera().position.x, y: Camera.getCamera().position.y, z: Camera.getCamera().position.z}
+            Sounds.playBulletFiringSound(soundCoords, this.#weaponInstance.SOUNDS.shoot)
         }
         else {
             // play out of ammo sound
@@ -202,8 +201,11 @@ class Weapons {
         bullet.position.x = _bulletCoords.x
         bullet.position.y = _bulletCoords.y
         bullet.position.z = _bulletCoords.z
-
         bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.25, restitution: 0 }, Scene.getScene());
+
+        // play bullet firing sound
+        const soundCoords = {x: _bulletCoords.x, y: _bulletCoords.y, z: _bulletCoords.z}
+        Sounds.playBulletFiringSound(soundCoords, this.#weaponInstance.SOUNDS.shoot)
 
         // Convert bullet direction to Vector3
         var bulletDirectionVector = new BABYLON.Vector3(_bulletDirection.x, _bulletDirection.y, _bulletDirection.z);

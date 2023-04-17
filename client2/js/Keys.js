@@ -6,6 +6,7 @@ import player from './ClientPlayer.js';
 import { KEY_BINDINGS } from './CONTROLS.js';
 import Weapons from './weapons/Weapons.js';
 import WallShop from './weapons/WallShop.js';
+import PlayersStatsTable from './stats/PlayersStatsTable.js';
 
 import Sky from './Environment/Sky.js';
 import AKM from './weapons/AKM.js';
@@ -14,6 +15,7 @@ import ClientPlayer from './ClientPlayer.js';
 // events
 import BuyItemFromWallShop from './events/BuyItemFromWallShop.js';
 import GUI from './GUI.js';
+import Camera from './Camera.js';
 
 class Keys {
     #debug = true
@@ -77,6 +79,10 @@ class Keys {
                 else {
                     if (this.#debug) console.log('[Keys] Pressed Buy Weapon OUTSIDE Wall Shop')
                 }
+                break
+            // open players stats list
+            case KEY_BINDINGS.OPEN_STATS_LIST:
+                PlayersStatsTable.setShown(true)
                 break
             case 32: // space
                 // check if player is on ground

@@ -42,7 +42,7 @@ var startRenderLoop = function (_engine, _canvas, _scene) {
             Updater.runUpdater()
 
             // draw players
-            Players.drawPlayers()
+            Players.updatePlayersData()
         }
     });
 }
