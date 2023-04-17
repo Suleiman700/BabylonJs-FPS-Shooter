@@ -20,6 +20,7 @@ class ClientPlayer {
         state: false,
         itemId: '', // string | wall shop item id - example: AKM
         itemCost: 0, // number | wall shop item cost - example: 150
+        itemType: '' // string | item type, example: weapon|item
     }
 
     constructor() {}

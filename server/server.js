@@ -104,6 +104,15 @@ io.on('connection', async (socket) => {
         Players.updatePlayerCameraRotation(socket.id, _rotationData)
     })
 
+    /**
+     * event when player purchase weapon from wall shop
+     * @param _purchasedWeaponData {object} example: {weaponId: 'AKM', weaponCost: 150}
+     */
+    socket.on('playerPurchasedWeaponFromWallShop', (_purchasedWeaponData) => {
+        // update player holding weapon id
+        Players.purchasedWeapon(socket.id, _purchasedWeaponData.weaponId, _purchasedWeaponData.weaponCost)
+    })
+
     // Handle disconnections
     socket.on('disconnect', () => {
         console.log('A client disconnected');

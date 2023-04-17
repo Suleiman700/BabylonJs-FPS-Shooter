@@ -17,6 +17,13 @@ class Weapons {
     #isFiring = false
     #fireIntervalId = null
 
+    // store ammo settings of the currently used weapon
+    ammoSettings = {
+        ammoCapacity: 0,
+        magSize: 0,
+        ammoLeftInMag: 0,
+    }
+
     COUNT_firedBullets = 0 // count selected weapon fired bullets
 
     constructor() {}
@@ -39,6 +46,11 @@ class Weapons {
         this.#weaponId = _weaponId
         this.#weaponInstance = this.getWeaponInstanceById(_weaponId)
 
+        // set ammo stats to the picked weapon ammo settings
+        this.ammoSettings.ammoCapacity = this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity
+        this.ammoSettings.magSize = this.#weaponInstance.WEAPON_SETTINGS.magSize
+        this.ammoSettings.ammoLeftInMag = this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag
+
         // reset fired bullets on weapon pickup
         this.COUNT_firedBullets = 0
 
@@ -49,20 +61,20 @@ class Weapons {
         let currentAmmoInMag = 0
         let currentAmmoInCapacity = 0
         // check if mag size exists in capacity
-        if (this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity >= this.#weaponInstance.WEAPON_SETTINGS.magSize) {
+        if (this.ammoSettings.ammoCapacity >= this.ammoSettings.magSize) {
             // take mag size from capacity
-            currentAmmoInMag = this.#weaponInstance.WEAPON_SETTINGS.magSize
-            this.#weaponInstance.ammoLeftInLag = currentAmmoInMag
+            currentAmmoInMag = this.ammoSettings.magSize
+            this.ammoSettings.ammoLeftInMag = currentAmmoInMag
 
-            this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity -= currentAmmoInMag
-            currentAmmoInCapacity = this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity
+            this.ammoSettings.ammoCapacity -= currentAmmoInMag
+            currentAmmoInCapacity = this.ammoSettings.ammoCapacity
         }
         // capacity does not have mag size
         else {
             // set capacity as the current ammo in mag
-            currentAmmoInMag = this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity
+            currentAmmoInMag = this.ammoSettings.ammoCapacity
             // set capacity to 0
-            this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity = 0
+            this.ammoSettings.ammoCapacity = 0
         }
         GUI.UI_setAmmo(currentAmmoInMag, currentAmmoInCapacity)
     }
@@ -73,7 +85,7 @@ class Weapons {
      */
     fire() {
         // check if weapon has ammo left in mag
-        if (this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag > 0) {
+        if (this.ammoSettings.ammoLeftInMag > 0) {
             // shoot event
             ShootEvent.fireEvent()
 
@@ -107,15 +119,15 @@ class Weapons {
             // play firing sound
             // new BABYLON.Sound("gunshot", "gunshot.mp3", Scene.getScene()).play()
 
-            this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag--
+            this.ammoSettings.ammoLeftInMag--
 
 
             // count bullets fired
             this.COUNT_firedBullets++;
 
             // update ammo text in UI
-            const currentAmmoInMag = this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag;
-            const currentAmmoCapacity = this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity;
+            const currentAmmoInMag = this.ammoSettings.ammoLeftInMag;
+            const currentAmmoCapacity = this.ammoSettings.ammoCapacity;
             GUI.UI_setAmmo(currentAmmoInMag, currentAmmoCapacity);
 
             // play weapon firing animation
@@ -165,7 +177,10 @@ class Weapons {
         }
     }
 
-    fireFromOther(_bulletCoords, _bulletDirection) {
+    fireFromOther(_weaponId, _bulletCoords, _bulletDirection) {
+        // get weapon settings by id
+        const firingWeaponInstance = this.getWeaponInstanceById(_weaponId)
+
         var translate = function (mesh, direction, power) {
             mesh.physicsImpostor.setLinearVelocity(
                 mesh.physicsImpostor.getLinearVelocity().add(direction.scale(power)
@@ -180,7 +195,7 @@ class Weapons {
         var material = new BABYLON.StandardMaterial("bulletMaterial", Scene.getScene());
         material.diffuseColor = BABYLON.Color3.Black();
 
-        var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, 0.5, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
+        var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, firingWeaponInstance.BULLET_SETTINGS.diameter, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
         bullet.material = material;
 
         // bullet.depthTest = false;
@@ -192,11 +207,11 @@ class Weapons {
 
         // Convert bullet direction to Vector3
         var bulletDirectionVector = new BABYLON.Vector3(_bulletDirection.x, _bulletDirection.y, _bulletDirection.z);
-        translate(bullet, bulletDirectionVector, this.#weaponInstance.BULLET_SETTINGS.speed);
+        translate(bullet, bulletDirectionVector, firingWeaponInstance.BULLET_SETTINGS.speed);
 
         setTimeout(() => {
             bullet.dispose()
-        }, this.#weaponInstance.BULLET_SETTINGS.decayTimer)
+        }, firingWeaponInstance.BULLET_SETTINGS.decayTimer)
     }
 
     /**
@@ -211,28 +226,28 @@ class Weapons {
         });
         setTimeout(() => {
             // check if capacity have mag
-            if (this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity >= this.#weaponInstance.WEAPON_SETTINGS.magSize) {
+            if (this.ammoSettings.ammoCapacity >= this.ammoSettings.magSize) {
                 // take the amount of bullets fired from capacity and put it into the mag
-                this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity -= this.COUNT_firedBullets
-                this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag += this.COUNT_firedBullets
+                this.ammoSettings.ammoCapacity -= this.COUNT_firedBullets
+                this.ammoSettings.ammoLeftInMag += this.COUNT_firedBullets
             }
             else {
                 // check if capacity have the amount of fired bullets
                 if (this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity >= this.COUNT_firedBullets) {
                     // take the amount of bullets fired from capacity into mag
-                    this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity -= this.COUNT_firedBullets
+                    this.ammoSettings.ammoCapacity -= this.COUNT_firedBullets
 
-                    this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag += this.COUNT_firedBullets
+                    this.ammoSettings.ammoLeftInMag += this.COUNT_firedBullets
                 }
                 else {
                     // take all ammo capacity and put it in mag
-                    this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag += this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity
+                    this.ammoSettings.ammoLeftInMag += this.ammoSettings.ammoCapacity
 
-                    this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity = 0
+                    this.ammoSettings.ammoCapacity = 0
                 }
             }
 
-            GUI.UI_setAmmo(this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag, this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity)
+            GUI.UI_setAmmo(this.ammoSettings.ammoLeftInMag, this.ammoSettings.ammoCapacity)
             this.COUNT_firedBullets = 0
             this.#isReloading = false
             GUI.UI_showReloadingText(false)
@@ -243,9 +258,9 @@ class Weapons {
         this.#isReloading = _option;
         if (_option) {
             // check if mag is not full
-            if (this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag < this.#weaponInstance.WEAPON_SETTINGS.magSize) {
+            if (this.ammoSettings.ammoLeftInMag < this.ammoSettings.magSize) {
                 // check if no ammo capacity
-                if (this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity == 0) {
+                if (this.ammoSettings.ammoCapacity == 0) {
                     if (this.#debug) console.log('[Weapons] Cant reload weapon, there are no more bullets in capacity')
                     this.#isReloading = false
                     return

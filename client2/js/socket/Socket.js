@@ -72,7 +72,7 @@ class Socket {
         })
 
         this.socket.on('bulletFired', (_bulletData) => {
-            Weapons.fireFromOther(_bulletData.bulletCords, _bulletData.bulletDirection)
+            Weapons.fireFromOther(_bulletData.weaponId, _bulletData.bulletCords, _bulletData.bulletDirection)
         })
     }
 

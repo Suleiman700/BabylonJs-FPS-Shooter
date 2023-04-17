@@ -20,7 +20,7 @@ const MAP_01_CONFIG = {
     defaultPlayerHealth: 100, // default player health (1 ~ 100)
     defaultPlayerJumpHeight: 0.2, // default player jump height (uses less gravity)
     defaultPlayerGravity: -0.2, // default player gravity
-    defaultPlayerMoney: 100, // default player money
+    defaultPlayerMoney: 1000, // default player money
 
     skySettings: {
         type: 2, // types can be found in client Sky class under SKY_TYPES

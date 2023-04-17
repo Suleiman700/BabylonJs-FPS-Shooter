@@ -103,6 +103,24 @@ class Players {
     }
 
     /**
+     * player purchased weapon
+     * @param _socketId {string}
+     * @param _purchasedWeaponId {string} example: AKM
+     * @param _amount {number} example: 150
+     */
+    purchasedWeapon(_socketId, _purchasedWeaponId, _amount) {
+        // get player index
+        const index = this.#players.findIndex((player) => player.socketId === _socketId);
+
+        if (index === -1) {
+            // throw new Error(`[Remove Player] Player with socketId ${socketId} not found`);
+        }
+
+        this.#players[index].holdingGunId = _purchasedWeaponId;
+        this.#players[index].money -= _amount;
+    }
+
+    /**
      * count players in room
      * @param _roomId {string} example: 123
      * @returns {number}

@@ -75,11 +75,11 @@ export default function Map_01_createScene(_scene, _camera) {
     const shopMeasurement = {width: 5, height: 10, depth: 9}
     const itemPosition = {x: shopPosition.x, y: shopPosition.y + 3, z: shopPosition.z - 0.03}
     const itemRotation = {x: -7.8, y: 0, z: 0}
-    WallShop.createNewWallShop(shopPosition, shopMeasurement, AKM, AKM.SHOPS.WALL_SHOP.COST, itemPosition, itemRotation)
+    WallShop.createNewWallShop(shopPosition, shopMeasurement, AKM, AKM.SHOPS.WALL_SHOP.COST, itemPosition, itemRotation, 'weapon')
 
     const shopPosition2 = {x: 15, y: 0, z: 95}
     const shopMeasurement2 = {width: 5, height: 10, depth: 9}
     const itemPosition2 = {x: shopPosition2.x, y: shopPosition2.y + 3, z: shopPosition2.z - 0.03}
     const itemRotation2 = {x: 0, y: 1.6, z: 4.7}
-    WallShop.createNewWallShop(shopPosition2, shopMeasurement2, G17, G17.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2)
+    WallShop.createNewWallShop(shopPosition2, shopMeasurement2, G17, G17.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'weapon')
 }

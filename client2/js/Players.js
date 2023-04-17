@@ -30,6 +30,40 @@ class Players {
                 playerMesh.rotation.x = playerData.cameraRotation.x;
                 playerMesh.rotation.y = playerData.cameraRotation.y;
                 playerMesh.rotation.z = playerData.cameraRotation.z;
+
+                // Check if the player's holdingGunId has changed
+                if (playerMesh.holdingGunId !== playerData.holdingGunId) {
+                    console.log('updated other player holding weapon')
+                    // Remove the old weapon mesh (if it exists)
+                    const oldWeaponMesh = playerMesh.getChildren(child => child.type === 'weapon')[0];
+                    if (oldWeaponMesh) {
+                        oldWeaponMesh.dispose();
+                    }
+
+                    // Add the new weapon mesh to the player mesh
+                    let weaponInstance = undefined
+                    let weaponClone = undefined
+                    switch (playerData.holdingGunId) {
+                        case 'AKM':
+                            weaponInstance = AKM
+                            weaponClone = weaponInstance.MODEL_weaponModel.clone("AKM Clone");
+                            break
+                        case 'G17':
+                            weaponInstance = G17;
+                            weaponClone = weaponInstance.MODEL_weaponModel.clone("G17 Clone");
+                            break
+                    }
+
+                    weaponClone.visibility = 1
+                    weaponClone.position = new BABYLON.Vector3(weaponInstance.MEASUREMENTS.position.x, weaponInstance.MEASUREMENTS.position.y + 1, weaponInstance.MEASUREMENTS.position.z)
+                    weaponClone.rotation.x = weaponInstance.MEASUREMENTS.rotation.x
+                    weaponClone.rotation.y = weaponInstance.MEASUREMENTS.rotation.y
+                    weaponClone.rotation.z = weaponInstance.MEASUREMENTS.rotation.z
+
+                    weaponClone.type = 'weapon';
+                    weaponClone.parent = playerMesh;
+                    playerMesh.holdingGunId = playerData.holdingGunId;
+                }
             } else {
                 // Create new player mesh
                 const playerMesh = BABYLON.MeshBuilder.CreateCylinder(`player-${playerId}`, { diameter: 2, height: 3 }, Scene.getScene());
@@ -39,23 +73,23 @@ class Players {
                 playerMesh.rotation.x = playerData.cameraRotation.z;
 
                 // draw weapon on player body
-                let weaponClone = undefined
-                switch (playerData.holdingGunId) {
-                    case 'AKM':
-                        weaponClone = AKM.MODEL_weaponModel.clone("AKM Clone");
-                        break
-                    case 'G17':
-                        weaponClone = G17.MODEL_weaponModel.clone("G17 Clone");
-                        break
-                }
-
-                weaponClone.visibility = 1
-                weaponClone.position = new BABYLON.Vector3(AKM.MEASUREMENTS.position.x, AKM.MEASUREMENTS.position.y + 1, AKM.MEASUREMENTS.position.z)
-                weaponClone.rotation.x = AKM.MEASUREMENTS.rotation.x
-                weaponClone.rotation.y = AKM.MEASUREMENTS.rotation.y
-                weaponClone.rotation.z = AKM.MEASUREMENTS.rotation.z
-
-                weaponClone.parent = playerMesh
+                // let weaponClone = undefined
+                // switch (playerData.holdingGunId) {
+                //     case 'AKM':
+                //         weaponClone = AKM.MODEL_weaponModel.clone("AKM Clone");
+                //         break
+                //     case 'G17':
+                //         weaponClone = G17.MODEL_weaponModel.clone("G17 Clone");
+                //         break
+                // }
+                //
+                // weaponClone.visibility = 1
+                // weaponClone.position = new BABYLON.Vector3(AKM.MEASUREMENTS.position.x, AKM.MEASUREMENTS.position.y + 1, AKM.MEASUREMENTS.position.z)
+                // weaponClone.rotation.x = AKM.MEASUREMENTS.rotation.x
+                // weaponClone.rotation.y = AKM.MEASUREMENTS.rotation.y
+                // weaponClone.rotation.z = AKM.MEASUREMENTS.rotation.z
+                //
+                // weaponClone.parent = playerMesh
 
                 // Add player mesh to the scene
                 Scene.getScene().addMesh(playerMesh);

@@ -13,6 +13,7 @@ import ClientPlayer from './ClientPlayer.js';
 
 // events
 import BuyItemFromWallShop from './events/BuyItemFromWallShop.js';
+import GUI from './GUI.js';
 
 class Keys {
     #debug = true
@@ -58,6 +59,13 @@ class Keys {
                 // check if player is at wall shop
                 if (ClientPlayer.isAtWallShop.state) {
                     if (this.#debug) console.log('[Keys] Pressed Buy Weapon INSIDE Wall Shop')
+                    // check if player does not have enough money
+                    if (ClientPlayer.money < parseInt(ClientPlayer.isAtWallShop.itemCost)) {
+                        // change shop buy text
+                        GUI.UI_setWallShopBuyText(true, '<span class="text-danger">You dont have enough money!</span>')
+                        return;
+                    }
+
                     if (!this.#BUY_FROM_WALL_SHOP.isBuyKeyDown) {
                         this.#BUY_FROM_WALL_SHOP.isBuyKeyDown = true
                         this.#BUY_FROM_WALL_SHOP.buyWeaponTimeout = setTimeout(() => {
