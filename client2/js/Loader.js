@@ -2,6 +2,7 @@
 import Scene from './Scene.js';
 import AKM from './weapons/AKM.js';
 import G17 from './weapons/G17.js';
+import Medkit from './shops/items/Medkit.js';
 
 class Loader {
     weapons = {}
@@ -18,6 +19,10 @@ class Loader {
         //     this.weapons.akm = result.meshes[0]
         // });
         // console.log(this.weapons)
+    }
+
+    async loadItems() {
+        await Medkit.importModel()
     }
 }
 

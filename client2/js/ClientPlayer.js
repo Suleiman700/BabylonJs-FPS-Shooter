@@ -7,7 +7,7 @@ class ClientPlayer {
     socketId = '' // the socketId of the player
 
     coords = {x: 0, y: 0, z: 0}
-    #heath = -1 // number (1 ~ 100)
+    #health = -1 // number (1 ~ 100)
     #walkSpeed = -1 // number
     #sprintSpeed = -1 // number
     #jumpHeight = -1 // number
@@ -155,6 +155,25 @@ class ClientPlayer {
      */
     get money() {
         return this.#money
+    }
+
+    /**
+     * set player health
+     * @param _health {number} example: 100
+     */
+    set health(_health) {
+        this.#health = _health
+
+        // update GUI
+        GUI.UI_setPlayerHealth(_health)
+    }
+
+    /**
+     * get player health
+     * @return {number} example: 100
+     */
+    get health() {
+        return this.#health
     }
 
     /**

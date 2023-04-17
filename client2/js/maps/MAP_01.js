@@ -1,7 +1,8 @@
 import Camera from '../Camera.js';
-import WallShop from '../weapons/WallShop.js';
+import WallShop from '../shops/WallShop.js';
 import AKM from '../weapons/AKM.js';
 import G17 from '../weapons/G17.js';
+import Medkit from '../shops/items/Medkit.js';
 
 export default function Map_01_createScene(_scene, _camera) {
     // Lights
@@ -77,9 +78,15 @@ export default function Map_01_createScene(_scene, _camera) {
     const itemRotation = {x: -7.8, y: 0, z: 0}
     WallShop.createNewWallShop(shopPosition, shopMeasurement, AKM, AKM.SHOPS.WALL_SHOP.COST, itemPosition, itemRotation, 'weapon')
 
+    // const shopPosition2 = {x: 15, y: 0, z: 95}
+    // const shopMeasurement2 = {width: 5, height: 10, depth: 9}
+    // const itemPosition2 = {x: shopPosition2.x, y: shopPosition2.y + 3, z: shopPosition2.z - 0.03}
+    // const itemRotation2 = {x: 0, y: 1.6, z: 4.7}
+    // WallShop.createNewWallShop(shopPosition2, shopMeasurement2, G17, G17.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'weapon')
+
     const shopPosition2 = {x: 15, y: 0, z: 95}
     const shopMeasurement2 = {width: 5, height: 10, depth: 9}
-    const itemPosition2 = {x: shopPosition2.x, y: shopPosition2.y + 3, z: shopPosition2.z - 0.03}
-    const itemRotation2 = {x: 0, y: 1.6, z: 4.7}
-    WallShop.createNewWallShop(shopPosition2, shopMeasurement2, G17, G17.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'weapon')
+    const itemPosition2 = {x: shopPosition2.x, y: shopPosition2.y + 3, z: shopPosition2.z}
+    const itemRotation2 = {x: -1.55, y: 0, z: 3.1}
+    WallShop.createNewWallShop(shopPosition2, shopMeasurement2, Medkit, Medkit.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'medkit')
 }

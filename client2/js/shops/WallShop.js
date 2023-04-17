@@ -1,8 +1,9 @@
-import AKM from './AKM.js';
+import AKM from '../weapons/AKM.js';
 import Scene from '../Scene.js';
 import Camera from '../Camera.js';
 import GUI from '../GUI.js';
 import ClientPlayer from '../ClientPlayer.js';
+import Medkit from './items/Medkit.js';
 
 class WallShop {
     #showBounding = true
@@ -19,14 +20,25 @@ class WallShop {
      * @param _itemType {string} the type of the item, example: weapon|item
      */
     createNewWallShop(_shopPosition, _shopMeasurement, _itemInstance, _itemCost, _itemPosition, _itemRotation, _itemType) {
-        const weaponClone = _itemInstance.MODEL_weaponModel.clone("AKM Clone");
-        weaponClone.position.x = _itemPosition.x
-        weaponClone.position.y = _itemPosition.y
-        weaponClone.position.z = _itemPosition.z
+        let itemClone = undefined
+        switch (_itemType) {
+            case 'weapon':
+                itemClone = _itemInstance.MODEL_weaponModel.clone("AKM Clone");
+                break;
+            case 'medkit':
+                itemClone = Medkit.MODEL.clone('Item Clone')
+                break;
+        }
 
-        weaponClone.rotation.x = _itemRotation.x
-        weaponClone.rotation.y = _itemRotation.y
-        weaponClone.rotation.z = _itemRotation.z
+        console.log(itemClone)
+
+        itemClone.position.x = _itemPosition.x
+        itemClone.position.y = _itemPosition.y
+        itemClone.position.z = _itemPosition.z
+
+        itemClone.rotation.x = _itemRotation.x
+        itemClone.rotation.y = _itemRotation.y
+        itemClone.rotation.z = _itemRotation.z
 
         // weaponClone.isWallShop = true
         // weaponClone.id = 'test'

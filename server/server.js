@@ -122,6 +122,11 @@ io.on('connection', async (socket) => {
         io.sockets.in(socket.roomId).emit('playWallShopPurchaseParticle', particleCoords)
     })
 
+    socket.on('playerPurchasedMedkitFromWallShop', (_medkitData) => {
+        console.log(_medkitData)
+        Players.purchasedMedkit(socket.id, _medkitData.itemCost)
+    })
+
     // Handle disconnections
     socket.on('disconnect', () => {
         console.log('A client disconnected');

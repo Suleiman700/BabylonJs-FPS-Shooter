@@ -18,9 +18,9 @@ Game.createDefaultEngine()
 
 Scene.initScene()
 await Loader.loadWeapons()
+await Loader.loadItems()
 Scene.createScene('MAP_01')
 
-await Loader.loadWeapons()
 Camera.initCamera()
 
 

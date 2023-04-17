@@ -5,7 +5,7 @@ import Player from './ClientPlayer.js';
 import player from './ClientPlayer.js';
 import { KEY_BINDINGS } from './CONTROLS.js';
 import Weapons from './weapons/Weapons.js';
-import WallShop from './weapons/WallShop.js';
+import WallShop from './shops/WallShop.js';
 import PlayersStatsTable from './stats/PlayersStatsTable.js';
 
 import Sky from './Environment/Sky.js';
