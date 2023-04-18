@@ -46,6 +46,9 @@ class Medkit {
         if (this.#debug) console.log('[MEDKIT] model loaded')
 
         this.MODEL = medkit
+
+        // Remove the mesh from the scene after loading it
+        Scene.getScene().removeTransformNode(medkit);
     }
 }
 
