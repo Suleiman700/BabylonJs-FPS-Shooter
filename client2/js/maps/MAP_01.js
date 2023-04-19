@@ -119,4 +119,55 @@ export default async function Map_01_createScene(_scene, _camera) {
     const itemPosition2 = {x: shopPosition2.x, y: shopPosition2.y + 3, z: shopPosition2.z + 1.5}
     const itemRotation2 = {x: -1.55, y: 0, z: 3.1}
     WallShop.createNewWallShop(shopPosition2, shopMeasurement2, Medkit, Medkit.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'medkit')
+
+
+// Load zombie model and animations using GLTF loader
+    BABYLON.SceneLoader.ImportMeshAsync("", "./assets/models/zombies/", "zombie_walk_cycle.glb", _scene).then((result) => {
+        // Callback function after loading
+        // Access the loaded zombie model from result.meshes
+        const zombieMesh = result.meshes[0];
+
+        // Set scaling factors for the zombie mesh
+        zombieMesh.scaling = new BABYLON.Vector3(0.02, 0.02, 0.02);
+
+        // Set initial position of the zombie mesh
+        zombieMesh.position = new BABYLON.Vector3(0, 0, 0);
+
+        // Set initial rotation of the zombie mesh
+        zombieMesh.rotationQuaternion = new BABYLON.Quaternion.RotationYawPitchRoll(0, 0, 0); // Set to identity quaternion
+
+        // Get the animation group
+        const animationGroup = result.animationGroups[0];
+
+        // Start playing the walking animation in loop
+        animationGroup.play(true); // Pass 'true' as argument to enable loop
+
+        // Follow player (camera)
+        _scene.registerBeforeRender(() => {
+            // Get the current position of the zombie
+            const zombiePosition = zombieMesh.position.clone(); // Create a clone to preserve y position
+
+            // Get the current position of the player (camera)
+            const playerPosition = _scene.activeCamera.position.clone(); // Create a clone to preserve y position
+
+            // Restrict movement only on x and z axes
+            playerPosition.y = zombiePosition.y;
+
+            // Calculate the direction vector from the zombie to the player
+            const direction = playerPosition.subtract(zombiePosition).normalize();
+
+            // Set the new position of the zombie to move towards the player
+            const speed = 0.01; // Adjust speed as needed
+            zombieMesh.position.addInPlace(direction.scale(speed));
+
+            // Update rotation of the zombie to face the player
+            zombieMesh.lookAt(playerPosition);
+
+            // Rotate the zombie to face the player
+            const rotationMatrix = BABYLON.Matrix.LookAtLH(zombieMesh.position, playerPosition, BABYLON.Vector3.Up());
+            const rotationQuaternion = BABYLON.Quaternion.FromRotationMatrix(rotationMatrix);
+            zombieMesh.rotationQuaternion = rotationQuaternion;
+        });
+    });
+
 }
