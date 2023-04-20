@@ -121,28 +121,134 @@ export default async function Map_01_createScene(_scene, _camera) {
     WallShop.createNewWallShop(shopPosition2, shopMeasurement2, Medkit, Medkit.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'medkit')
 
 
-// Load zombie model and animations using GLTF loader
-    BABYLON.SceneLoader.ImportMeshAsync("", "./assets/models/zombies/", "stupid_zombie.glb", _scene).then((result) => {
-        // Callback function after loading
-        // Access the loaded zombie model from result.meshes
-        const skeleton = result.meshes[0];
+    // stairs - ADDED
+    var box = new BABYLON.Mesh.CreateBox("box", 5, _scene);
+    box.position.y = -2;
+    box.position.z = 4;
+    box.checkCollisions = true;
+    box.type = "wall"
+    var box11 = new BABYLON.Mesh.CreateBox("box1", 5, _scene);
+    box11.position.y = -1.5;
+    box11.position.z = 5;
+    box11.checkCollisions = true;
+    var box2 = new BABYLON.Mesh.CreateBox("box2", 5, _scene);
+    box2.position.y = -1;
+    box2.position.z = 6;
+    box2.checkCollisions = true;
+    var box3 = new BABYLON.Mesh.CreateBox("box2", 5, _scene);
+    box3.position.y = -0.5;
+    box3.position.z = 7;
+    box3.checkCollisions = true;
+    var box4 = new BABYLON.Mesh.CreateBox("box4", 5, _scene);
+    box4.position.y = 0;
+    box4.position.z = 8;
+    box4.checkCollisions = true;
+    var box5 = new BABYLON.Mesh.CreateBox("box5", 5, _scene);
+    box5.position.y = 0.5;
+    box5.position.z = 9;
+    box5.checkCollisions = true;
 
-        // Set scaling factors for the zombie mesh
-        skeleton.scaling = new BABYLON.Vector3(0.015, 0.015, 0.015);
+    const zombies = []
 
-        // Set initial position of the zombie mesh
-        skeleton.position = new BABYLON.Vector3(0, 0, 0);
+    // Create cylinder mesh
+    const cylinder = BABYLON.MeshBuilder.CreateCylinder("cylinder", { diameter: 1, height: 3, tessellation: 16 }, _scene);
 
-        skeleton.rotation.x = 1
-        skeleton.rotation.z = 1
-        skeleton.rotation.y = 1
+// Loop to create 1 zombie instances
+    for (let i = 0; i < 1; i++) {
+        // Load zombie model and animations using GLTF loader
+        BABYLON.SceneLoader.ImportMeshAsync("", "./assets/models/zombies/", "stupid_zombie.glb", _scene).then((result) => {
+            // Callback function after loading
+            // Access the loaded zombie model from result.meshes
+            const skeleton = result.meshes[0];
 
-        // Register a function to be called before each render loop iteration
-        _scene.registerBeforeRender(() => {
-            // Set the zombie's rotation to face the camera on the x-z plane with the specified pan angle
-            // and no tilt (pitch) or roll rotation
-            skeleton.lookAt(_scene.activeCamera.position, 0, 0, 0);
-        });
-    });
+            // Set scaling factors for the zombie mesh
+            skeleton.scaling = new BABYLON.Vector3(0.013, 0.013, 0.013);
 
+            // Set initial position of the zombie mesh randomly within a radius
+            const radius = 10; // Adjust this value to control the radius of the spawn area
+            const angle = Math.random() * Math.PI * 2; // Random angle between 0 and 2*pi
+            const x = radius * Math.cos(angle);
+            const z = radius * Math.sin(angle);
+            skeleton.position = new BABYLON.Vector3(x, 0, z);
+
+            skeleton.checkCollisions = true
+
+            // Set the speed at which the zombie walks
+            const speed = 0.03; // Adjust this value to control the speed of the zombie
+
+            // Set the gravity force to be applied to the zombie
+            const gravity = -0.01; // Adjust this value to control the strength of gravity
+
+            // Set the initial velocity of the zombie to be zero
+            let velocity = new BABYLON.Vector3(0, 0, 0);
+
+            // Add the zombie instance to the zombies array
+            zombies.push(skeleton);
+
+            // Register a function to be called before each render loop iteration
+            _scene.registerBeforeRender(() => {
+                // Loop through all the zombie instances
+                for (let i = 0; i < zombies.length; i++) {
+                    const zombie = zombies[i];
+
+                    // Get the direction vector from the zombie's position to the camera's position
+                    const direction = _scene.activeCamera.position.subtract(zombie.position);
+
+                    // Normalize the direction vector to have a magnitude of 1
+                    direction.normalize();
+
+                    // Update the zombie's position based on the direction vector and speed
+                    zombie.position.addInPlace(direction.scale(speed));
+
+                    // Update the velocity of the zombie by applying the gravity force
+                    velocity.y += gravity;
+
+                    // Update the zombie's position based on the velocity
+                    zombie.position.addInPlace(velocity);
+
+                    // Check if the zombie has landed on the ground (y <= 0)
+                    if (zombie.position.y <= 0) {
+                        // Reset the velocity to zero and set the position to y = 0 (ground level)
+                        velocity.y = 0;
+                        zombie.position.y = 0;
+                    }
+
+                    // Calculate the rotation angle around Y-axis from the zombie's position to the camera's position
+                    const rotationY = Math.atan2(direction.x, direction.z) + Math.PI; // Add 180 degrees
+
+                    // Set the rotation of the zombie only around Y-axis (keeping X and Z rotation constant)
+                    zombie.rotation = new BABYLON.Vector3(0, rotationY, 0);
+
+                    // Collision detection logic
+                    for (let i = 0; i < zombies.length; i++) {
+                        const zombieA = zombies[i];
+                        for (let j = i + 1; j < zombies.length; j++) {
+                            const zombieB = zombies[j];
+                            const distance = BABYLON.Vector3.Distance(zombieA.position, zombieB.position);
+                            const collisionThreshold = 1; // Adjust this value to control the collision threshold
+
+                            if (distance < collisionThreshold) {
+                                const minDistance = collisionThreshold + 0.1; // Add a small offset to prevent zombies from getting too close
+
+                                // Calculate the direction vector from zombieA to zombieB
+                                const direction = zombieB.position.subtract(zombieA.position);
+                                direction.normalize();
+
+                                // Calculate the amount to move each zombie
+                                const moveDistance = (collisionThreshold - distance + 0.1) / 2; // Divide by 2 to ensure equal movement for both zombies
+
+                                // Update the position of both zombies to move them apart along the collision normal
+                                const newPositionA = zombieA.position.subtract(direction.scale(moveDistance));
+                                const newPositionB = zombieB.position.add(direction.scale(moveDistance));
+                                zombieA.position.copyFrom(newPositionA);
+                                zombieB.position.copyFrom(newPositionB);
+                            }
+                        }
+                    }
+                }
+            })
+
+
+        })
+    }
 }
