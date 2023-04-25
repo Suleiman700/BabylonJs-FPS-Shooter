@@ -89,6 +89,7 @@ export default async function Map_01_createScene(_scene, _camera) {
     const boxMaterial = new BABYLON.StandardMaterial("boxMaterial1", _scene);
     boxMaterial.diffuseTexture = new BABYLON.Texture("./assets/textures/material/wooden_box_01.jpg", _scene);
     box1.material = boxMaterial;
+    box1.type = 'solid';
 
     var box2 = box1.clone("box2");
     box2.position.x = -50;
@@ -126,7 +127,7 @@ export default async function Map_01_createScene(_scene, _camera) {
     box.position.y = -2;
     box.position.z = 4;
     box.checkCollisions = true;
-    box.type = "wall"
+    box.type = "solid"
     var box11 = new BABYLON.Mesh.CreateBox("box1", 5, _scene);
     box11.position.y = -1.5;
     box11.position.z = 5;
@@ -148,18 +149,24 @@ export default async function Map_01_createScene(_scene, _camera) {
     box5.position.z = 9;
     box5.checkCollisions = true;
 
-    const zombies = []
 
-    // Create cylinder mesh
-    const cylinder = BABYLON.MeshBuilder.CreateCylinder("cylinder", { diameter: 1, height: 3, tessellation: 16 }, _scene);
+
+
+
+
+
+
+
+    // const zombies = []
 
 // Loop to create 1 zombie instances
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 0; i++) {
         // Load zombie model and animations using GLTF loader
         BABYLON.SceneLoader.ImportMeshAsync("", "./assets/models/zombies/", "stupid_zombie.glb", _scene).then((result) => {
             // Callback function after loading
             // Access the loaded zombie model from result.meshes
             const skeleton = result.meshes[0];
+
 
             // Set scaling factors for the zombie mesh
             skeleton.scaling = new BABYLON.Vector3(0.013, 0.013, 0.013);
@@ -185,10 +192,14 @@ export default async function Map_01_createScene(_scene, _camera) {
             // Add the zombie instance to the zombies array
             zombies.push(skeleton);
 
+            // Set initial cooldown time for collision detection
+            let collisionCooldown = 0;
+
             // Register a function to be called before each render loop iteration
             _scene.registerBeforeRender(() => {
                 // Loop through all the zombie instances
                 for (let i = 0; i < zombies.length; i++) {
+
                     const zombie = zombies[i];
 
                     // Get the direction vector from the zombie's position to the camera's position
@@ -199,6 +210,27 @@ export default async function Map_01_createScene(_scene, _camera) {
 
                     // Update the zombie's position based on the direction vector and speed
                     zombie.position.addInPlace(direction.scale(speed));
+
+
+
+                    // Create a ray in front of the zombie
+                    const rayLength = 0.2; // Adjust this value to control the length of the ray
+                    const rayDirection = direction.scale(rayLength);
+                    const rayOrigin = skeleton.position.add(rayDirection);
+                    const ray = new BABYLON.Ray(rayOrigin, rayDirection, rayLength);
+
+                    // Cast the ray and check for collisions
+                    const rayResult = _scene.pickWithRay(ray);
+                    // Check if the ray intersects with any objects
+                    if (rayResult.hit && rayResult.pickedMesh !== skeleton) {
+                        // If ray intersects with an object, update the direction to avoid the object
+                        direction.addInPlace(rayResult.getNormal(true));
+                        direction.normalize();
+                        // Update the velocity based on the updated direction
+                        direction.scale(speed).add(new BABYLON.Vector3(0, gravity, 0));
+                        velocity.set(0, 0, 0);
+                    }
+
 
                     // Update the velocity of the zombie by applying the gravity force
                     velocity.y += gravity;
@@ -251,4 +283,162 @@ export default async function Map_01_createScene(_scene, _camera) {
 
         })
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var targetHealth = 100;
+    // Create an array to store the target meshes
+    var zombies = [];
+
+    function checkObstacle(zombie, direction, distance) {
+        var ray = new BABYLON.Ray(zombie.position.add(new BABYLON.Vector3(0, 0.1, 0)), direction);
+        var hit = scene.pickWithRay(ray, function (mesh) { return mesh != zombie && mesh != ground0; }); // exclude the zombie and ground meshes from the collision check
+        if (hit.pickedMesh && hit.distance < distance) {
+            return true; // there is an obstacle between the zombie and the player
+        } else {
+            return false; // there is no obstacle between the zombie and the player
+        }
+    }
+
+    function isTooClose(zombie, zombiesArray, minDistance) {
+        for (var i = 0; i < zombiesArray.length; i++) {
+            var otherZombie = zombiesArray[i];
+            var distance = BABYLON.Vector3.Distance(zombie.position, otherZombie.position);
+            if (distance < minDistance) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
+    var minDistance = 5; // Minimum distance between zombies
+
+    // Create 1 targets
+    for (var i = 0; i < 5; i++) {
+        var zombie = BABYLON.MeshBuilder.CreateCylinder("zombie", {height: 4, diameter: 2, tessellation: 10}, _scene);
+        // zombie.scaling.y = 0.5; // Set the scaling of the cylinder to make it half the original height
+
+        zombie.type = 'zombie'
+        zombie.position.y = 10
+        zombie.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
+        zombie.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
+        zombie.material = new BABYLON.StandardMaterial("mat", _scene);
+        zombie.health = targetHealth
+        zombie.material.emissiveColor = new BABYLON.Color3(zombie.health, zombie.health, zombie.health);
+        zombie.material = new BABYLON.StandardMaterial("mat", _scene); // Create a new standard material for the zombie
+        zombie.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Set the diffuse color to red (R: 1, G: 0, B: 0)
+
+        zombie.physicsImpostor = new BABYLON.PhysicsImpostor(zombie, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0, restitution: 0, friction: 0.5, applyGravity: false }, _scene);
+        zombie.physicsImpostor.physicsBody.collisionFilterGroup = 0; // set collision group to 2 for zombies
+
+        // enemy health bar
+        var enemyHealthBar = new BABYLON.GUI.Rectangle();
+        enemyHealthBar.width = "100px";
+        enemyHealthBar.height = "10px";
+        enemyHealthBar.cornerRadius = 20;
+        enemyHealthBar.color = "black";
+        enemyHealthBar.thickness = 3;
+        enemyHealthBar.background = "green";
+        advancedTexture.addControl(enemyHealthBar);
+        enemyHealthBar.linkWithMesh(zombie);
+        enemyHealthBar.linkOffsetY = -80;
+
+        zombie.healthBar = enemyHealthBar
+
+        // Update the zombie's initial position with minimum distance between zombies
+        do {
+            zombie.position.x = Math.random() * 20 - 10;
+            zombie.position.z = Math.random() * 20 - 10;
+        } while (isTooClose(zombie, zombies, minDistance));
+
+        zombies.push(zombie);
+    }
+
+    var followRange = 100;
+    var zombieSpeed = 0.005;
+
+
+    _scene.registerBeforeRender(function() {
+        const player = Camera.getCamera();
+        // Iterate over the zombies array and update their positions
+        // Update the direction of the zombie based on the player's position
+        for (var i = 0; i < zombies.length; i++) {
+            var zombie = zombies[i];
+
+            // Set the zombie's Y position to 0
+            zombie.position.y = 1;
+
+            // Calculate the distance between the zombie and the player
+            var distance = BABYLON.Vector3.Distance(zombie.position, player.position);
+
+            // If the distance is within the follow range, move the zombie towards the player
+            if (distance <= followRange) {
+                // Calculate the direction from the zombie to the player
+                var direction = player.position.subtract(zombie.position);
+
+                // Normalize the direction vector
+                direction.normalize();
+
+                // Multiply the direction by the zombie's speed and delta time
+                direction.scaleInPlace(zombieSpeed * _scene.getEngine().getDeltaTime());
+
+                // Move the zombie towards the player
+                zombie.moveWithCollisions(direction);
+            }
+
+            // Check if zombies are too close and move them slightly
+            for (var j = i + 1; j < zombies.length; j++) {
+                var otherZombie = zombies[j];
+                var dist = BABYLON.Vector3.Distance(zombie.position, otherZombie.position);
+                if (dist < 2) {
+                    // Move the zombies away from each other
+                    var direction = zombie.position.subtract(otherZombie.position);
+                    direction.normalize();
+                    direction.scaleInPlace(0.01);
+                    zombie.moveWithCollisions(direction);
+                    otherZombie.moveWithCollisions(direction.negate());
+                }
+            }
+        }
+    });
 }
