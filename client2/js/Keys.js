@@ -46,6 +46,7 @@ class Keys {
     }
 
     #onKeyDown(_event) {
+        console.log(_event.keyCode)
         switch (_event.keyCode) {
             case 16: // shift
                 if (this.#debug) console.log('is sprinting')

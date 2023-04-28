@@ -7,7 +7,7 @@ const MAP_01_CONFIG = {
     id: 'MAP_01',
     name: 'MAP 01',
     zombiesSpawns: [
-        {x: 0, y: 0, z: 0},
+        {id: 0, x: 0, y: 3.015, z: 18, enabled: true,},
     ],
     defaultZombieSpawn: 1, // spawn 1 zombie first time
     defaultZombieHealth: 100, // default zombie health
@@ -21,6 +21,8 @@ const MAP_01_CONFIG = {
     defaultPlayerJumpHeight: 0.2, // default player jump height (uses less gravity)
     defaultPlayerGravity: -0.2, // default player gravity
     defaultPlayerMoney: 1000, // default player money
+
+    timeBetweenRounds: 500, // time between rounds (in ms)
 
     skySettings: {
         type: 2, // types can be found in client Sky class under SKY_TYPES

@@ -17,7 +17,8 @@ class Players {
         cameraRotation: {x: 0, y: 0, z: 0},
         stats: {
             bulletsFired: 0
-        }
+        },
+        isReadyForNextRound: false, // determine if the player is ready for the next round
     }
 
     constructor() {}

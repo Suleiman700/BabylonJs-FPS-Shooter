@@ -5,4 +5,5 @@ export const KEY_BINDINGS = {
     WEAPON_RELOAD: 82, // R
     BUY_FROM_WALL_SHOP: 70, // F
     OPEN_STATS_LIST: 89, // Y
+    GET_READY_FOR_NEXT_ROUND: 71, // G
 }

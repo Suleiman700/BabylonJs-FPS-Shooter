@@ -12,6 +12,7 @@ import Updater from './Updater.js';
 import AKM from './weapons/AKM.js';
 import MovementEvent from './events/MovementEvent.js';
 import Players from './Players.js';
+import Zombies from './Zombies.js';
 
 Game.initCanvas()
 Game.createDefaultEngine()
@@ -43,6 +44,8 @@ var startRenderLoop = function (_engine, _canvas, _scene) {
 
             // draw players
             Players.updatePlayersData()
+            // draw zombies
+            Zombies.updateZombiesData()
         }
     });
 }

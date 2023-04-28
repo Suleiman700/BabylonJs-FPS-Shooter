@@ -6,6 +6,7 @@ import Scene from '../Scene.js';
 import Camera from '../Camera.js';
 import ShootEvent from '../events/ShootEvent.js';
 import Sounds from '../Environment/Sounds.js';
+import Zombies from '../Zombies.js';
 
 class Weapons {
     #debug = true
@@ -23,6 +24,10 @@ class Weapons {
         ammoCapacity: 0,
         magSize: 0,
         ammoLeftInMag: 0,
+    }
+
+    weaponSettings = {
+        damage: 0
     }
 
     COUNT_firedBullets = 0 // count selected weapon fired bullets
@@ -51,6 +56,9 @@ class Weapons {
         this.ammoSettings.ammoCapacity = this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity
         this.ammoSettings.magSize = this.#weaponInstance.WEAPON_SETTINGS.magSize
         this.ammoSettings.ammoLeftInMag = this.#weaponInstance.WEAPON_SETTINGS.ammoLeftInMag
+
+        // update weapon settings
+        this.weaponSettings.damage = this.#weaponInstance.WEAPON_SETTINGS.damage
 
         // reset fired bullets on weapon pickup
         this.COUNT_firedBullets = 0
@@ -162,10 +170,30 @@ class Weapons {
             // weapon recoil
             Camera.getCamera().rotation.x -= this.#weaponInstance.WEAPON_SETTINGS.recoil;
 
-
             // play bullet firing sound
             const soundCoords = {x: Camera.getCamera().position.x, y: Camera.getCamera().position.y, z: Camera.getCamera().position.z}
             Sounds.playBulletFiringSound(soundCoords, this.#weaponInstance.SOUNDS.shoot)
+
+
+
+            // Create a ray from the bullet's position and direction
+            var ray = new BABYLON.Ray(bullet.position, Camera.getCamera().getForwardRay().direction);
+            var hitZombie = Scene.getScene().pickWithRay(ray, (mesh) => {
+                return mesh.type === "zombie";
+            })
+            if (hitZombie.hit) {
+                const weaponDamage = this.weaponSettings.damage // 10
+                console.log(hitZombie.pickedMesh.healthBar) // 100
+
+                console.log(Zombies.zombies)
+
+                // Update the zombie's health
+                hitZombie.pickedMesh.health -= weaponDamage;
+
+                // Update the zombie's material emissive color based on its health
+                hitZombie.pickedMesh.material.emissiveColor = new BABYLON.Color3(hitZombie.pickedMesh.health / 100, hitZombie.pickedMesh.health / 100, hitZombie.pickedMesh.health / 100);
+            }
+
         }
         else {
             // play out of ammo sound

@@ -6,6 +6,7 @@ const io = require('socket.io')(server, {cors: {origin: '*'}}); // Create a new 
 const Players = require('./classes/Players.js')
 const Rooms = require('./classes/Rooms.js')
 const Maps = require('./classes/Maps.js')
+const Zombies = require('./classes/Zombies.js');
 
 
 
@@ -41,9 +42,12 @@ io.on('connection', async (socket) => {
     const mapData = await Maps.getMapConfig(mapId)
     const newRoomData = {
         roomId: roomId,
-        round: 1,
         difficulty: 1,
         mapData: mapData,
+        roundData: {
+            isStarted: false,
+            number: 1
+        },
     }
     Rooms.createRoom(newRoomData)
 
@@ -60,6 +64,7 @@ io.on('connection', async (socket) => {
         stats: {
             bulletsFired: 0
         },
+        isReadyForNextRound: false
     }
     Players.addPlayer(newPlayerData)
 
@@ -156,21 +161,87 @@ setInterval(() => {
     // update rooms
     for (const roomData of Rooms.getRooms()) {
         const roomID = roomData.roomId
+
         // get room players
         const roomPlayers = Players.getPlayersInRoom(roomID)
-        // get zombies
-        const zombies = [
 
-        ]
+        // check if round is started
+        if (roomData.roundData.isStarted) {
+            // check if there are zombies in room
+            let zombiesInRoom = Zombies.getZombiesInRoom(roomID)
+
+            // zombies found in room
+            if (zombiesInRoom.length) {
+                // iterate on zombies and make them walk to player coords
+                const playerCoords = roomPlayers[0].coords // {x: 0, y: 0, z: 0}
+
+                for (let i = 0; i < zombiesInRoom.length; i++) {
+                    const zombieId = zombiesInRoom[i].id
+                    Zombies.updateZombieWalkTo(playerCoords, roomID, zombieId)
+                }
+            }
+            // no zombies in room
+            else {
+                // calculate the amount of zombies to spawn based on difficulty and round number
+                const numberOfZombiesToSpawn = 1 // Zombies.calcNumberOfZombiesToSpawn(roomData.difficulty, roomData.roundData.number)
+
+                // create zombies
+                for (let i = 0; i < numberOfZombiesToSpawn; i++) {
+                    // get available zombies spawners
+                    const availableZombiesSpawners = roomData.mapData.zombiesSpawns.filter(zombieSpawn => zombieSpawn.enabled === true)
+
+                    // pick random spawn point
+                    const randomIndex = Math.floor(Math.random() * availableZombiesSpawners.length);
+
+                    const zombieData = {
+                        roomId: roomID, // string
+                        id: i, // number - 1, 2, 3
+                        health: roomData.mapData.defaultZombieHealth, // number
+                        speed: roomData.mapData.defaultZombieWalkSpeed, // number
+                        damage: roomData.mapData.defaultZombieDamage, // number
+                        color: 'red', // string
+                        scale: {x: 1, y: 1, z: 1}, // zombie scale
+                        coords: {
+                            x: availableZombiesSpawners[randomIndex].x,
+                            y: availableZombiesSpawners[randomIndex].y,
+                            z: availableZombiesSpawners[randomIndex].z
+                        }, // current zombie coords
+                        walkTo: {
+                            x: 0,
+                            y: 0,
+                            z: 0,
+                        }, // zombie walk to coords
+                    }
+                    Zombies.createZombie(zombieData)
+                }
+            }
+
+
+
+        }
+        else {
+            // set round to started
+            setTimeout(() => {
+                roomData.roundData.isStarted = true
+                // console.log(roomData.roundData.number)
+            }, roomData.mapData.timeBetweenRounds)
+        }
+
+        // get zombies
+        const zombies = Zombies.getZombiesInRoom(roomID)
 
         // put room players into data
         const newRoomData = {
             ...roomData,
-            players: roomPlayers
+            players: roomPlayers,
+            zombies: zombies,
         }
+
+        console.log(zombies[0])
+
         io.to(roomID).emit('updateRoomData', newRoomData)
     }
-}, 1)
+}, 1000)
 
 
 

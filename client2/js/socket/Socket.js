@@ -6,6 +6,7 @@ import Weapons from '../weapons/Weapons.js';
 import Sky from '../Environment/Sky.js';
 import Players from '../Players.js';
 import Particles from '../Environment/Particles.js';
+import Zombies from '../Zombies.js';
 
 class Socket {
 
@@ -61,15 +62,20 @@ class Socket {
             Sky.showSky(skyType, Sky.ANIMATION_SPEED_SETTINGS.NORMAL)
         })
 
-        // update room data
+        // update room data - loop
         this.socket.on('updateRoomData', (_data) => {
             // console.log(_data)
 
             // set round number UI text
-            GUI.UI_setRoundNumber(_data.round)
+            GUI.UI_setRoundNumber(_data.roundData.number)
+
+            // console.log(_data)
 
             // store players
             Players.players = _data.players
+
+            // store zombies
+            Zombies.zombies = _data.zombies
         })
 
         this.socket.on('bulletFired', (_bulletData) => {

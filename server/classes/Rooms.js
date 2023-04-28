@@ -8,9 +8,12 @@ class Rooms {
     // template for storing room
     #roomTemplate = {
         roomId: '', // string
-        round: 0, // number - 1, 2, 3..etc
         difficulty: 0, // number - 1, 2, 3
         mapData: {}, // store map data
+        roundData: {
+            isStarted: false,
+            number: 0, // number - 1, 2, 3..etc
+        },
     }
 
     constructor() {}

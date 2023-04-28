@@ -8,6 +8,8 @@ class Game {
     #canvas = null
     #engine = null
 
+    roundStarted = false
+
     constructor() {}
 
     getEngine() {

@@ -71,7 +71,8 @@ class Players {
                     weaponClone.parent = playerMesh;
                     playerMesh.holdingGunId = playerData.holdingGunId;
                 }
-            } else {
+            }
+            else {
                 // Create new player mesh
                 const playerMesh = BABYLON.MeshBuilder.CreateCylinder(`player-${playerId}`, { diameter: 2, height: 3 }, Scene.getScene());
                 playerMesh.position = new BABYLON.Vector3(playerData.coords.x, playerData.coords.y - 1.5, playerData.coords.z);
