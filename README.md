@@ -7,6 +7,15 @@
 
 This project involves creating a first-person shooter game with features such as ammo, weapons, a wall shop, and a money system. The game is currently in progress, but we have encountered some issues with the zombie system.
 
+## Features
+
+* Money system
+* Wallshop
+* Gravity / Sky / Weather
+* Sound / Particles
+* Multi-player
+* Weapon system
+
 ## Current Status
 
 The project is still in development, but we have encountered some roadblocks in the implementation of the zombie system. We are working on resolving these issues and hope to have a working system soon.
