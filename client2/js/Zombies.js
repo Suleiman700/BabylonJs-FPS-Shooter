@@ -31,64 +31,42 @@ class Zombies {
             const zombieCoords = zombieData.coords // example: {x: 0, y: 0, z: 0}
             const zombieId = zombieData.id;
             const zombieWalkTo = zombieData.walkTo // example: {x: 0, y: 0, z: 0}
+            const zombieSpeed = 0.05
 
             // Find the zombie mesh in the scene using the socket ID
-            const zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
+            let zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
+
 
             // If zombie mesh exists, update its position
             if (zombieMesh && zombieMesh.type === 'zombie') {
-                // zombieMesh.position = new BABYLON.Vector3(zombieData.coords.x, zombieData.coords.y, zombieData.coords.z);
-
-                // show bounding box if enabled
-                if (this.#DEVELOPER.SHOW_ZOMBIE_BOUNDING_BOX) zombieMesh.showBoundingBox = true
-
-                // zombieMesh.rotation.x = zombieData.coords.x;
-                // zombieMesh.rotation.y = zombieData.coords.y;
-                // zombieMesh.rotation.z = zombieData.coords.z;
-
-                // const player = Camera.getCamera();
+                // If zombie mesh exists, update its position and walk towards the player
+                zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
 
 
-                // // Calculate the direction from the zombie to the player
-                // const playerPos = Camera.getCamera().position;
-                // const zombiePos = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
-                // const walkToPos = new BABYLON.Vector3(zombieWalkTo.x, zombieWalkTo.y, zombieWalkTo.z);
-                //
-                // // const direction = walkToPos.subtract(zombiePos);
-                // const direction = walkToPos.subtract(zombiePos);
-                // direction.normalize();
-                // direction.scaleInPlace(0.01 * Scene.getScene().getEngine().getDeltaTime());
-                // zombieMesh.moveWithCollisions(direction);
-
+                // Register a function to run before every frame is rendered
                 Scene.getScene().registerBeforeRender(() => {
+                    const zombiePos = zombieMesh.position;
+                    const walkToPos = new BABYLON.Vector3(zombieWalkTo.x, zombieWalkTo.y, zombieWalkTo.z);
 
+                    const distance = walkToPos.subtract(zombiePos).length();
+                    const direction = walkToPos.subtract(zombiePos).normalize();
 
-                    // const direction = playerPos.subtract(zombiePos);
-                    // const direction = walkToPos.subtract(zombiePos);
+                    // calculate the new position of the zombie
+                    const newPosition = new BABYLON.Vector3(zombiePos.x + direction.x * zombieSpeed, zombiePos.y, zombiePos.z + direction.z * zombieSpeed);
 
+                    // set the new position of the zombie
+                    zombieMesh.position = newPosition;
 
-                    // // Normalize the direction vector
-                    // direction.normalize();
-                    //
-                    // // Multiply the direction by the zombie's speed and delta time
-                    // direction.scaleInPlace(0.01 * Scene.getScene().getEngine().getDeltaTime());
-                    //
-                    // // Move the zombie towards the player
-                    // zombieMesh.moveWithCollisions(direction);
-                })
-
-
+                    // If the distance to the player is greater than some threshold, move the zombie
+                    // zombieMesh.position.addInPlace(direction.scale(zombieSpeed));
+                });
             }
             else {
                 // Create new zombie mesh
-                const zombieMesh = BABYLON.MeshBuilder.CreateCylinder(`zombie-${zombieId}`, {height: 3, diameter: 2, tessellation: 10}, Scene.getScene());
-                zombieMesh.position = new BABYLON.Vector3(zombieData.coords.x, zombieData.coords.y, zombieData.coords.z);
+                zombieMesh = BABYLON.MeshBuilder.CreateCylinder(`zombie-${zombieId}`, {height: 3, diameter: 2, tessellation: 10}, Scene.getScene());
+                zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
                 zombieMesh.type = 'zombie';
-                // zombieMesh.rotation.x = zombieData.coords.x;
-                // zombieMesh.rotation.y = zombieData.coords.y;
-                // zombieMesh.rotation.x = zombieData.coords.z;
-
-                zombieMesh.position.y = 10
+                zombieMesh.position.y = 1
                 zombieMesh.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
                 zombieMesh.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
                 zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene());
@@ -97,8 +75,9 @@ class Zombies {
                 zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene()); // Create a new standard material for the zombie
                 zombieMesh.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Set the diffuse color to red (R: 1, G: 0, B: 0)
 
-                zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0, restitution: 0, friction: 0.5, applyGravity: false }, Scene.getScene());
-                zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 0; // set collision group to 2 for zombies
+                zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0, restitution: 0, friction: 0.5, applyGravity: true }, Scene.getScene());
+                zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 2; // set collision group to 2 for zombies
+                zombieMesh.physicsImpostor.physicsBody.collisionFilterMask = 1; // only collide with ground
 
                 // Add zombie mesh to the scene
                 Scene.getScene().addMesh(zombieMesh);

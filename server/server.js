@@ -237,11 +237,9 @@ setInterval(() => {
             zombies: zombies,
         }
 
-        console.log(zombies[0])
-
         io.to(roomID).emit('updateRoomData', newRoomData)
     }
-}, 1000)
+}, 1)
 
 
 
