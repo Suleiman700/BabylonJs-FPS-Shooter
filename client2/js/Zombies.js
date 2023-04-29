@@ -40,33 +40,19 @@ class Zombies {
             // If zombie mesh exists, update its position
             if (zombieMesh && zombieMesh.type === 'zombie') {
                 // If zombie mesh exists, update its position and walk towards the player
-                zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
+                // zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
+
+                // zombieMesh.checkCollisions = true
 
 
-                // Register a function to run before every frame is rendered
-                Scene.getScene().registerBeforeRender(() => {
-                    const zombiePos = zombieMesh.position;
-                    const walkToPos = new BABYLON.Vector3(zombieWalkTo.x, zombieWalkTo.y, zombieWalkTo.z);
 
-                    const distance = walkToPos.subtract(zombiePos).length();
-                    const direction = walkToPos.subtract(zombiePos).normalize();
-
-                    // calculate the new position of the zombie
-                    const newPosition = new BABYLON.Vector3(zombiePos.x + direction.x * zombieSpeed, zombiePos.y, zombiePos.z + direction.z * zombieSpeed);
-
-                    // set the new position of the zombie
-                    zombieMesh.position = newPosition;
-
-                    // If the distance to the player is greater than some threshold, move the zombie
-                    // zombieMesh.position.addInPlace(direction.scale(zombieSpeed));
-                });
             }
             else {
                 // Create new zombie mesh
                 zombieMesh = BABYLON.MeshBuilder.CreateCylinder(`zombie-${zombieId}`, {height: 3, diameter: 2, tessellation: 10}, Scene.getScene());
                 zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
                 zombieMesh.type = 'zombie';
-                zombieMesh.position.y = 1
+                zombieMesh.position.y = 10
                 zombieMesh.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
                 zombieMesh.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
                 zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene());
@@ -74,6 +60,11 @@ class Zombies {
                 zombieMesh.material.emissiveColor = new BABYLON.Color3(zombieData.health, zombieData.health, zombieData.health);
                 zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene()); // Create a new standard material for the zombie
                 zombieMesh.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Set the diffuse color to red (R: 1, G: 0, B: 0)
+
+                // zombieMesh.checkCollisions = true;
+                // // Set up collision detection for the zombie
+                // zombieMesh.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+                // zombieMesh.ellipsoidOffset = new BABYLON.Vector3(0, 1, 0);
 
                 zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0, restitution: 0, friction: 0.5, applyGravity: true }, Scene.getScene());
                 zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 2; // set collision group to 2 for zombies

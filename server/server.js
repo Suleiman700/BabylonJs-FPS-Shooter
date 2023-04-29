@@ -172,12 +172,25 @@ setInterval(() => {
 
             // zombies found in room
             if (zombiesInRoom.length) {
-                // iterate on zombies and make them walk to player coords
-                const playerCoords = roomPlayers[0].coords // {x: 0, y: 0, z: 0}
-
+                // find the closest player to each zombie and make them walk to player coords
                 for (let i = 0; i < zombiesInRoom.length; i++) {
                     const zombieId = zombiesInRoom[i].id
-                    Zombies.updateZombieWalkTo(playerCoords, roomID, zombieId)
+                    const zombieCoords = zombiesInRoom[i].coords
+
+                    // iterate through players in the room and find the closest one
+                    let closestDistance = Infinity
+                    let closestPlayerCoords
+                    for (let j = 0; j < roomPlayers.length; j++) {
+                        const playerCoords = roomPlayers[j].coords
+                        const distance = Math.sqrt((zombieCoords.x - playerCoords.x) ** 2 + (zombieCoords.y - playerCoords.y) ** 2 + (zombieCoords.z - playerCoords.z) ** 2)
+                        if (distance < closestDistance) {
+                            closestDistance = distance
+                            closestPlayerCoords = playerCoords
+                        }
+                    }
+
+                    // make the zombie walk to the closest player
+                    Zombies.updateZombieWalkTo(closestPlayerCoords, roomID, zombieId)
                 }
             }
             // no zombies in room

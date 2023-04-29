@@ -134,23 +134,35 @@ export default async function Map_01_createScene(_scene, _camera) {
     box11.position.y = -1.5;
     box11.position.z = 5;
     box11.checkCollisions = true;
+    box11.type = "solid"
     var box2 = new BABYLON.Mesh.CreateBox("box2", 5, _scene);
     box2.position.y = -1;
     box2.position.z = 6;
     box2.checkCollisions = true;
+    box2.type = "solid"
     var box3 = new BABYLON.Mesh.CreateBox("box2", 5, _scene);
     box3.position.y = -0.5;
     box3.position.z = 7;
     box3.checkCollisions = true;
+    box3.type = "solid"
     var box4 = new BABYLON.Mesh.CreateBox("box4", 5, _scene);
     box4.position.y = 0;
     box4.position.z = 8;
     box4.checkCollisions = true;
+    box4.type = "solid"
     var box5 = new BABYLON.Mesh.CreateBox("box5", 5, _scene);
     box5.position.y = 0.5;
     box5.position.z = 9;
     box5.checkCollisions = true;
+    box5.type = "solid"
 
+    // apply physics to the boxes
+    box.physicsImpostor = new BABYLON.PhysicsImpostor(box, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, _scene);
+    box11.physicsImpostor = new BABYLON.PhysicsImpostor(box11, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, _scene);
+    box2.physicsImpostor = new BABYLON.PhysicsImpostor(box2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, _scene);
+    box3.physicsImpostor = new BABYLON.PhysicsImpostor(box3, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, _scene);
+    box4.physicsImpostor = new BABYLON.PhysicsImpostor(box4, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, _scene);
+    box5.physicsImpostor = new BABYLON.PhysicsImpostor(box5, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, _scene);
 
 
     // zombies.spawnZombies()

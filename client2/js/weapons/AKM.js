@@ -26,7 +26,7 @@ class AKM {
 
     BULLET_SETTINGS = {
         decayTimer: 1000, // decay bullet in ms
-        speed: 2000, // bullet speed in ms
+        speed: 100, // bullet speed in ms
         diameter: 0.5, // bullet diameter
     }
 

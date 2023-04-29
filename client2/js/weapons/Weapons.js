@@ -174,25 +174,49 @@ class Weapons {
             const soundCoords = {x: Camera.getCamera().position.x, y: Camera.getCamera().position.y, z: Camera.getCamera().position.z}
             Sounds.playBulletFiringSound(soundCoords, this.#weaponInstance.SOUNDS.shoot)
 
+            bullet.showBoundingBox = true
 
 
-            // Create a ray from the bullet's position and direction
-            var ray = new BABYLON.Ray(bullet.position, Camera.getCamera().getForwardRay().direction);
-            var hitZombie = Scene.getScene().pickWithRay(ray, (mesh) => {
-                return mesh.type === "zombie";
-            })
-            if (hitZombie.hit) {
-                const weaponDamage = this.weaponSettings.damage // 10
-                console.log(hitZombie.pickedMesh.healthBar) // 100
+            // Get all zombie meshes
 
-                console.log(Zombies.zombies)
 
-                // Update the zombie's health
-                hitZombie.pickedMesh.health -= weaponDamage;
+            // Loop through all zombies to check for collisions
+            for (var i = 0; i < Zombies.zombies.length; i++) {
+                var zombie = Zombies.zombies[i];
 
-                // Update the zombie's material emissive color based on its health
-                hitZombie.pickedMesh.material.emissiveColor = new BABYLON.Color3(hitZombie.pickedMesh.health / 100, hitZombie.pickedMesh.health / 100, hitZombie.pickedMesh.health / 100);
+                let zombieMesh = Scene.getScene().getMeshByName(`zombie-0`);
+
+                console.log(bulletMesh)
+
+                // Check if the bullet collides with the zombie
+                if (bulletMesh.intersectsMesh(zombieMesh)) {
+                    console.log('bullet hit zombie');
+                    const weaponDamage = this.weaponSettings.damage // 10
+
+                    // Update the zombie's health
+                    zombie.health -= weaponDamage;
+
+                    // Update the zombie's material emissive color based on its health
+                    zombie.material.emissiveColor = new BABYLON.Color3(zombie.health / 100, zombie.health / 100, zombie.health / 100);
+
+                    // Dispose of the bullet mesh
+                    bulletMesh.dispose();
+
+                    // Exit the loop since the bullet has hit a zombie
+                    break;
+                }
             }
+
+// // Check if the bullet hit anything else
+//             if (!bullet.isDisposed()) {
+//                 var pick = Scene.getScene().pickWithRay(ray, (mesh) => {
+//                     return mesh.name !== bullet.name && mesh.isPickable && mesh.type !== "zombie";
+//                 })
+//                 if (pick.hit) {
+//                     console.log('bullet hit something else');
+//                     bullet.dispose();
+//                 }
+//             }
 
         }
         else {

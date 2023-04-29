@@ -13,6 +13,7 @@ import AKM from './weapons/AKM.js';
 import MovementEvent from './events/MovementEvent.js';
 import Players from './Players.js';
 import Zombies from './Zombies.js';
+import scene from './Scene.js';
 
 Game.initCanvas()
 Game.createDefaultEngine()
@@ -49,6 +50,62 @@ var startRenderLoop = function (_engine, _canvas, _scene) {
         }
     });
 }
+
+Scene.getScene().registerBeforeRender(() => {
+    const zombies = Zombies.zombies;
+    const zombieCount = zombies.length;
+    const zombieSpeed = 0.01;
+    const zombieThreshold = 2;
+
+    for (let i = 0; i < zombieCount; i++) {
+        const zombieData = zombies[i];
+        const zombieId = zombieData.id;
+        let zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
+        if (zombieMesh && zombieMesh.type === 'zombie') {
+            const zombiePos = zombieMesh.position.clone();
+            const zombieWalkTo = new BABYLON.Vector3(zombieData.walkTo.x, 0.5, zombieData.walkTo.z);
+
+            // Calculate the direction from the zombie to the walkTo point
+            let direction = zombieWalkTo.subtract(zombiePos);
+            direction.normalize();
+
+
+            // Check for collisions with other zombies
+            for (let j = 0; j < zombieCount; j++) {
+                if (i === j) {
+                    continue;
+                }
+                const otherZombieData = zombies[j];
+                const otherZombieId = otherZombieData.id;
+                const otherZombieMesh = Scene.getScene().getMeshByName(`zombie-${otherZombieId}`);
+                if (otherZombieMesh && otherZombieMesh.type === 'zombie') {
+                    const otherZombiePos = otherZombieMesh.position.clone();
+                    const distance = BABYLON.Vector3.Distance(zombiePos, otherZombiePos);
+                    if (distance < zombieThreshold) {
+                        // Zombies are colliding, move away from other zombie
+                        if (distance < 2) {
+                            const moveAwayDirection = zombiePos.subtract(otherZombiePos);
+                            moveAwayDirection.normalize();
+                            moveAwayDirection.scaleInPlace(0.02);
+                            zombieMesh.moveWithCollisions(moveAwayDirection);
+                            otherZombieMesh.moveWithCollisions(moveAwayDirection.negate());
+                            // direction = direction.add(moveAwayDirection);
+                        }
+                    }
+                }
+            }
+
+            // Scale the direction vector by the zombie's speed and delta time
+            direction.scaleInPlace(zombieSpeed * Game.getEngine().getDeltaTime());
+
+            // Move the zombie in the direction of the vector
+            zombieMesh.moveWithCollisions(direction);
+        }
+    }
+});
+
+
+
 
 startRenderLoop(Game.getEngine(), Game.getCanvas(), Scene.getScene());
 
