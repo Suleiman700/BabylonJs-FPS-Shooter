@@ -7,6 +7,7 @@ import Camera from '../Camera.js';
 import ShootEvent from '../events/ShootEvent.js';
 import Sounds from '../Environment/Sounds.js';
 import Zombies from '../Zombies.js';
+import ShootZombieEvent from '../events/ShootZombieEvent.js';
 
 class Weapons {
     #debug = true
@@ -98,12 +99,6 @@ class Weapons {
             // shoot event
             ShootEvent.fireEvent()
 
-            var translate = function (mesh, direction, power) {
-                mesh.physicsImpostor.setLinearVelocity(
-                    mesh.physicsImpostor.getLinearVelocity().add(direction.scale(power)
-                    )
-                );
-            }
 
             var bulletMesh = new BABYLON.Mesh("bulletMesh", Scene.getScene());
             // bulletMesh.renderOrder = 1;
@@ -119,17 +114,19 @@ class Weapons {
             bullet.position.y = Camera.getCamera().position.y
             bullet.position.z = Camera.getCamera().position.z
             bullet.physicsImpostor = new BABYLON.PhysicsImpostor(bullet, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0.25, restitution: 0 }, Scene.getScene());
+
+            var translate = function (bullet, direction, speed) {
+                bullet.physicsImpostor.setLinearVelocity(
+                    bullet.physicsImpostor.getLinearVelocity().add(direction.scale(speed))
+                );
+            }
             translate(bullet, Camera.getCamera().getForwardRay().direction, this.#weaponInstance.BULLET_SETTINGS.speed);
 
             setTimeout(() => {
                 bullet.dispose()
             }, this.#weaponInstance.BULLET_SETTINGS.decayTimer)
 
-            // play firing sound
-            // new BABYLON.Sound("gunshot", "gunshot.mp3", Scene.getScene()).play()
-
             this.ammoSettings.ammoLeftInMag--
-
 
             // count bullets fired
             this.COUNT_firedBullets++;
@@ -176,47 +173,25 @@ class Weapons {
 
             bullet.showBoundingBox = true
 
+            Zombies.zombies.forEach(zombieData => {
+                const zombieId = zombieData.id;
+                const zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
 
-            // Get all zombie meshes
+                // Set up collision detection between the bullet and the zombie mesh
+                const bulletImpostor = bullet.physicsImpostor;
+                const zombieImpostor = zombieMesh.physicsImpostor;
+                bulletImpostor.physicsBody.collisionFilterMask = zombieImpostor.physicsBody.collisionFilterGroup;
 
+                bulletImpostor.onCollideEvent = (firedBullet, hitObject) => {
+                    if (hitObject.object.type === 'zombie' && hitObject.object.id == `zombie-${zombieId}`) {
+                        console.log('hit zombie')
+                        console.log(zombieId)
+                        ShootZombieEvent.fireEvent(zombieId, this.weaponSettings.damage)
+                        bullet.dispose();
+                    }
+                };
+            });
 
-            // Loop through all zombies to check for collisions
-            for (var i = 0; i < Zombies.zombies.length; i++) {
-                var zombie = Zombies.zombies[i];
-
-                let zombieMesh = Scene.getScene().getMeshByName(`zombie-0`);
-
-                console.log(bulletMesh)
-
-                // Check if the bullet collides with the zombie
-                if (bulletMesh.intersectsMesh(zombieMesh)) {
-                    console.log('bullet hit zombie');
-                    const weaponDamage = this.weaponSettings.damage // 10
-
-                    // Update the zombie's health
-                    zombie.health -= weaponDamage;
-
-                    // Update the zombie's material emissive color based on its health
-                    zombie.material.emissiveColor = new BABYLON.Color3(zombie.health / 100, zombie.health / 100, zombie.health / 100);
-
-                    // Dispose of the bullet mesh
-                    bulletMesh.dispose();
-
-                    // Exit the loop since the bullet has hit a zombie
-                    break;
-                }
-            }
-
-// // Check if the bullet hit anything else
-//             if (!bullet.isDisposed()) {
-//                 var pick = Scene.getScene().pickWithRay(ray, (mesh) => {
-//                     return mesh.name !== bullet.name && mesh.isPickable && mesh.type !== "zombie";
-//                 })
-//                 if (pick.hit) {
-//                     console.log('bullet hit something else');
-//                     bullet.dispose();
-//                 }
-//             }
 
         }
         else {

@@ -132,6 +132,15 @@ io.on('connection', async (socket) => {
         Players.purchasedMedkit(socket.id, _medkitData.itemCost)
     })
 
+    /**
+     * player shoot zombie event
+     * @param _data {object} example: { zombieId: _zombieId: 0, damageAmount: _damageAmount: 10 }
+     */
+    socket.on('ShootZombieEvent', (_data) => {
+        console.log(_data)
+        Zombies.zombieTakeDamage(socket.roomId, _data.zombieId, _data.damageAmount)
+    })
+
     // Handle disconnections
     socket.on('disconnect', () => {
         console.log('A client disconnected');
@@ -196,7 +205,7 @@ setInterval(() => {
             // no zombies in room
             else {
                 // calculate the amount of zombies to spawn based on difficulty and round number
-                const numberOfZombiesToSpawn = 1 // Zombies.calcNumberOfZombiesToSpawn(roomData.difficulty, roomData.roundData.number)
+                const numberOfZombiesToSpawn = 2 // Zombies.calcNumberOfZombiesToSpawn(roomData.difficulty, roomData.roundData.number)
 
                 // create zombies
                 for (let i = 0; i < numberOfZombiesToSpawn; i++) {

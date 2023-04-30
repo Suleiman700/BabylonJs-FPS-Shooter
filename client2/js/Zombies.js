@@ -67,8 +67,16 @@ class Zombies {
                 // zombieMesh.ellipsoidOffset = new BABYLON.Vector3(0, 1, 0);
 
                 zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0, restitution: 0, friction: 0.5, applyGravity: true }, Scene.getScene());
-                zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 2; // set collision group to 2 for zombies
-                zombieMesh.physicsImpostor.physicsBody.collisionFilterMask = 1; // only collide with ground
+                // zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 2; // set collision group to 2 for zombies
+                // zombieMesh.physicsImpostor.physicsBody.collisionFilterMask = 1; // only collide with ground
+
+
+                zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, Scene.getScene());
+
+                zombieMesh.checkCollisions = true
+
+                // show zombie bounding box
+                zombieMesh.showBoundingBox = true
 
                 // Add zombie mesh to the scene
                 Scene.getScene().addMesh(zombieMesh);

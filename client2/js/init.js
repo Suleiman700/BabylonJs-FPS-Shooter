@@ -57,6 +57,20 @@ Scene.getScene().registerBeforeRender(() => {
     const zombieSpeed = 0.01;
     const zombieThreshold = 2;
 
+    // find zombie meshes that are died (not exists in zombies data anymore)
+    Scene.getScene().meshes.forEach(mesh => {
+        // Check if mesh is a zombie
+        if (mesh.type === 'zombie') {
+            // Check if zombie ID is not in the new zombie data
+            const zombieId = parseInt(mesh.name.replace('zombie-', ''));
+            const zombieExists = zombies.find(zombie => zombie.id == zombieId);
+            if (!zombieExists) {
+                // Remove the mesh from the scene
+                mesh.dispose();
+            }
+        }
+    });
+
     for (let i = 0; i < zombieCount; i++) {
         const zombieData = zombies[i];
         const zombieId = zombieData.id;

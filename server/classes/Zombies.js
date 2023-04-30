@@ -32,7 +32,6 @@ class Zombies {
         this.#zombies.push(_zombieData);
     }
 
-
     /**
      * get zombies in room
      * @param _roomId {string}
@@ -53,6 +52,37 @@ class Zombies {
         if (zombieToUpdate) {
             zombieToUpdate.walkTo = _coords;
             // zombieToUpdate.coords = _coords;
+        }
+    }
+
+    /**
+     * make zombie take damage
+     * @param _roomId {string}
+     * @param _zombieId {number} example: 0
+     * @param _damageAmount {number} example: 10
+     */
+    zombieTakeDamage(_roomId, _zombieId, _damageAmount) {
+        const zombieToUpdate = this.#zombies.find(zombie => zombie.roomId == _roomId && zombie.id == _zombieId)
+        if (zombieToUpdate) {
+            zombieToUpdate.health = parseFloat(zombieToUpdate.health) - parseFloat(_damageAmount)
+
+            // check if zombie died
+            if (zombieToUpdate.health <= 0) {
+                this.removeZombie(_roomId, _zombieId)
+            }
+        }
+    }
+
+    /**
+     * remove zombie from object
+     * @param _roomId {string}
+     * @param _zombieId {number} example: 0
+     */
+    removeZombie(_roomId, _zombieId) {
+        const index = this.#zombies.findIndex(zombie => zombie.id == _zombieId && zombie.roomId == _roomId);
+        if (index !== -1) {
+            this.#zombies.splice(index, 1);
+            console.log(`Zombie with id ${_zombieId} in room ${_roomId} has been removed.`);
         }
     }
 
