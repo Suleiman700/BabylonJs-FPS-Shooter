@@ -157,6 +157,22 @@ class Players {
     }
 
     /**
+     * reward player money
+     * @param _socketId {string}
+     * @param _moneyAmount {number}
+     */
+    rewardPlayerMoney(_socketId, _moneyAmount) {
+        // get player index
+        const index = this.#players.findIndex((player) => player.socketId === _socketId);
+
+        if (index === -1) {
+            // throw new Error(`[Remove Player] Player with socketId ${socketId} not found`);
+        }
+
+        this.#players[index].money += parseFloat(_moneyAmount);
+    }
+
+    /**
      * count players in room
      * @param _roomId {string} example: 123
      * @returns {number}

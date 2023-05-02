@@ -7,12 +7,13 @@ const MAP_01_CONFIG = {
     id: 'MAP_01',
     name: 'MAP 01',
     zombiesSpawns: [
-        {id: 0, x: 0, y: 3.015, z: 18, enabled: true,},
+        {id: 0, x: 46, y: 3.015, z: 45, enabled: true,},
     ],
     defaultZombieSpawn: 1, // spawn 1 zombie first time
     defaultZombieHealth: 100, // default zombie health
     defaultZombieDamage: 1, // default zombie damage
-    defaultZombieKillReward: 1, // default zombie kill reward (money)
+    defaultZombieKillReward: 2, // default zombie kill reward (money)
+    defaultZombieShootReward: 1, // default zombie shoot reward (money)
     defaultZombieWalkSpeed: 1, // default zombie walk speed
 
     defaultPlayerWalkSpeed: 3.5, // default player walk speed
@@ -20,7 +21,7 @@ const MAP_01_CONFIG = {
     defaultPlayerHealth: 100, // default player health (1 ~ 100)
     defaultPlayerJumpHeight: 0.2, // default player jump height (uses less gravity)
     defaultPlayerGravity: -0.2, // default player gravity
-    defaultPlayerMoney: 1000, // default player money
+    defaultPlayerMoney: 0, // default player money
 
     timeBetweenRounds: 2000, // time between rounds (in ms)
 

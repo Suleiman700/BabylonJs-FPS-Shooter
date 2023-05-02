@@ -60,16 +60,14 @@ class Zombies {
      * @param _roomId {string}
      * @param _zombieId {number} example: 0
      * @param _damageAmount {number} example: 10
+     * @return {number}
      */
     zombieTakeDamage(_roomId, _zombieId, _damageAmount) {
         const zombieToUpdate = this.#zombies.find(zombie => zombie.roomId == _roomId && zombie.id == _zombieId)
         if (zombieToUpdate) {
             zombieToUpdate.health = parseFloat(zombieToUpdate.health) - parseFloat(_damageAmount)
 
-            // check if zombie died
-            if (zombieToUpdate.health <= 0) {
-                this.removeZombie(_roomId, _zombieId)
-            }
+            return zombieToUpdate.health
         }
     }
 

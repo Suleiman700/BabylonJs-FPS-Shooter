@@ -137,8 +137,28 @@ io.on('connection', async (socket) => {
      * @param _data {object} example: { zombieId: _zombieId: 0, damageAmount: _damageAmount: 10 }
      */
     socket.on('ShootZombieEvent', (_data) => {
+        const shotZombieId = _data.zombieId
         console.log('Player shot zombie', _data)
-        Zombies.zombieTakeDamage(socket.roomId, _data.zombieId, _data.damageAmount)
+        const zombieHealth = Zombies.zombieTakeDamage(socket.roomId, shotZombieId, _data.damageAmount)
+
+        // add shooting zombie reward
+        const roomData = Rooms.getRoomData(socket.roomId)
+        let playerReward = 0
+        const shootingZombieReward = parseFloat(roomData.mapData.defaultZombieShootReward)
+        playerReward += shootingZombieReward
+
+
+        if (zombieHealth <= 0) {
+            // remove zombie
+            Zombies.removeZombie(socket.roomId, shotZombieId)
+
+            // add killing zombie reward
+            const killingZombieReward = parseFloat(roomData.mapData.defaultZombieKillReward)
+            playerReward += killingZombieReward
+        }
+
+        // reward player
+        Players.rewardPlayerMoney(socket.id, playerReward)
 
         // check if there are zombies left in room
         const zombiesInRoom = Zombies.getZombiesInRoom(socket.roomId)
@@ -187,9 +207,6 @@ setInterval(() => {
             // check if there are zombies in room
             let zombiesInRoom = Zombies.getZombiesInRoom(roomID)
 
-            if (zombiesInRoom.length == 0) {
-                console.log('no zombies')
-            }
             // zombies found in room
             if (zombiesInRoom.length) {
                 // find the closest player to each zombie and make them walk to player coords

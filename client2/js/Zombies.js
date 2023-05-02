@@ -55,8 +55,9 @@ class Zombies {
                 zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
                 zombieMesh.type = 'zombie';
                 zombieMesh.position.y = 1
-                zombieMesh.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
-                zombieMesh.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
+                zombieMesh.position.x = zombieData.coords.x; // Set x position randomly between -10 and 10
+                zombieMesh.position.y = zombieData.coords.y; // Set x position randomly between -10 and 10
+                zombieMesh.position.z = zombieData.coords.z; // Set z position randomly between -10 and 10
                 zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene());
                 zombieMesh.health = 100
                 zombieMesh.material.emissiveColor = new BABYLON.Color3(zombieData.health, zombieData.health, zombieData.health);
@@ -73,8 +74,8 @@ class Zombies {
                     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
                     // Create a new text block for the zombie ID label
                     var zombieIdText = new BABYLON.GUI.TextBlock();
-                    zombieIdText.text = `Zombie ID: ${zombieId}`;
-                    zombieIdText.color = "white";
+                    zombieIdText.text = zombieId;
+                    zombieIdText.color = "blue";
                     zombieIdText.fontSize = 14;
                     zombieIdText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
                     zombieIdText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
