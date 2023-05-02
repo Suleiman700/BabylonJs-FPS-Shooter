@@ -5,7 +5,7 @@
 
 ## Overview
 
-This project involves creating a first-person shooter game with features such as ammo, weapons, a wall shop, and a money system. The game is currently in progress, but we have encountered some issues with the zombie system.
+This project involves creating a first-person shooter game with features such as ammo, weapons, a wall shop, and a money system. The game is currently in progress, but we have made significant progress on the zombie system.
 
 ## Features
 
@@ -15,19 +15,11 @@ This project involves creating a first-person shooter game with features such as
 * Sound / Particles
 * Multi-player
 * Weapon system
+* Zombie system with spawn, movement, and reward
 
 ## Current Status
 
-The project is still in development, but we have encountered some roadblocks in the implementation of the zombie system. We are working on resolving these issues and hope to have a working system soon.
-
-## Zombie System Issues
-
-The current issues with the zombie system include:
-
-* Zombies moving away from the player instead of towards them
-* Inconsistent movement behavior of zombies
-* Collision detection issues with zombies
-* We are currently investigating these issues and trying to find a resolution.
+The project is still in development, but we have resolved the major issues with the zombie system. The zombies now spawn and follow the player, and players can earn rewards for killing them.
 
 ## Next Steps
 
