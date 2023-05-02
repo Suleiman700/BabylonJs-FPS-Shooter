@@ -1,6 +1,7 @@
 
 import Scene from './Scene.js';
 import Camera from './Camera.js';
+import Game from './Game.js';
 
 class Zombies {
     #zombies = [] // array of zombies objects
@@ -15,7 +16,8 @@ class Zombies {
 
     #DEVELOPER = {
         DEBUG: true,
-        SHOW_ZOMBIE_BOUNDING_BOX: true
+        SHOW_ZOMBIE_BOUNDING_BOX: false,
+        SHOW_ZOMBIE_ID_ABOVE: true, // show id above the zombie mesh
     }
 
     constructor() {}
@@ -52,7 +54,7 @@ class Zombies {
                 zombieMesh = BABYLON.MeshBuilder.CreateCylinder(`zombie-${zombieId}`, {height: 3, diameter: 2, tessellation: 10}, Scene.getScene());
                 zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
                 zombieMesh.type = 'zombie';
-                zombieMesh.position.y = 10
+                zombieMesh.position.y = 1
                 zombieMesh.position.x = Math.random() * 20 - 10; // Set x position randomly between -10 and 10
                 zombieMesh.position.z = Math.random() * 20 - 10; // Set z position randomly between -10 and 10
                 zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene());
@@ -66,17 +68,41 @@ class Zombies {
                 // zombieMesh.ellipsoid = new BABYLON.Vector3(1, 1, 1);
                 // zombieMesh.ellipsoidOffset = new BABYLON.Vector3(0, 1, 0);
 
+
+                if (this.#DEVELOPER.SHOW_ZOMBIE_ID_ABOVE) {
+                    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
+                    // Create a new text block for the zombie ID label
+                    var zombieIdText = new BABYLON.GUI.TextBlock();
+                    zombieIdText.text = `Zombie ID: ${zombieId}`;
+                    zombieIdText.color = "white";
+                    zombieIdText.fontSize = 14;
+                    zombieIdText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                    zombieIdText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+                    // Add the zombie ID text to the advanced texture
+                    advancedTexture.addControl(zombieIdText);
+                    // Set the position of the zombie ID text above the zombie mesh
+                    var zombiePosition = zombieMesh.getBoundingInfo().boundingBox.centerWorld;
+                    var screenPosition = BABYLON.Vector3.Project(zombiePosition, BABYLON.Matrix.Identity(), Scene.getScene().getTransformMatrix(), Scene.getScene().activeCamera.viewport.toGlobal(Game.getEngine()));
+                    zombieIdText.linkWithMesh(zombieMesh);
+                    zombieIdText.linkOffsetY = -50;
+                    // Add the zombie ID text control to the zombie mesh as a metadata
+                    zombieMesh.zombieIdUIText = zombieIdText;
+                }
+
+                if (this.#DEVELOPER.SHOW_ZOMBIE_BOUNDING_BOX) {
+                    // show zombie bounding box
+                    zombieMesh.showBoundingBox = true
+                }
+
+
                 zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0, restitution: 0, friction: 0.5, applyGravity: true }, Scene.getScene());
                 // zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 2; // set collision group to 2 for zombies
                 // zombieMesh.physicsImpostor.physicsBody.collisionFilterMask = 1; // only collide with ground
 
 
-                zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, Scene.getScene());
+                // zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, Scene.getScene());
 
                 zombieMesh.checkCollisions = true
-
-                // show zombie bounding box
-                zombieMesh.showBoundingBox = true
 
                 // Add zombie mesh to the scene
                 Scene.getScene().addMesh(zombieMesh);

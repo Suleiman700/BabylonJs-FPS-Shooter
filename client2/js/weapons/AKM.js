@@ -21,13 +21,13 @@ class AKM {
         magSize: 30, // total amount of ammo magazine can hold
         ammoLeftInMag: 30, // set same as magSize
         ammoCapacity: 180, // total amount of ammo weapon can hold
-        damage: 50,
+        damage: 100,
     }
 
     BULLET_SETTINGS = {
         decayTimer: 1000, // decay bullet in ms
         speed: 100, // bullet speed in ms
-        diameter: 0.5, // bullet diameter
+        diameter: 0.01, // bullet diameter
     }
 
     SOUNDS = {

@@ -22,7 +22,7 @@ const MAP_01_CONFIG = {
     defaultPlayerGravity: -0.2, // default player gravity
     defaultPlayerMoney: 1000, // default player money
 
-    timeBetweenRounds: 500, // time between rounds (in ms)
+    timeBetweenRounds: 2000, // time between rounds (in ms)
 
     skySettings: {
         type: 2, // types can be found in client Sky class under SKY_TYPES

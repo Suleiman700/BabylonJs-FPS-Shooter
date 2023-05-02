@@ -53,7 +53,6 @@ var startRenderLoop = function (_engine, _canvas, _scene) {
 
 Scene.getScene().registerBeforeRender(() => {
     const zombies = Zombies.zombies;
-    const zombieCount = zombies.length;
     const zombieSpeed = 0.01;
     const zombieThreshold = 2;
 
@@ -67,12 +66,12 @@ Scene.getScene().registerBeforeRender(() => {
             if (!zombieExists) {
                 // Remove the mesh from the scene
                 mesh.dispose();
+                mesh.zombieIdUIText.dispose();
             }
         }
     });
 
-    for (let i = 0; i < zombieCount; i++) {
-        const zombieData = zombies[i];
+    zombies.forEach(zombieData => {
         const zombieId = zombieData.id;
         let zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
         if (zombieMesh && zombieMesh.type === 'zombie') {
@@ -85,12 +84,11 @@ Scene.getScene().registerBeforeRender(() => {
 
 
             // Check for collisions with other zombies
-            for (let j = 0; j < zombieCount; j++) {
-                if (i === j) {
-                    continue;
-                }
-                const otherZombieData = zombies[j];
+            zombies.forEach(otherZombieData => {
                 const otherZombieId = otherZombieData.id;
+                if (zombieId === otherZombieId) {
+                    return;
+                }
                 const otherZombieMesh = Scene.getScene().getMeshByName(`zombie-${otherZombieId}`);
                 if (otherZombieMesh && otherZombieMesh.type === 'zombie') {
                     const otherZombiePos = otherZombieMesh.position.clone();
@@ -107,7 +105,7 @@ Scene.getScene().registerBeforeRender(() => {
                         }
                     }
                 }
-            }
+            });
 
             // Scale the direction vector by the zombie's speed and delta time
             direction.scaleInPlace(zombieSpeed * Game.getEngine().getDeltaTime());
@@ -115,7 +113,7 @@ Scene.getScene().registerBeforeRender(() => {
             // Move the zombie in the direction of the vector
             zombieMesh.moveWithCollisions(direction);
         }
-    }
+    });
 });
 
 

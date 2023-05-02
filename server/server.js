@@ -137,8 +137,16 @@ io.on('connection', async (socket) => {
      * @param _data {object} example: { zombieId: _zombieId: 0, damageAmount: _damageAmount: 10 }
      */
     socket.on('ShootZombieEvent', (_data) => {
-        console.log(_data)
+        console.log('Player shot zombie', _data)
         Zombies.zombieTakeDamage(socket.roomId, _data.zombieId, _data.damageAmount)
+
+        // check if there are zombies left in room
+        const zombiesInRoom = Zombies.getZombiesInRoom(socket.roomId)
+
+        if (!zombiesInRoom.length) {
+            // set game to started false
+            Rooms.setRoomIsStarted(false, socket.roomId)
+        }
     })
 
     // Handle disconnections
@@ -179,6 +187,9 @@ setInterval(() => {
             // check if there are zombies in room
             let zombiesInRoom = Zombies.getZombiesInRoom(roomID)
 
+            if (zombiesInRoom.length == 0) {
+                console.log('no zombies')
+            }
             // zombies found in room
             if (zombiesInRoom.length) {
                 // find the closest player to each zombie and make them walk to player coords
@@ -205,7 +216,7 @@ setInterval(() => {
             // no zombies in room
             else {
                 // calculate the amount of zombies to spawn based on difficulty and round number
-                const numberOfZombiesToSpawn = 2 // Zombies.calcNumberOfZombiesToSpawn(roomData.difficulty, roomData.roundData.number)
+                const numberOfZombiesToSpawn = Zombies.calcNumberOfZombiesToSpawn(roomData.difficulty, roomData.roundData.number)
 
                 // create zombies
                 for (let i = 0; i < numberOfZombiesToSpawn; i++) {
@@ -236,17 +247,20 @@ setInterval(() => {
                     }
                     Zombies.createZombie(zombieData)
                 }
+
+                roomData.roundData.number++
             }
-
-
-
         }
         else {
             // set round to started
-            setTimeout(() => {
+            new Promise(resolve => {
+                setTimeout(() => {
+                    resolve()
+                }, roomData.mapData.timeBetweenRounds)
+            }).then(() => {
                 roomData.roundData.isStarted = true
                 // console.log(roomData.roundData.number)
-            }, roomData.mapData.timeBetweenRounds)
+            })
         }
 
         // get zombies

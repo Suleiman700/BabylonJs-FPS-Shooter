@@ -171,7 +171,7 @@ class Weapons {
             const soundCoords = {x: Camera.getCamera().position.x, y: Camera.getCamera().position.y, z: Camera.getCamera().position.z}
             Sounds.playBulletFiringSound(soundCoords, this.#weaponInstance.SOUNDS.shoot)
 
-            bullet.showBoundingBox = true
+            // bullet.showBoundingBox = true
 
             Zombies.zombies.forEach(zombieData => {
                 const zombieId = zombieData.id;
@@ -183,11 +183,11 @@ class Weapons {
                 bulletImpostor.physicsBody.collisionFilterMask = zombieImpostor.physicsBody.collisionFilterGroup;
 
                 bulletImpostor.onCollideEvent = (firedBullet, hitObject) => {
-                    if (hitObject.object.type === 'zombie' && hitObject.object.id == `zombie-${zombieId}`) {
-                        console.log('hit zombie')
-                        console.log(zombieId)
-                        ShootZombieEvent.fireEvent(zombieId, this.weaponSettings.damage)
-                        bullet.dispose();
+                    bullet.dispose();
+                    // console.log(hitObject.object.id)
+                    if (hitObject.object.type === 'zombie') {
+                        const hitZombieId = (hitObject.object.id).replace('zombie-', '')
+                        ShootZombieEvent.fireEvent(hitZombieId, this.weaponSettings.damage)
                     }
                 };
             });

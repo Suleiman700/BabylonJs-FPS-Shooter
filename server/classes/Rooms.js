@@ -43,6 +43,30 @@ class Rooms {
     }
 
     /**
+     * set room is started or not
+     * @param _option {boolean}
+     * @param _roomId {string}
+     */
+    setRoomIsStarted(_option, _roomId) {
+        // check if room exists
+        const roomExists = this.doesRoomExists(_roomId);
+        if (roomExists) {
+            // get room index
+            const roomIndex = this.#rooms.findIndex(room => room.roomId == _roomId);
+
+            // update isStarted property
+            this.#rooms[roomIndex].roundData.isStarted = _option;
+
+            console.log(`[Set Room IsStarted] Room ${_roomId} isStarted set to ${_option}`);
+        }
+        else {
+            if (this.#debug) {
+                console.log(`[Set Room IsStarted] Failed to set isStarted, room ID does not exist`);
+            }
+        }
+    }
+
+    /**
      * get room data
      * @param _roomId {string} example: 123
      * @returns {{}}
