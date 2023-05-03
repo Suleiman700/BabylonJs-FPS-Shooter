@@ -17,6 +17,7 @@ class Scene {
         this.#scene.collisionsEnabled = true;
         this.#scene.enablePhysics()
         this.#scene.gravity.y = -0.6
+        this.#scene.autoClear = true
 
         this.#scene.onPointerDown = _event => {
             switch (_event.button) {

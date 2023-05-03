@@ -57,6 +57,7 @@ Scene.getScene().registerBeforeRender(() => {
     const zombieThreshold = 2;
 
     // find zombie meshes that are died (not exists in zombies data anymore)
+    console.log(Scene.getScene().meshes.length)
     Scene.getScene().meshes.forEach(mesh => {
         // Check if mesh is a zombie
         if (mesh.type === 'zombie') {
@@ -65,12 +66,14 @@ Scene.getScene().registerBeforeRender(() => {
             const zombieExists = zombies.find(zombie => zombie.id == zombieId);
             if (!zombieExists) {
                 // Remove the mesh from the scene
+                Scene.getScene().removeMesh(mesh)
                 mesh.dispose();
                 mesh.zombieIdUIText.dispose();
             }
         }
     });
 
+    // move zombies follow walkTo path
     zombies.forEach(zombieData => {
         const zombieId = zombieData.id;
         let zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);

@@ -123,7 +123,8 @@ class Weapons {
             translate(bullet, Camera.getCamera().getForwardRay().direction, this.#weaponInstance.BULLET_SETTINGS.speed);
 
             setTimeout(() => {
-                bullet.dispose()
+                Scene.getScene().removeMesh(bulletMesh)
+                bullet.dispose();
             }, this.#weaponInstance.BULLET_SETTINGS.decayTimer)
 
             this.ammoSettings.ammoLeftInMag--
@@ -177,22 +178,23 @@ class Weapons {
                 const zombieId = zombieData.id;
                 const zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
 
-                // Set up collision detection between the bullet and the zombie mesh
-                const bulletImpostor = bullet.physicsImpostor;
-                const zombieImpostor = zombieMesh.physicsImpostor;
-                bulletImpostor.physicsBody.collisionFilterMask = zombieImpostor.physicsBody.collisionFilterGroup;
+                if (zombieMesh) {
+                    // Set up collision detection between the bullet and the zombie mesh
+                    const bulletImpostor = bullet.physicsImpostor;
+                    const zombieImpostor = zombieMesh.physicsImpostor;
+                    bulletImpostor.physicsBody.collisionFilterMask = zombieImpostor.physicsBody.collisionFilterGroup;
 
-                bulletImpostor.onCollideEvent = (firedBullet, hitObject) => {
-                    bullet.dispose();
-                    // console.log(hitObject.object.id)
-                    if (hitObject.object.type === 'zombie') {
-                        const hitZombieId = (hitObject.object.id).replace('zombie-', '')
-                        ShootZombieEvent.fireEvent(hitZombieId, this.weaponSettings.damage)
-                    }
-                };
+                    bulletImpostor.onCollideEvent = (firedBullet, hitObject) => {
+                        Scene.getScene().removeMesh(bulletMesh)
+                        bullet.dispose();
+                        // console.log(hitObject.object.id)
+                        if (hitObject.object.type === 'zombie') {
+                            const hitZombieId = (hitObject.object.id).replace('zombie-', '')
+                            ShootZombieEvent.fireEvent(hitZombieId, this.weaponSettings.damage)
+                        }
+                    };
+                }
             });
-
-
         }
         else {
             // play out of ammo sound

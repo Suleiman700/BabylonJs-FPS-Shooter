@@ -22,14 +22,22 @@ class Zombies {
 
     constructor() {}
 
+    resolveAfter2Seconds() {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve('resolved');
+            }, 2000);
+        });
+    }
+
     /**
      * update zombies data
-     * @param _zombiesData {[{}]}
      */
-    updateZombiesData(_zombiesData) {
+    async updateZombiesData() {
+        const now = Date.now();
+
         // Loop through players received from the emit
-        for (let i = 0; i < this.#zombies.length; i++) {
-            const zombieData = this.#zombies[i];
+        for (const zombieData of this.#zombies) {
             const zombieCoords = zombieData.coords // example: {x: 0, y: 0, z: 0}
             const zombieId = zombieData.id;
             const zombieWalkTo = zombieData.walkTo // example: {x: 0, y: 0, z: 0}
@@ -39,17 +47,16 @@ class Zombies {
             let zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
 
 
+
             // If zombie mesh exists, update its position
             if (zombieMesh && zombieMesh.type === 'zombie') {
                 // If zombie mesh exists, update its position and walk towards the player
                 // zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
 
                 // zombieMesh.checkCollisions = true
-
-
-
             }
             else {
+
                 // Create new zombie mesh
                 zombieMesh = BABYLON.MeshBuilder.CreateCylinder(`zombie-${zombieId}`, {height: 3, diameter: 2, tessellation: 10}, Scene.getScene());
                 zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
@@ -63,7 +70,6 @@ class Zombies {
                 zombieMesh.material.emissiveColor = new BABYLON.Color3(zombieData.health, zombieData.health, zombieData.health);
                 zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene()); // Create a new standard material for the zombie
                 zombieMesh.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Set the diffuse color to red (R: 1, G: 0, B: 0)
-
                 // zombieMesh.checkCollisions = true;
                 // // Set up collision detection for the zombie
                 // zombieMesh.ellipsoid = new BABYLON.Vector3(1, 1, 1);
@@ -96,7 +102,12 @@ class Zombies {
                 }
 
 
-                zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, { mass: 0, restitution: 0, friction: 0.5, applyGravity: true }, Scene.getScene());
+                zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, {
+                    mass: 0,
+                    restitution: 0,
+                    friction: 0.5,
+                    applyGravity: true
+                }, Scene.getScene());
                 // zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 2; // set collision group to 2 for zombies
                 // zombieMesh.physicsImpostor.physicsBody.collisionFilterMask = 1; // only collide with ground
 
