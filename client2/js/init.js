@@ -14,6 +14,7 @@ import MovementEvent from './events/MovementEvent.js';
 import Players from './Players.js';
 import Zombies from './Zombies.js';
 import scene from './Scene.js';
+import Debug from './Debug.js';
 
 Game.initCanvas()
 Game.createDefaultEngine()
@@ -57,7 +58,6 @@ Scene.getScene().registerBeforeRender(() => {
     const zombieThreshold = 2;
 
     // find zombie meshes that are died (not exists in zombies data anymore)
-    console.log(Scene.getScene().meshes.length)
     Scene.getScene().meshes.forEach(mesh => {
         // Check if mesh is a zombie
         if (mesh.type === 'zombie') {

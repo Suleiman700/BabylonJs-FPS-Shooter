@@ -76,6 +76,9 @@ class Socket {
 
             // store zombies
             Zombies.zombies = _data.zombies
+
+            // set the number of zombies left
+            GUI.UI_setZombiesLeftNumber(_data.zombies.length)
         })
 
         this.socket.on('bulletFired', (_bulletData) => {

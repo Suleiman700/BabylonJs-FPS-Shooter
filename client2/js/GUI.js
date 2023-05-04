@@ -74,6 +74,10 @@ class GUI {
         document.querySelector('#UI-hold-f-to-buy').style.display = _visible? 'flex':'none'
         document.querySelector('#UI-hold-f-to-buy #buy-text').innerHTML = _text
     }
+
+    UI_setZombiesLeftNumber(_zombiesLeftNumber) {
+        document.querySelector('#zombies-left-count #count').innerHTML = _zombiesLeftNumber
+    }
 }
 
 export default new GUI()

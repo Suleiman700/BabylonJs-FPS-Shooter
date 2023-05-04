@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="./assets/css/player-stats.css">
     <link rel="stylesheet" href="./assets/css/player-coords.css">
     <link rel="stylesheet" href="./assets/css/overlay.css">
+    <link rel="stylesheet" href="./assets/css/debug.css">
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
@@ -65,6 +66,11 @@
 </head>
 <body class="bg-dark">
     <div class="overlay">
+        <div id="debug-window" style="display: block;">
+            <h6 class="text-center mt-1 mb-3">Debug</h6>
+            <p class="mx-2">Meshes: <span id="count-meshes">0</span></p>
+            <p class="mx-2">FPS: <span id="fps">0</span></p>
+        </div>
         <div id="UI-reloading-indicator" style="display: none;">
             RELOADING
         </div>
@@ -81,8 +87,8 @@
     <div id="round-info">
         <h4>Round: <span id="round-number">0</span></h4>
     </div>
-    <div id="round-starts-in-time">
-        <h6>Starts In 3 Seconds</h6>
+    <div id="zombies-left-count">
+        <h6><span id="count">0</span> zombies left</h6>
     </div>
     <div class="player left skewright small weapon-ammo">
         <h5 class="text-white">Ammo: <span id="ui-weapon-ammo">0</span></h5>

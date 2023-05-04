@@ -1,0 +1,14 @@
+
+#debug-window {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background-color: #80808070;
+    /*border: 1px solid black;*/
+}
+
+#debug-window p {
+    line-height: 1px;
+}

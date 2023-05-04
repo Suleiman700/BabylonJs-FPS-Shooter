@@ -9,7 +9,7 @@
     color: white;
 }
 
-#round-starts-in-time {
+#zombies-left-count {
     display: flex;
     justify-content: center;
     width: 100%;
