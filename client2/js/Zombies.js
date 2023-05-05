@@ -20,7 +20,7 @@ class Zombies {
         DEBUG: true,
         SHOW_ZOMBIE_BOUNDING_BOX: false,
         SHOW_ZOMBIE_ID_ABOVE: true, // show id above the zombie mesh
-        SHOW_ZOMBIE_HEALTH_ABOVE: false, // show health above the zombie mesh
+        SHOW_ZOMBIE_HEALTH_ABOVE: true, // show health above the zombie mesh
     }
 
     constructor() {}
@@ -32,20 +32,19 @@ class Zombies {
         let zombieIndex = 0;
         const zombieCreationInterval = setInterval(() => {
 
+            /*
+                limit the number of spawned zombie in scene
+             */
+            // count zombies in scene
             let zombiesInScene = 0
-
-            // find zombie meshes that are died (not exists in zombies data anymore)
             Scene.getScene().meshes.forEach(mesh => {
-
                 // Check if mesh is a zombie
                 if (mesh.type === 'zombie') {
                     zombiesInScene++
                 }
             });
-
-            console.log(zombiesInScene)
-
             if (zombiesInScene >= Settings.zombies.spawnLimit) {
+                // console.log(`Zombies in scene reached the limit of: ${zombiesInScene}`)
                 return;
             }
 

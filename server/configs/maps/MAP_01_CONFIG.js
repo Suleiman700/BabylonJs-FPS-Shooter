@@ -29,7 +29,11 @@ const MAP_01_CONFIG = {
     timeBetweenRounds: 2000, // time between rounds (in ms)
 
     performance: {
-        zombieSpawnLimit: 10, // the maximum number of zombies to spawn in scene - (number / 2 = the maximum number of zombies) because each zombie has two meshes - example: 10 means 5 zombies | 20 means 10 zombies
+        zombieSpawnLimit: 2, // the maximum number of zombies to spawn in scene - (number / 2 = the maximum number of zombies) because each zombie has two meshes - example: 10 means 5 zombies | 20 means 10 zombies
+    },
+
+    multiplier: {
+        increaseZombieHealthEachRound: 5, // increase zombie health for each new round
     },
 
     skySettings: {

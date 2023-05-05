@@ -265,7 +265,11 @@ setInterval(() => {
                     Zombies.createZombie(zombieData)
                 }
 
+                // increase round
                 roomData.roundData.number++
+
+                // increase zombie health multiplier
+                roomData.mapData.defaultZombieHealth +=  roomData.mapData.multiplier.increaseZombieHealthEachRound // increase zombie health for each new round - example: 5 | it will increase zombie health by 5 for each new round
             }
         }
         else {
