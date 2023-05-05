@@ -3,6 +3,7 @@ import Scene from './Scene.js';
 import Camera from './Camera.js';
 import Game from './Game.js';
 import Materials from './Materials.js';
+import Settings from './Settings.js';
 
 class Zombies {
     #zombies = [] // array of zombies objects
@@ -22,10 +23,6 @@ class Zombies {
         SHOW_ZOMBIE_HEALTH_ABOVE: false, // show health above the zombie mesh
     }
 
-    SETTINGS = {
-        zombieSpawnTimer: 0, // time between each zombie spawn (in ms) - this will be updated on setStartGameData server emit
-    }
-
     constructor() {}
 
     /**
@@ -34,7 +31,25 @@ class Zombies {
     async updateZombiesData() {
         let zombieIndex = 0;
         const zombieCreationInterval = setInterval(() => {
-            // stop creating zombies when reacing the end
+
+            let zombiesInScene = 0
+
+            // find zombie meshes that are died (not exists in zombies data anymore)
+            Scene.getScene().meshes.forEach(mesh => {
+
+                // Check if mesh is a zombie
+                if (mesh.type === 'zombie') {
+                    zombiesInScene++
+                }
+            });
+
+            console.log(zombiesInScene)
+
+            if (zombiesInScene >= Settings.zombies.spawnLimit) {
+                return;
+            }
+
+            // stop creating zombies when reaching the end
             if (zombieIndex >= this.#zombies.length) {
                 clearInterval(zombieCreationInterval);
                 return;
@@ -143,7 +158,7 @@ class Zombies {
                 zombieIndex++
 
             }
-        }, this.SETTINGS.zombieSpawnTimer)
+        }, Settings.zombies.spawnTimer)
 
         // // Loop through players received from the emit
         // for (const zombieData of this.#zombies) {

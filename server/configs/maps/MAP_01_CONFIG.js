@@ -24,7 +24,13 @@ const MAP_01_CONFIG = {
     defaultPlayerGravity: -0.2, // default player gravity
     defaultPlayerMoney: 0, // default player money
 
+    defaultWeaponId: 'AKM', // default weapon id
+
     timeBetweenRounds: 2000, // time between rounds (in ms)
+
+    performance: {
+        zombieSpawnLimit: 10, // the maximum number of zombies to spawn in scene - (number / 2 = the maximum number of zombies) because each zombie has two meshes - example: 10 means 5 zombies | 20 means 10 zombies
+    },
 
     skySettings: {
         type: 2, // types can be found in client Sky class under SKY_TYPES
@@ -37,7 +43,6 @@ const MAP_01_CONFIG = {
         // {x: 30, y: 10, z: 30, pan: 10, roll: 10},
     ],
 
-    defaultWeaponId: 'AKM', // default weapon id
 }
 
 module.exports = { MAP_01_CONFIG }

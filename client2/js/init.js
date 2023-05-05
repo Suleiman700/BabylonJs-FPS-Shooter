@@ -41,7 +41,7 @@ Socket.connect()
 Keys.registerKeys()
 
 // Enable the performance monitor
-Scene.getScene().debugLayer.show();
+// Scene.getScene().debugLayer.show();
 
 var startRenderLoop = function (_engine, _canvas, _scene) {
     _engine.runRenderLoop(function () {
@@ -64,6 +64,7 @@ Scene.getScene().registerBeforeRender(() => {
 
     // find zombie meshes that are died (not exists in zombies data anymore)
     Scene.getScene().meshes.forEach(mesh => {
+
         // Check if mesh is a zombie
         if (mesh.type === 'zombie') {
             // Check if zombie ID is not in the new zombie data

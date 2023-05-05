@@ -7,6 +7,8 @@ import Sky from '../Environment/Sky.js';
 import Players from '../Players.js';
 import Particles from '../Environment/Particles.js';
 import Zombies from '../Zombies.js';
+import Game from '../Game.js';
+import Settings from '../Settings.js';
 
 class Socket {
 
@@ -53,8 +55,9 @@ class Socket {
             // set player money - this also sets the UI
             ClientPlayer.money = _mapData.defaultPlayerMoney
 
-            // store zombies data
-            Zombies.SETTINGS.zombieSpawnTimer = _mapData.defaultZombieSpawnTimer
+            // store zombies settings
+            Settings.zombies.spawnTimer = _mapData.defaultZombieSpawnTimer
+            Settings.zombies.spawnLimit = _mapData.performance.zombieSpawnLimit
 
             // pick random spawn point and set player spawn
             const randomSpawnPoint = _mapData.playersSpawns[Math.floor(Math.random() * _mapData.playersSpawns.length)];
