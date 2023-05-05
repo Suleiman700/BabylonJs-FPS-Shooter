@@ -2,6 +2,7 @@
 import Scene from './Scene.js';
 import Camera from './Camera.js';
 import Game from './Game.js';
+import Materials from './Materials.js';
 
 class Zombies {
     #zombies = [] // array of zombies objects
@@ -67,17 +68,16 @@ class Zombies {
                     // zombieMesh.position.x = zombieData.coords.x; // Set x position randomly between -10 and 10
                     // zombieMesh.position.y = zombieData.coords.y; // Set x position randomly between -10 and 10
                     // zombieMesh.position.z = zombieData.coords.z; // Set z position randomly between -10 and 10
-                    zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene());
+                    zombieMesh.material = Materials.zombieMaterial; // Create a new standard material for the zombie
                     zombieMesh.material.emissiveColor = new BABYLON.Color3(zombieData.health, zombieData.health, zombieData.health);
-                    zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene()); // Create a new standard material for the zombie
                     zombieMesh.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Set the diffuse color to red (R: 1, G: 0, B: 0)
                     // zombieMesh.checkCollisions = true;
                     // // Set up collision detection for the zombie
                     // zombieMesh.ellipsoid = new BABYLON.Vector3(1, 1, 1);
                     // zombieMesh.ellipsoidOffset = new BABYLON.Vector3(0, 1, 0);
 
-                    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
                     if (this.#DEVELOPER.SHOW_ZOMBIE_ID_ABOVE) {
+                        var advancedTexture = Scene.advancedDynamicTexture
                         // Create a new text block for the zombie ID label
                         var UI_id = new BABYLON.GUI.TextBlock();
                         UI_id.text = `ID: ${zombieId}`;
@@ -97,6 +97,7 @@ class Zombies {
                     }
 
                     if (this.#DEVELOPER.SHOW_ZOMBIE_HEALTH_ABOVE) {
+                        var advancedTexture = Scene.advancedDynamicTexture
                         // Create a new text block for the zombie ID label
                         var zombieGUIHealth = new BABYLON.GUI.TextBlock();
                         zombieGUIHealth.text = `Health: ${zombieData.health}`;

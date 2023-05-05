@@ -8,6 +8,7 @@ import ShootEvent from '../events/ShootEvent.js';
 import Sounds from '../Environment/Sounds.js';
 import Zombies from '../Zombies.js';
 import ShootZombieEvent from '../events/ShootZombieEvent.js';
+import Materials from '../Materials.js';
 
 class Weapons {
     #debug = true
@@ -104,7 +105,7 @@ class Weapons {
             // bulletMesh.renderOrder = 1;
 
             // create material with black color
-            var material = new BABYLON.StandardMaterial("bulletMaterial", Scene.getScene());
+            var material = Materials.bulletMaterial
             material.diffuseColor = BABYLON.Color3.Black();
 
             var bullet = BABYLON.Mesh.CreateSphere("bullet", 10, this.#weaponInstance.BULLET_SETTINGS.diameter, Scene.getScene(), false, BABYLON.Mesh.DEFAULTSIDE, bulletMesh);
@@ -251,10 +252,8 @@ class Weapons {
      */
     reload() {
         // play weapon reload sound
-        const music = new BABYLON.Sound("sound", this.#weaponInstance.SOUNDS.reload, Scene.getScene(), null, {
-            loop: false,
-            autoplay: true,
-        });
+        Sounds.playWeaponReloadingSound(this.#weaponInstance.SOUNDS.reload)
+
         setTimeout(() => {
             // check if capacity have mag
             if (this.ammoSettings.ammoCapacity >= this.ammoSettings.magSize) {

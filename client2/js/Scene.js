@@ -9,6 +9,8 @@ import AKM from './weapons/AKM.js';
 class Scene {
     #scene = null
 
+    advancedDynamicTexture = undefined
+
     constructor() {}
 
     initScene() {
@@ -43,6 +45,8 @@ class Scene {
                     break
             }
         }
+
+        this.advancedDynamicTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
 
         // this.#scene.registerBeforeRender(() => {
         //     var player = this.#scene.activeCamera.position;

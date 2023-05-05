@@ -15,6 +15,7 @@ import Players from './Players.js';
 import Zombies from './Zombies.js';
 import scene from './Scene.js';
 import Debug from './Debug.js';
+import Materials from './Materials.js';
 
 Game.initCanvas()
 Game.createDefaultEngine()
@@ -22,6 +23,7 @@ Game.createDefaultEngine()
 Scene.initScene()
 await Loader.loadWeapons()
 await Loader.loadItems()
+await Materials.loadMaterial()
 Scene.createScene('MAP_01')
 
 Camera.initCamera()
@@ -37,6 +39,9 @@ Socket.connect()
 
 
 Keys.registerKeys()
+
+// Enable the performance monitor
+Scene.getScene().debugLayer.show();
 
 var startRenderLoop = function (_engine, _canvas, _scene) {
     _engine.runRenderLoop(function () {
