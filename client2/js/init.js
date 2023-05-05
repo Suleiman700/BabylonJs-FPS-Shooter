@@ -66,9 +66,7 @@ Scene.getScene().registerBeforeRender(() => {
             const zombieExists = zombies.find(zombie => zombie.id == zombieId);
             if (!zombieExists) {
                 // Remove the mesh from the scene
-                Scene.getScene().removeMesh(mesh)
-                mesh.dispose();
-                mesh.zombieIdUIText.dispose();
+                Zombies.removeZombieMeshFromScene(mesh)
             }
         }
     });
@@ -80,6 +78,9 @@ Scene.getScene().registerBeforeRender(() => {
         if (zombieMesh && zombieMesh.type === 'zombie') {
             const zombiePos = zombieMesh.position.clone();
             const zombieWalkTo = new BABYLON.Vector3(zombieData.walkTo.x, 0.5, zombieData.walkTo.z);
+
+            // update zombie health in UI
+            Zombies.updateZombieUIHealth(zombieMesh, zombieData.health)
 
             // Calculate the direction from the zombie to the walkTo point
             let direction = zombieWalkTo.subtract(zombiePos);

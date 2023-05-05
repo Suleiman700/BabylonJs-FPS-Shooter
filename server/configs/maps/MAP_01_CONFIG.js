@@ -15,6 +15,7 @@ const MAP_01_CONFIG = {
     defaultZombieKillReward: 2, // default zombie kill reward (money)
     defaultZombieShootReward: 1, // default zombie shoot reward (money)
     defaultZombieWalkSpeed: 1, // default zombie walk speed
+    defaultZombieSpawnTimer: 1000, // time between each zombie spawn (in ms)
 
     defaultPlayerWalkSpeed: 3.5, // default player walk speed
     defaultPlayerSprintSpeed: 5, // default player sprint speed

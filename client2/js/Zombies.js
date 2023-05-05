@@ -18,107 +18,158 @@ class Zombies {
         DEBUG: true,
         SHOW_ZOMBIE_BOUNDING_BOX: false,
         SHOW_ZOMBIE_ID_ABOVE: true, // show id above the zombie mesh
+        SHOW_ZOMBIE_HEALTH_ABOVE: false, // show health above the zombie mesh
+    }
+
+    SETTINGS = {
+        zombieSpawnTimer: 0, // time between each zombie spawn (in ms) - this will be updated on setStartGameData server emit
     }
 
     constructor() {}
-
-    resolveAfter2Seconds() {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve('resolved');
-            }, 2000);
-        });
-    }
 
     /**
      * update zombies data
      */
     async updateZombiesData() {
-        const now = Date.now();
-
-        // Loop through players received from the emit
-        for (const zombieData of this.#zombies) {
-            const zombieCoords = zombieData.coords // example: {x: 0, y: 0, z: 0}
-            const zombieId = zombieData.id;
-            const zombieWalkTo = zombieData.walkTo // example: {x: 0, y: 0, z: 0}
-            const zombieSpeed = 0.05
-
-            // Find the zombie mesh in the scene using the socket ID
-            let zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
-
-
-
-            // If zombie mesh exists, update its position
-            if (zombieMesh && zombieMesh.type === 'zombie') {
-                // If zombie mesh exists, update its position and walk towards the player
-                // zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
-
-                // zombieMesh.checkCollisions = true
+        let zombieIndex = 0;
+        const zombieCreationInterval = setInterval(() => {
+            // stop creating zombies when reacing the end
+            if (zombieIndex >= this.#zombies.length) {
+                clearInterval(zombieCreationInterval);
+                return;
             }
             else {
+                const zombieData = this.zombies[zombieIndex]
+                const zombieCoords = zombieData.coords // example: {x: 0, y: 0, z: 0}
+                const zombieId = zombieData.id;
+                const zombieWalkTo = zombieData.walkTo // example: {x: 0, y: 0, z: 0}
+                const zombieSpeed = 0.05
 
-                // Create new zombie mesh
-                zombieMesh = BABYLON.MeshBuilder.CreateCylinder(`zombie-${zombieId}`, {height: 3, diameter: 2, tessellation: 10}, Scene.getScene());
-                zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
-                zombieMesh.type = 'zombie';
-                zombieMesh.position.y = 1
-                zombieMesh.position.x = zombieData.coords.x; // Set x position randomly between -10 and 10
-                zombieMesh.position.y = zombieData.coords.y; // Set x position randomly between -10 and 10
-                zombieMesh.position.z = zombieData.coords.z; // Set z position randomly between -10 and 10
-                zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene());
-                zombieMesh.health = 100
-                zombieMesh.material.emissiveColor = new BABYLON.Color3(zombieData.health, zombieData.health, zombieData.health);
-                zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene()); // Create a new standard material for the zombie
-                zombieMesh.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Set the diffuse color to red (R: 1, G: 0, B: 0)
-                // zombieMesh.checkCollisions = true;
-                // // Set up collision detection for the zombie
-                // zombieMesh.ellipsoid = new BABYLON.Vector3(1, 1, 1);
-                // zombieMesh.ellipsoidOffset = new BABYLON.Vector3(0, 1, 0);
+                // Find the zombie mesh in the scene using the socket ID
+                let zombieMesh = Scene.getScene().getMeshByName(`zombie-${zombieId}`);
 
 
-                if (this.#DEVELOPER.SHOW_ZOMBIE_ID_ABOVE) {
+
+                // If zombie mesh exists, update its position
+                if (zombieMesh && zombieMesh.type === 'zombie') {
+                    // If zombie mesh exists, update its position and walk towards the player
+                    // zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
+
+                    // zombieMesh.checkCollisions = true
+                }
+                else {
+
+                    // Create new zombie mesh
+                    zombieMesh = BABYLON.MeshBuilder.CreateCylinder(`zombie-${zombieId}`, {height: 3, diameter: 2, tessellation: 10}, Scene.getScene());
+                    zombieMesh.position = new BABYLON.Vector3(zombieCoords.x, zombieCoords.y, zombieCoords.z);
+                    zombieMesh.type = 'zombie';
+                    zombieMesh.health = 100
+                    // zombieMesh.position.x = zombieData.coords.x; // Set x position randomly between -10 and 10
+                    // zombieMesh.position.y = zombieData.coords.y; // Set x position randomly between -10 and 10
+                    // zombieMesh.position.z = zombieData.coords.z; // Set z position randomly between -10 and 10
+                    zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene());
+                    zombieMesh.material.emissiveColor = new BABYLON.Color3(zombieData.health, zombieData.health, zombieData.health);
+                    zombieMesh.material = new BABYLON.StandardMaterial("mat", Scene.getScene()); // Create a new standard material for the zombie
+                    zombieMesh.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Set the diffuse color to red (R: 1, G: 0, B: 0)
+                    // zombieMesh.checkCollisions = true;
+                    // // Set up collision detection for the zombie
+                    // zombieMesh.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+                    // zombieMesh.ellipsoidOffset = new BABYLON.Vector3(0, 1, 0);
+
                     var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
-                    // Create a new text block for the zombie ID label
-                    var zombieIdText = new BABYLON.GUI.TextBlock();
-                    zombieIdText.text = zombieId;
-                    zombieIdText.color = "blue";
-                    zombieIdText.fontSize = 14;
-                    zombieIdText.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
-                    zombieIdText.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-                    // Add the zombie ID text to the advanced texture
-                    advancedTexture.addControl(zombieIdText);
-                    // Set the position of the zombie ID text above the zombie mesh
-                    var zombiePosition = zombieMesh.getBoundingInfo().boundingBox.centerWorld;
-                    var screenPosition = BABYLON.Vector3.Project(zombiePosition, BABYLON.Matrix.Identity(), Scene.getScene().getTransformMatrix(), Scene.getScene().activeCamera.viewport.toGlobal(Game.getEngine()));
-                    zombieIdText.linkWithMesh(zombieMesh);
-                    zombieIdText.linkOffsetY = -50;
-                    // Add the zombie ID text control to the zombie mesh as a metadata
-                    zombieMesh.zombieIdUIText = zombieIdText;
+                    if (this.#DEVELOPER.SHOW_ZOMBIE_ID_ABOVE) {
+                        // Create a new text block for the zombie ID label
+                        var UI_id = new BABYLON.GUI.TextBlock();
+                        UI_id.text = `ID: ${zombieId}`;
+                        UI_id.color = "blue";
+                        UI_id.fontSize = 14;
+                        UI_id.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                        UI_id.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+                        // Add the zombie ID text to the advanced texture
+                        advancedTexture.addControl(UI_id);
+                        // Set the position of the zombie ID text above the zombie mesh
+                        var zombiePosition = zombieMesh.getBoundingInfo().boundingBox.centerWorld;
+                        var screenPosition = BABYLON.Vector3.Project(zombiePosition, BABYLON.Matrix.Identity(), Scene.getScene().getTransformMatrix(), Scene.getScene().activeCamera.viewport.toGlobal(Game.getEngine()));
+                        UI_id.linkWithMesh(zombieMesh);
+                        UI_id.linkOffsetY = -50;
+                        // Add the zombie ID text control to the zombie mesh as a metadata
+                        zombieMesh.UI_id = UI_id;
+                    }
+
+                    if (this.#DEVELOPER.SHOW_ZOMBIE_HEALTH_ABOVE) {
+                        // Create a new text block for the zombie ID label
+                        var zombieGUIHealth = new BABYLON.GUI.TextBlock();
+                        zombieGUIHealth.text = `Health: ${zombieData.health}`;
+                        zombieGUIHealth.color = "blue";
+                        zombieGUIHealth.fontSize = 14;
+                        zombieGUIHealth.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+                        zombieGUIHealth.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+                        // Add the zombie ID text to the advanced texture
+                        advancedTexture.addControl(zombieGUIHealth);
+                        // Set the position of the zombie ID text above the zombie mesh
+                        var zombiePosition = zombieMesh.getBoundingInfo().boundingBox.centerWorld;
+                        var screenPosition = BABYLON.Vector3.Project(zombiePosition, BABYLON.Matrix.Identity(), Scene.getScene().getTransformMatrix(), Scene.getScene().activeCamera.viewport.toGlobal(Game.getEngine()));
+                        zombieGUIHealth.linkWithMesh(zombieMesh);
+                        zombieGUIHealth.linkOffsetY = -70;
+                        // Add the zombie ID text control to the zombie mesh as a metadata
+                        zombieMesh.UI_health = zombieGUIHealth;
+                    }
+
+                    if (this.#DEVELOPER.SHOW_ZOMBIE_BOUNDING_BOX) {
+                        // show zombie bounding box
+                        zombieMesh.showBoundingBox = true
+                    }
+
+
+                    zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, {
+                        mass: 0,
+                        restitution: 0,
+                        friction: 0.5,
+                        applyGravity: true
+                    }, Scene.getScene());
+                    // zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 2; // set collision group to 2 for zombies
+                    // zombieMesh.physicsImpostor.physicsBody.collisionFilterMask = 1; // only collide with ground
+
+
+                    // zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, Scene.getScene());
+
+                    zombieMesh.checkCollisions = true
+
+                    // Add zombie mesh to the scene
+                    Scene.getScene().addMesh(zombieMesh);
+                    // Delay the creation of the next zombie by 1 second
                 }
+                zombieIndex++
 
-                if (this.#DEVELOPER.SHOW_ZOMBIE_BOUNDING_BOX) {
-                    // show zombie bounding box
-                    zombieMesh.showBoundingBox = true
-                }
-
-
-                zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.SphereImpostor, {
-                    mass: 0,
-                    restitution: 0,
-                    friction: 0.5,
-                    applyGravity: true
-                }, Scene.getScene());
-                // zombieMesh.physicsImpostor.physicsBody.collisionFilterGroup = 2; // set collision group to 2 for zombies
-                // zombieMesh.physicsImpostor.physicsBody.collisionFilterMask = 1; // only collide with ground
-
-
-                // zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, Scene.getScene());
-
-                zombieMesh.checkCollisions = true
-
-                // Add zombie mesh to the scene
-                Scene.getScene().addMesh(zombieMesh);
             }
+        }, this.SETTINGS.zombieSpawnTimer)
+
+        // // Loop through players received from the emit
+        // for (const zombieData of this.#zombies) {
+        // }
+    }
+
+    /**
+     * remove zombie mesh from scene
+     * @param _zombieMesh
+     */
+    removeZombieMeshFromScene(_zombieMesh) {
+        Scene.getScene().removeMesh(_zombieMesh)
+        _zombieMesh.dispose();
+
+        // remove zombie UI ID text if enabled
+        if (this.#DEVELOPER.SHOW_ZOMBIE_ID_ABOVE) {
+            _zombieMesh.UI_id.dispose();
+        }
+        if (this.#DEVELOPER.SHOW_ZOMBIE_HEALTH_ABOVE) {
+            _zombieMesh.UI_health.dispose();
+        }
+    }
+
+    updateZombieUIHealth(_zombieMesh, _zombieHealth) {
+        // remove zombie UI ID text if enabled
+        if (this.#DEVELOPER.SHOW_ZOMBIE_HEALTH_ABOVE) {
+            _zombieMesh.UI_health.text = `Health: ${_zombieHealth}`;
         }
     }
 

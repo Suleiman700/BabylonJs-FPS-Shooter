@@ -53,6 +53,9 @@ class Socket {
             // set player money - this also sets the UI
             ClientPlayer.money = _mapData.defaultPlayerMoney
 
+            // store zombies data
+            Zombies.SETTINGS.zombieSpawnTimer = _mapData.defaultZombieSpawnTimer
+
             // pick random spawn point and set player spawn
             const randomSpawnPoint = _mapData.playersSpawns[Math.floor(Math.random() * _mapData.playersSpawns.length)];
             ClientPlayer.setCoords(randomSpawnPoint.x, randomSpawnPoint.y, randomSpawnPoint.z)
