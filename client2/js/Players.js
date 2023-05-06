@@ -5,6 +5,7 @@ import AKM from './weapons/AKM.js';
 import G17 from './weapons/G17.js';
 import PlayersStatsTable from './stats/PlayersStatsTable.js';
 import GUI from './GUI.js';
+import ClientPlayer from './ClientPlayer.js';
 
 class Players {
     #players = [] // store other players
@@ -25,9 +26,8 @@ class Players {
 
             // Skip the current player
             if (playerId === Player.socketId) {
-                // update player money
-                const playerMoney = playerData.money
-                GUI.UI_setMoney(playerMoney)
+                // update client player money - which also will update GUI money
+                ClientPlayer.money = playerData.money
                 continue;
             }
 

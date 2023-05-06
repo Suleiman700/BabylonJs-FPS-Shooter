@@ -117,6 +117,12 @@ export default async function Map_01_createScene(_scene, _camera) {
     // const itemRotation2 = {x: 0, y: 1.6, z: 4.7}
     // WallShop.createNewWallShop(shopPosition2, shopMeasurement2, G17, G17.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'weapon')
 
+    // const shopPosition2 = {x: 15, y: 0, z: 53}
+    // const shopMeasurement2 = {width: 5, height: 10, depth: 4}
+    // const itemPosition2 = {x: shopPosition2.x, y: shopPosition2.y + 3, z: shopPosition2.z + 1.5}
+    // const itemRotation2 = {x: -1.55, y: 0, z: 3.1}
+    // WallShop.createNewWallShop(shopPosition2, shopMeasurement2, Medkit, Medkit.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'medkit')
+
     const shopPosition2 = {x: 15, y: 0, z: 53}
     const shopMeasurement2 = {width: 5, height: 10, depth: 4}
     const itemPosition2 = {x: shopPosition2.x, y: shopPosition2.y + 3, z: shopPosition2.z + 1.5}

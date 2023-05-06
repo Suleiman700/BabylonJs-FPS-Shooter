@@ -19,12 +19,13 @@ class G17 {
         magSize: 8, // total amount of ammo magazine can hold
         ammoLeftInMag: 8, // set same as magSize
         ammoCapacity: 80, // total amount of ammo weapon can hold
+        damage: 20,
     }
 
     BULLET_SETTINGS = {
         decayTimer: 1000, // decay bullet in ms
-        speed: 1000, // bullet speed in ms
-        diameter: 0.5, // bullet diameter
+        speed: 100, // bullet speed in ms
+        diameter: 0.1, // bullet diameter
     }
 
     SOUNDS = {

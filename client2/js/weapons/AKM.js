@@ -21,7 +21,7 @@ class AKM {
         magSize: 30, // total amount of ammo magazine can hold
         ammoLeftInMag: 30, // set same as magSize
         ammoCapacity: 18000, // total amount of ammo weapon can hold
-        damage: 50,
+        damage: 100,
     }
 
     BULLET_SETTINGS = {

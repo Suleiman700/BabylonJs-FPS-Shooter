@@ -7,7 +7,8 @@ const MAP_01_CONFIG = {
     id: 'MAP_01',
     name: 'MAP 01',
     zombiesSpawns: [
-        {id: 0, x: 46, y: 3.015, z: 45, enabled: true,},
+        {id: 0, x: 45, y: 3.015, z: 45, enabled: true,},
+        {id: 1, x: -45, y: 3.015, z: -45, enabled: true,},
     ],
     defaultZombieSpawn: 1, // spawn 1 zombie first time
     defaultZombieHealth: 100, // default zombie health
@@ -29,7 +30,7 @@ const MAP_01_CONFIG = {
     timeBetweenRounds: 2000, // time between rounds (in ms)
 
     performance: {
-        zombieSpawnLimit: 2, // the maximum number of zombies to spawn in scene - (number / 2 = the maximum number of zombies) because each zombie has two meshes - example: 10 means 5 zombies | 20 means 10 zombies
+        zombieSpawnLimit: 20, // the maximum number of zombies to spawn in scene - (number / 2 = the maximum number of zombies) because each zombie has two meshes - example: 10 means 5 zombies | 20 means 10 zombies
     },
 
     multiplier: {
