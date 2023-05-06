@@ -11,6 +11,11 @@ class Scene {
 
     advancedDynamicTexture = undefined
 
+    // store particles
+    SCENE_PARTICLES = {
+        DOLLAR_PARTICLES: undefined
+    }
+
     constructor() {}
 
     initScene() {
@@ -47,6 +52,9 @@ class Scene {
         }
 
         this.advancedDynamicTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI('UI');
+        this.SCENE_PARTICLES.DOLLAR_PARTICLES = new BABYLON.ParticleSystem("dollarSigns", 2000, this.#scene)
+
+        // this.particles.dollarSign = new BABYLON.ParticleSystem("dollarSigns", 2000, this.#scene)
 
         // this.#scene.registerBeforeRender(() => {
         //     var player = this.#scene.activeCamera.position;

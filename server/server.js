@@ -133,6 +133,10 @@ io.on('connection', async (socket) => {
     socket.on('playerPurchasedMedkitFromWallShop', (_medkitData) => {
         // console.log(_medkitData)
         Players.purchasedMedkit(socket.id, _medkitData.itemCost)
+
+        // emit to all players to play wall shop purchase particle
+        const particleCoords = Players.getPlayerCoords(socket.id)
+        io.sockets.in(socket.roomId).emit('playWallShopPurchaseParticle', particleCoords)
     })
 
     /**

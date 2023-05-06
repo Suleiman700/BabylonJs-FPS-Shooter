@@ -6,7 +6,7 @@ class Particles {
 
     playWallShopPurchaseParticle(_coords) {
         // Create a particle system at player's position
-        const particleSystem = new BABYLON.ParticleSystem("dollarSigns", 2000, Scene.getScene());
+        const particleSystem = Scene.SCENE_PARTICLES.DOLLAR_PARTICLES;
 
         // Set particle texture and emitter position
         particleSystem.particleTexture = new BABYLON.Texture("./assets/textures/flying_money_01.png", Scene.getScene());

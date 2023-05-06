@@ -41,7 +41,7 @@ Socket.connect()
 Keys.registerKeys()
 
 // Enable the performance monitor
-// Scene.getScene().debugLayer.show();
+Scene.getScene().debugLayer.show();
 
 var startRenderLoop = function (_engine, _canvas, _scene) {
     _engine.runRenderLoop(function () {
