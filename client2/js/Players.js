@@ -57,11 +57,11 @@ class Players {
                     switch (playerData.holdingGunId) {
                         case 'AKM':
                             weaponInstance = AKM
-                            weaponClone = weaponInstance.MODEL_weaponModel.clone("AKM Clone");
+                            weaponClone = weaponInstance.MODEL.clone("AKM Clone");
                             break
                         case 'G17':
                             weaponInstance = G17;
-                            weaponClone = weaponInstance.MODEL_weaponModel.clone("G17 Clone");
+                            weaponClone = weaponInstance.MODEL.clone("G17 Clone");
                             break
                     }
 

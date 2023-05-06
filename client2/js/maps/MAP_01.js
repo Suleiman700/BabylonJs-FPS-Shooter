@@ -5,6 +5,7 @@ import G17 from '../weapons/G17.js';
 import Medkit from '../shops/items/Medkit.js';
 import Zombies from '../Zombies.js';
 import zombies from '../Zombies.js';
+import AmmoBox from '../shops/items/AmmoBox.js';
 
 export default async function Map_01_createScene(_scene, _camera) {
     // Lights
@@ -123,11 +124,10 @@ export default async function Map_01_createScene(_scene, _camera) {
     // const itemRotation2 = {x: -1.55, y: 0, z: 3.1}
     // WallShop.createNewWallShop(shopPosition2, shopMeasurement2, Medkit, Medkit.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'medkit')
 
-    const shopPosition2 = {x: 15, y: 0, z: 53}
+    const shopPosition2 = {x: 13, y: 0, z: 53}
     const shopMeasurement2 = {width: 5, height: 10, depth: 4}
-    const itemPosition2 = {x: shopPosition2.x, y: shopPosition2.y + 3, z: shopPosition2.z + 1.5}
-    const itemRotation2 = {x: -1.55, y: 0, z: 3.1}
-    WallShop.createNewWallShop(shopPosition2, shopMeasurement2, Medkit, Medkit.SHOPS.WALL_SHOP.COST, itemPosition2, itemRotation2, 'medkit')
+    const itemPosition2 = {x: shopPosition2.x - 0.7, y: shopPosition2.y + 3, z: shopPosition2.z + 1.5}
+    WallShop.createNewWallShop(shopPosition2, shopMeasurement2, AmmoBox, AmmoBox.SHOPS.WALL_SHOP.COST, itemPosition2, AmmoBox.MEASUREMENTS.rotation, AmmoBox.NAMES.ITEM_NAME)
 
 
     // stairs - ADDED

@@ -16,15 +16,22 @@ class Sounds {
      * @param _coords {object} example: {x: 0, y: 0, z: 0}
      */
     playWallShopPurchase(_coords) {
-        const sound = new BABYLON.Sound("music", this.SOUNDS.WALL_SHOP_PURCHASE, Scene.getScene(), null, {
-            loop: false,
-            autoplay: true,
-            spatialSound: true,
-            distanceModel: "linear",
-            rolloffFactor: 2,
-        });
-        sound.setVolume(0.5);
-        sound.setPosition(new BABYLON.Vector3(_coords.x, _coords.y, _coords.z));
+        // store the name of the sound
+        const name = `wallShopPurchaseSound`
+
+        if (this.sounds[name]) {
+            // Use existing sound
+            this.sounds[name].play();
+        } else {
+            // Create new sound
+            const sound = new BABYLON.Sound(name, this.SOUNDS.WALL_SHOP_PURCHASE, Scene.getScene(), null, {
+                loop: false,
+                autoplay: true,
+            });
+            this.sounds[name] = sound;
+            this.sounds[name].setVolume(0.5);
+            this.sounds[name].setPosition(new BABYLON.Vector3(_coords.x, _coords.y, _coords.z));
+        }
     }
 
     /**

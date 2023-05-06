@@ -5,6 +5,7 @@ import Weapons from '../weapons/Weapons.js';
 import Socket from '../socket/Socket.js';
 import Particles from '../Environment/Particles.js';
 import Sounds from '../Environment/Sounds.js';
+import AmmoBox from '../shops/items/AmmoBox.js';
 
 class BuyItemFromWallShop {
     constructor() {}
@@ -52,6 +53,15 @@ class BuyItemFromWallShop {
 
             // update player health
             ClientPlayer.health = 100
+        }
+        else if (purchasedItemType === 'AmmoBox') {
+            // set current player weapon's ammo to the maximum
+            Weapons.refillWeaponAmmo()
+
+            const purchasedItemData = {
+                itemCost: AmmoBox.SHOPS.WALL_SHOP.COST
+            }
+            Socket.socket.emit('playerPurchasedAmmoBoxFromWallShop', purchasedItemData)
         }
 
         // play wall shop purchase sound

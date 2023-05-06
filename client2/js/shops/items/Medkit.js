@@ -23,7 +23,7 @@ class Medkit {
 
     MEASUREMENTS = {
         rotation: {x: 80, y: 0, z: 4.5},
-        scale: {x: 5.02, y: 5.02, z: 5.02}
+        scale: {x: 0.02, y: 5.02, z: 5.02}
     }
 
     constructor() {}
@@ -38,6 +38,10 @@ class Medkit {
                 item.scaling.x = this.MEASUREMENTS.scale.x;
                 item.scaling.y = this.MEASUREMENTS.scale.y;
                 item.scaling.z = this.MEASUREMENTS.scale.z;
+
+                // Mirror the model along the X-axis
+                item.scaling.x *= -1;
+
                 item.isPickable = false;
                 item.parent = medkit;
             }

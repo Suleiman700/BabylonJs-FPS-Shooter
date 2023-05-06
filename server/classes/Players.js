@@ -144,6 +144,11 @@ class Players {
         this.#players[index].money -= _amount;
     }
 
+    /**
+     * player purchased medkit
+     * @param _socketId {string}
+     * @param _itemCost {number}
+     */
     purchasedMedkit(_socketId, _itemCost) {
         // get player index
         const index = this.#players.findIndex((player) => player.socketId === _socketId);
@@ -153,6 +158,22 @@ class Players {
         }
 
         this.#players[index].health = 100;
+        this.#players[index].money -= _itemCost;
+    }
+
+    /**
+     * player purchased ammo box
+     * @param _socketId {string}
+     * @param _itemCost {number}
+     */
+    purchasedAmmoBox(_socketId, _itemCost) {
+        // get player index
+        const index = this.#players.findIndex((player) => player.socketId === _socketId);
+
+        if (index === -1) {
+            // throw new Error(`[Remove Player] Player with socketId ${socketId} not found`);
+        }
+
         this.#players[index].money -= _itemCost;
     }
 

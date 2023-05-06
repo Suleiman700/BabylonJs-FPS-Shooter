@@ -3,6 +3,7 @@ import Scene from './Scene.js';
 import AKM from './weapons/AKM.js';
 import G17 from './weapons/G17.js';
 import Medkit from './shops/items/Medkit.js';
+import AmmoBox from './shops/items/AmmoBox.js';
 
 class Loader {
     weapons = {}
@@ -23,6 +24,7 @@ class Loader {
 
     async loadItems() {
         await Medkit.importModel()
+        await AmmoBox.importModel()
     }
 }
 

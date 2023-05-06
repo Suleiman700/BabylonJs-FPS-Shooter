@@ -6,8 +6,10 @@ import Player from '../ClientPlayer.js';
 class G17 {
     #debug = true
 
-    id = 'G17'
-    name = 'G17'
+    NAMES = {
+        ITEM_NAME: 'G17',
+        WALLSHOP_NAME: 'G17',
+    }
 
     #isShown = false // if weapon is shown or not
 
@@ -60,7 +62,7 @@ class G17 {
         }
     }
 
-    MODEL_weaponModel = undefined
+    MODEL = undefined
 
 
     constructor() {}
@@ -85,16 +87,16 @@ class G17 {
 
         if (this.#debug) console.log('[G17] model loaded')
 
-        this.MODEL_weaponModel = G17
+        this.MODEL = G17
     }
 
     drawOnUI() {
-        this.MODEL_weaponModel.parent = Camera.getCamera()
-        this.MODEL_weaponModel.visibility = 1
-        this.MODEL_weaponModel.position = new BABYLON.Vector3(this.MEASUREMENTS.position.x, this.MEASUREMENTS.position.y, this.MEASUREMENTS.position.z)
-        this.MODEL_weaponModel.rotation.x = this.MEASUREMENTS.rotation.x
-        this.MODEL_weaponModel.rotation.y = this.MEASUREMENTS.rotation.y
-        this.MODEL_weaponModel.rotation.z = this.MEASUREMENTS.rotation.z
+        this.MODEL.parent = Camera.getCamera()
+        this.MODEL.visibility = 1
+        this.MODEL.position = new BABYLON.Vector3(this.MEASUREMENTS.position.x, this.MEASUREMENTS.position.y, this.MEASUREMENTS.position.z)
+        this.MODEL.rotation.x = this.MEASUREMENTS.rotation.x
+        this.MODEL.rotation.y = this.MEASUREMENTS.rotation.y
+        this.MODEL.rotation.z = this.MEASUREMENTS.rotation.z
         Camera.getCamera().fov = this.WEAPON_SETTINGS.fov
 
         // update flag
@@ -107,7 +109,7 @@ class G17 {
      */
     set isShown(_option) {
         this.#isShown = _option
-        this.MODEL_weaponModel.setEnabled(_option)
+        this.MODEL.setEnabled(_option)
     }
 
     /**

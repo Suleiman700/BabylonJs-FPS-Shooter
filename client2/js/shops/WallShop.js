@@ -4,6 +4,7 @@ import Camera from '../Camera.js';
 import GUI from '../GUI.js';
 import ClientPlayer from '../ClientPlayer.js';
 import Medkit from './items/Medkit.js';
+import AmmoBox from './items/AmmoBox.js';
 
 class WallShop {
     #showBounding = true
@@ -17,20 +18,13 @@ class WallShop {
      * @param _itemCost {number} the cost of the item
      * @param _itemPosition {object} example: {x: 23, y: 0, z: 95}
      * @param _itemRotation {object} example: {x: 0, y: 0, z: 0}
-     * @param _itemType {string} the type of the item, example: weapon|item
+     * @param _itemType {string} the type of the item, example: weapon|medkit|AmmoBox...etc
      */
     createNewWallShop(_shopPosition, _shopMeasurement, _itemInstance, _itemCost, _itemPosition, _itemRotation, _itemType) {
         let itemClone = undefined
-        switch (_itemType) {
-            case 'weapon':
-                itemClone = _itemInstance.MODEL_weaponModel.clone("AKM Clone");
-                break;
-            case 'medkit':
-                itemClone = Medkit.MODEL.clone('Item Clone')
-                break;
-        }
 
-        console.log(itemClone)
+        const cloneName = _itemInstance.name
+        itemClone = _itemInstance.MODEL.clone(`WALLSHOP - ${cloneName}`)
 
         itemClone.position.x = _itemPosition.x
         itemClone.position.y = _itemPosition.y
@@ -39,6 +33,8 @@ class WallShop {
         itemClone.rotation.x = _itemRotation.x
         itemClone.rotation.y = _itemRotation.y
         itemClone.rotation.z = _itemRotation.z
+
+        // itemClone.scaling.x *= AmmoCrate.MEASUREMENTS.scaling.x
 
         // weaponClone.isWallShop = true
         // weaponClone.id = 'test'
@@ -67,7 +63,7 @@ class WallShop {
             if (boundingBox.intersectsPoint(player)) {
                 if (!isPlayerAtWallShop) {
                     // player has entered the bounding box
-                    GUI.UI_setWallShopBuyText(true, `Hold F to buy ${_itemInstance.name} for $${_itemCost}`);
+                    GUI.UI_setWallShopBuyText(true, `Hold F to buy ${_itemInstance.NAMES.WALLSHOP_NAME} for $${_itemCost}`);
 
                     ClientPlayer.isAtWallShop = {
                         state: true,

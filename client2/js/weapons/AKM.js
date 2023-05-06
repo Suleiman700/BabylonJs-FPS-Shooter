@@ -7,7 +7,12 @@ class AKM {
     #debug = true
 
     id = 'AKM'
-    name = 'AKM'
+    // name = 'AKM'
+
+    NAMES = {
+        ITEM_NAME: 'AKM',
+        WALLSHOP_NAME: 'AKM',
+    }
 
     #isShown = false // if weapon is shown or not
 
@@ -62,7 +67,7 @@ class AKM {
         }
     }
 
-    MODEL_weaponModel = undefined
+    MODEL = undefined
 
 
     constructor() {}
@@ -87,16 +92,16 @@ class AKM {
 
         if (this.#debug) console.log('[AKM] model loaded')
 
-        this.MODEL_weaponModel = akm
+        this.MODEL = akm
     }
 
     drawOnUI() {
-        this.MODEL_weaponModel.parent = Camera.getCamera()
-        this.MODEL_weaponModel.visibility = 1
-        this.MODEL_weaponModel.position = new BABYLON.Vector3(this.MEASUREMENTS.position.x, this.MEASUREMENTS.position.y, this.MEASUREMENTS.position.z)
-        this.MODEL_weaponModel.rotation.x = this.MEASUREMENTS.rotation.x
-        this.MODEL_weaponModel.rotation.y = this.MEASUREMENTS.rotation.y
-        this.MODEL_weaponModel.rotation.z = this.MEASUREMENTS.rotation.z
+        this.MODEL.parent = Camera.getCamera()
+        this.MODEL.visibility = 1
+        this.MODEL.position = new BABYLON.Vector3(this.MEASUREMENTS.position.x, this.MEASUREMENTS.position.y, this.MEASUREMENTS.position.z)
+        this.MODEL.rotation.x = this.MEASUREMENTS.rotation.x
+        this.MODEL.rotation.y = this.MEASUREMENTS.rotation.y
+        this.MODEL.rotation.z = this.MEASUREMENTS.rotation.z
         Camera.getCamera().fov = this.WEAPON_SETTINGS.fov
 
         // update flag
@@ -109,7 +114,7 @@ class AKM {
      */
     set isShown(_option) {
         this.#isShown = _option
-        this.MODEL_weaponModel.setEnabled(_option)
+        this.MODEL.setEnabled(_option)
     }
 
     /**

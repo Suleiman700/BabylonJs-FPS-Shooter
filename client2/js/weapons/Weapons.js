@@ -161,7 +161,7 @@ class Weapons {
 
                 // Create the animation group and add the animation
                 const animationGroup = new BABYLON.AnimationGroup("weaponAnimationGroup");
-                animationGroup.addTargetedAnimation(animation, this.#weaponInstance.MODEL_weaponModel);
+                animationGroup.addTargetedAnimation(animation, this.#weaponInstance.MODEL);
                 animationGroup.play();
                 animationGroup.dispose()
             }
@@ -251,6 +251,8 @@ class Weapons {
      * @return {void}
      */
     reload() {
+        GUI.UI_showReloadingText(true)
+
         // play weapon reload sound
         Sounds.playWeaponReloadingSound(this.#weaponInstance.SOUNDS.reload)
 
@@ -263,7 +265,7 @@ class Weapons {
             }
             else {
                 // check if capacity have the amount of fired bullets
-                if (this.#weaponInstance.WEAPON_SETTINGS.ammoCapacity >= this.COUNT_firedBullets) {
+                if (this.ammoSettings.ammoCapacity >= this.COUNT_firedBullets) {
                     // take the amount of bullets fired from capacity into mag
                     this.ammoSettings.ammoCapacity -= this.COUNT_firedBullets
 
@@ -284,6 +286,18 @@ class Weapons {
         }, this.#weaponInstance.WEAPON_SETTINGS.reloadSpeed)
     }
 
+    /**
+     * refill weapon ammo to the maximum (used when purchase or pickup ammo box)
+     */
+    refillWeaponAmmo() {
+        this.ammoSettings.ammoCapacity = this.weaponInstance.WEAPON_SETTINGS.ammoCapacity - this.weaponInstance.WEAPON_SETTINGS.magSize
+        this.ammoSettings.magSize = this.weaponInstance.WEAPON_SETTINGS.magSize
+        this.ammoSettings.ammoLeftInMag = this.weaponInstance.WEAPON_SETTINGS.ammoLeftInMag
+        this.COUNT_firedBullets = 0
+
+        this.reload()
+    }
+
     set isReloading(_option) {
         this.#isReloading = _option;
         if (_option) {
@@ -295,7 +309,6 @@ class Weapons {
                     this.#isReloading = false
                     return
                 }
-                GUI.UI_showReloadingText(true)
                 this.reload()
             }
             else {
@@ -348,25 +361,25 @@ class Weapons {
 
         // use weapon scope
         if (_option) {
-            this.#weaponInstance.MODEL_weaponModel.position.x = this.#weaponInstance.SCOPE.position.x
-            this.#weaponInstance.MODEL_weaponModel.position.y = this.#weaponInstance.SCOPE.position.y
-            this.#weaponInstance.MODEL_weaponModel.position.z = this.#weaponInstance.SCOPE.position.z
+            this.#weaponInstance.MODEL.position.x = this.#weaponInstance.SCOPE.position.x
+            this.#weaponInstance.MODEL.position.y = this.#weaponInstance.SCOPE.position.y
+            this.#weaponInstance.MODEL.position.z = this.#weaponInstance.SCOPE.position.z
 
-            this.#weaponInstance.MODEL_weaponModel.rotation.x = this.#weaponInstance.SCOPE.rotation.x
-            this.#weaponInstance.MODEL_weaponModel.rotation.y = this.#weaponInstance.SCOPE.rotation.y
-            this.#weaponInstance.MODEL_weaponModel.rotation.z = this.#weaponInstance.SCOPE.rotation.z
+            this.#weaponInstance.MODEL.rotation.x = this.#weaponInstance.SCOPE.rotation.x
+            this.#weaponInstance.MODEL.rotation.y = this.#weaponInstance.SCOPE.rotation.y
+            this.#weaponInstance.MODEL.rotation.z = this.#weaponInstance.SCOPE.rotation.z
 
             Camera.getCamera().fov = this.#weaponInstance.SCOPE.fov
         }
         // do not use weapon scope
         else {
-            this.#weaponInstance.MODEL_weaponModel.position.x = this.#weaponInstance.MEASUREMENTS.position.x
-            this.#weaponInstance.MODEL_weaponModel.position.y = this.#weaponInstance.MEASUREMENTS.position.y
-            this.#weaponInstance.MODEL_weaponModel.position.z = this.#weaponInstance.MEASUREMENTS.position.z
+            this.#weaponInstance.MODEL.position.x = this.#weaponInstance.MEASUREMENTS.position.x
+            this.#weaponInstance.MODEL.position.y = this.#weaponInstance.MEASUREMENTS.position.y
+            this.#weaponInstance.MODEL.position.z = this.#weaponInstance.MEASUREMENTS.position.z
 
-            this.#weaponInstance.MODEL_weaponModel.rotation.x = this.#weaponInstance.MEASUREMENTS.rotation.x
-            this.#weaponInstance.MODEL_weaponModel.rotation.y = this.#weaponInstance.MEASUREMENTS.rotation.y
-            this.#weaponInstance.MODEL_weaponModel.rotation.z = this.#weaponInstance.MEASUREMENTS.rotation.z
+            this.#weaponInstance.MODEL.rotation.x = this.#weaponInstance.MEASUREMENTS.rotation.x
+            this.#weaponInstance.MODEL.rotation.y = this.#weaponInstance.MEASUREMENTS.rotation.y
+            this.#weaponInstance.MODEL.rotation.z = this.#weaponInstance.MEASUREMENTS.rotation.z
 
             Camera.getCamera().fov = this.#weaponInstance.WEAPON_SETTINGS.fov
         }

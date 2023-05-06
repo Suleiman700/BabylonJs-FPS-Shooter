@@ -13,8 +13,8 @@ const MAP_01_CONFIG = {
     defaultZombieSpawn: 1, // spawn 1 zombie first time
     defaultZombieHealth: 100, // default zombie health
     defaultZombieDamage: 1, // default zombie damage
-    defaultZombieKillReward: 2, // default zombie kill reward (money)
     defaultZombieShootReward: 1, // default zombie shoot reward (money)
+    defaultZombieKillReward: 2, // default zombie kill reward (money)
     defaultZombieWalkSpeed: 1, // default zombie walk speed
     defaultZombieSpawnTimer: 1000, // time between each zombie spawn (in ms)
 
@@ -25,7 +25,7 @@ const MAP_01_CONFIG = {
     defaultPlayerGravity: -0.2, // default player gravity
     defaultPlayerMoney: 0, // default player money
 
-    defaultWeaponId: 'AKM', // default weapon id
+    defaultWeaponId: 'G17', // default weapon id
 
     timeBetweenRounds: 2000, // time between rounds (in ms)
 
@@ -44,7 +44,7 @@ const MAP_01_CONFIG = {
     // define players spawns in map
     playersSpawns: [
         // {x: 0, y: 10, z: 0, pan: 10, roll: 10},
-        {x: 10, y: 10, z: 10, pan: 10, roll: 10},
+        {x: 15, y: 10, z: 45, pan: 25, roll: 1},
         // {x: 30, y: 10, z: 30, pan: 10, roll: 10},
     ],
 

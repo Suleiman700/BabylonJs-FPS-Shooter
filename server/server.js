@@ -127,9 +127,24 @@ io.on('connection', async (socket) => {
         io.sockets.in(socket.roomId).emit('playWallShopPurchaseParticle', particleCoords)
     })
 
+    /**
+     * event when player purchase medkit from wallshop
+     */
     socket.on('playerPurchasedMedkitFromWallShop', (_medkitData) => {
-        console.log(_medkitData)
+        // console.log(_medkitData)
         Players.purchasedMedkit(socket.id, _medkitData.itemCost)
+    })
+
+    /**
+     * event when player purchase ammo box from wallshop
+     * @param _ammoBoxData {object} example: itemCost: 50
+     */
+    socket.on('playerPurchasedAmmoBoxFromWallShop', (_ammoBoxData) => {
+        Players.purchasedAmmoBox(socket.id, _ammoBoxData.itemCost)
+
+        // emit to all players to play wall shop purchase particle
+        const particleCoords = Players.getPlayerCoords(socket.id)
+        io.sockets.in(socket.roomId).emit('playWallShopPurchaseParticle', particleCoords)
     })
 
     /**
