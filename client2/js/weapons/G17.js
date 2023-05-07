@@ -21,7 +21,7 @@ class G17 {
         magSize: 8, // total amount of ammo magazine can hold
         ammoLeftInMag: 8, // set same as magSize
         ammoCapacity: 80, // total amount of ammo weapon can hold
-        damage: 20,
+        damage: 10,
     }
 
     BULLET_SETTINGS = {

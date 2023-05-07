@@ -47,7 +47,7 @@ io.on('connection', async (socket) => {
         mapData: mapData,
         roundData: {
             isStarted: false,
-            number: 1
+            number: 20
         },
     }
     Rooms.createRoom(newRoomData)

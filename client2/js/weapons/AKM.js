@@ -25,8 +25,8 @@ class AKM {
         fov: 1, // weapon field of view
         magSize: 30, // total amount of ammo magazine can hold
         ammoLeftInMag: 30, // set same as magSize
-        ammoCapacity: 18000, // total amount of ammo weapon can hold
-        damage: 100,
+        ammoCapacity: 180, // total amount of ammo weapon can hold
+        damage: 20,
     }
 
     BULLET_SETTINGS = {
@@ -62,7 +62,7 @@ class AKM {
 
     SHOPS = {
         WALL_SHOP: {
-            COST: 150,
+            COST: 200,
             HOLD_BUY_KEY_FOR: 1000, // hold buy key for X ms to buy the weapon
         }
     }
