@@ -8,6 +8,7 @@ class ClientPlayer {
 
     coords = {x: 0, y: 0, z: 0}
     #health = -1 // number (1 ~ 100)
+    #kills = -1 // number (zombie kills)
     #walkSpeed = -1 // number
     #sprintSpeed = -1 // number
     #jumpHeight = -1 // number
@@ -155,6 +156,24 @@ class ClientPlayer {
      */
     get money() {
         return this.#money
+    }
+
+    /**
+     * set client player kills - also sets the UI
+     * @param _kills {number} example: 1
+     */
+    set kills(_kills) {
+        this.#kills = _kills
+
+        GUI.UI_setKills(_kills)
+    }
+
+    /**
+     * get client player kills
+     * @return {number}
+     */
+    get kills() {
+        return this.#kills
     }
 
     /**

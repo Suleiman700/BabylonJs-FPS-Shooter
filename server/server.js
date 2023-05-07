@@ -37,12 +37,13 @@ io.on('connection', async (socket) => {
     const roomId = '123'
     const mapId = 'MAP_01'
     const playerName = 'DUMMY'
+    const difficulty = 1
 
     // get map data
     const mapData = await Maps.getMapConfig(mapId)
     const newRoomData = {
         roomId: roomId,
-        difficulty: 1,
+        difficulty: difficulty,
         mapData: mapData,
         roundData: {
             isStarted: false,
@@ -58,6 +59,7 @@ io.on('connection', async (socket) => {
         name: playerName,
         health: mapData.defaultPlayerHealth,
         money: mapData.defaultPlayerMoney,
+        kills: 0,
         holdingGunId: mapData.defaultWeaponId,
         coords: {x: 0, y: 0, z: 0},
         cameraRotation: {x: 0, y: 0, z: 0},
@@ -163,6 +165,7 @@ io.on('connection', async (socket) => {
         // add shooting zombie reward
         const roomData = Rooms.getRoomData(socket.roomId)
         let playerReward = 0
+        let playerKills = 0
         const shootingZombieReward = parseFloat(roomData.mapData.defaultZombieShootReward)
         playerReward += shootingZombieReward
 
@@ -174,10 +177,15 @@ io.on('connection', async (socket) => {
             // add killing zombie reward
             const killingZombieReward = parseFloat(roomData.mapData.defaultZombieKillReward)
             playerReward += killingZombieReward
+
+            // increase player zombie kill count
+            playerKills++
         }
 
         // reward player
         Players.rewardPlayerMoney(socket.id, playerReward)
+        // increase player kills
+        Players.increasePlayerKills(socket.id, playerKills)
 
         // check if there are zombies left in room
         const zombiesInRoom = Zombies.getZombiesInRoom(socket.roomId)

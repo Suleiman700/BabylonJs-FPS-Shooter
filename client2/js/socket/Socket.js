@@ -54,6 +54,8 @@ class Socket {
             ClientPlayer.gravity = _mapData.defaultPlayerGravity
             // set player money - this also sets the UI
             ClientPlayer.money = _mapData.defaultPlayerMoney
+            // set client player kills - also sets the UI
+            ClientPlayer.kills = 0
 
             // store zombies settings
             Settings.zombies.spawnTimer = _mapData.defaultZombieSpawnTimer

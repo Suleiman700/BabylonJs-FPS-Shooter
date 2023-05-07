@@ -4,6 +4,7 @@ class GUI {
     #UI_playerHealth = 'UI-player-health' // display player health
     #UI_reloadingIndicator = 'UI-reloading-indicator'
     #UI_playerMoney = 'ui-player-money' // display player money
+    #UI_playerKills = 'ui-player-kills' // display player money
 
     constructor() {}
 
@@ -62,6 +63,15 @@ class GUI {
      */
     UI_setMoney(_money) {
         document.querySelector(`#${this.#UI_playerMoney}`).innerHTML = _money
+    }
+
+    /**
+     * set kills UI
+     * @param _kills {number} example: 1
+     * @constructor
+     */
+    UI_setKills(_kills) {
+        document.querySelector(`#${this.#UI_playerKills}`).innerHTML = _kills
     }
 
     /**

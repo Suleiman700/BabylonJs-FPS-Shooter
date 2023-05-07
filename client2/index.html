@@ -66,7 +66,7 @@
 </head>
 <body class="bg-dark">
     <div class="overlay">
-        <div id="debug-window" style="display: block;">
+        <div id="debug-window" style="display: none;">
             <h6 class="text-center mt-1 mb-3">Debug</h6>
             <p class="mx-2">Meshes: <span id="count-meshes">0</span></p>
             <p class="mx-2">FPS: <span id="fps">0</span></p>
@@ -90,12 +90,15 @@
     <div id="zombies-left-count">
         <h6><span id="count">0</span> zombies left</h6>
     </div>
-    <div class="player left skewright small weapon-ammo">
-        <h5 class="text-white">Ammo: <span id="ui-weapon-ammo">0</span></h5>
-    </div>
 
-    <div class="player left skewright small player-money">
+    <div class="player left skewright player-kills">
+        <h5 class="text-white">Kills: <span id="ui-player-kills">0</span></h5>
+    </div>
+    <div class="player left skewright player-money">
         <h5 class="text-white">Money: $<span id="ui-player-money">0</span></h5>
+    </div>
+    <div class="player left skewright weapon-ammo">
+        <h5 class="text-white">Ammo: <span id="ui-weapon-ammo">0</span></h5>
     </div>
 
     <div class="player right skewleft player-health">

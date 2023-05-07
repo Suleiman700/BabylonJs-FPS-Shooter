@@ -136,6 +136,15 @@ h3 {
     overflow: hidden;
 }
 
+.player-kills {
+    z-index: 999999;
+    display: flex;
+    width: 200px;
+    position: absolute;
+    bottom: 140px;
+    right: 0;
+}
+
 .weapon-ammo {
     z-index: 999999;
     display: flex;

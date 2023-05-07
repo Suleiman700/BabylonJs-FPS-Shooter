@@ -29,8 +29,6 @@ class Zombies {
      * update zombies data
      */
     async updateZombiesData() {
-        return;
-
         let zombieIndex = 0;
         const zombieCreationInterval = setInterval(() => {
 

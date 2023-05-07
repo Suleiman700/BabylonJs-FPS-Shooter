@@ -51,7 +51,7 @@ class PlayersStatsTable {
         tr.appendChild(cell_playerName)
 
         const cell_kills = document.createElement('td')
-        cell_kills.innerText = 0
+        cell_kills.innerText = _playerInfo.kills
         tr.appendChild(cell_kills)
 
         const cell_money = document.createElement('td')

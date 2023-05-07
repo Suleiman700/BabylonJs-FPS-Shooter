@@ -12,6 +12,7 @@ class Players {
         roomId: '', // string
         health: 0, // number
         money: 0, // number
+        kills: 0, // number - zombie kills
         holdingGunId: '', // string - example: AKM
         coords: {x: 0, y: 0, z: 0},
         cameraRotation: {x: 0, y: 0, z: 0},
@@ -191,6 +192,24 @@ class Players {
         }
 
         this.#players[index].money += parseFloat(_moneyAmount);
+    }
+
+    /**
+     * increase player zombie kills
+     * @param _socketId {string}
+     * @param _increaseAmount {number} example: 1
+     * @return {void}
+     */
+    increasePlayerKills(_socketId, _increaseAmount) {
+        // get player index
+        const index = this.#players.findIndex((player) => player.socketId === _socketId);
+
+        if (index === -1) {
+            // throw new Error(`[Remove Player] Player with socketId ${socketId} not found`);
+        }
+
+        this.#players[index].kills += parseInt(_increaseAmount);
+        console.log(this.#players[index].kills)
     }
 
     /**

@@ -14,7 +14,7 @@ import MovementEvent from './events/MovementEvent.js';
 import Players from './Players.js';
 import Zombies from './Zombies.js';
 import scene from './Scene.js';
-import Debug from './Debug.js';
+// import Debug from './Debug.js';
 import Materials from './Materials.js';
 
 Game.initCanvas()
@@ -41,7 +41,7 @@ Socket.connect()
 Keys.registerKeys()
 
 // Enable the performance monitor
-Scene.getScene().debugLayer.show();
+// Scene.getScene().debugLayer.show();
 
 var startRenderLoop = function (_engine, _canvas, _scene) {
     _engine.runRenderLoop(function () {

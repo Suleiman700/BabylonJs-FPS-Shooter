@@ -27,7 +27,13 @@ class Players {
             // Skip the current player
             if (playerId === Player.socketId) {
                 // update client player money - which also will update GUI money
-                ClientPlayer.money = playerData.money
+                if (ClientPlayer.money !== playerData.money) {
+                    ClientPlayer.money = playerData.money
+                }
+                // update client player kills - which also will update GUI kills
+                if (ClientPlayer.kills !== playerData.kills) {
+                    ClientPlayer.kills = playerData.kills
+                }
                 continue;
             }
 

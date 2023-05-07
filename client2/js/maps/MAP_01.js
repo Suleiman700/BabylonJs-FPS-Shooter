@@ -85,8 +85,8 @@ export default async function Map_01_createScene(_scene, _camera) {
     // boxes
     const box1 = BABYLON.Mesh.CreateBox("box1", 5, _scene);
     box1.jumpAble = true
-    box1.position.x = 50;
-    box1.position.z = 50;
+    box1.position.x = 40;
+    box1.position.z = 40;
     box1.position.y = 2;
     box1.checkCollisions = true;
     const boxMaterial = new BABYLON.StandardMaterial("boxMaterial1", _scene);
@@ -95,16 +95,16 @@ export default async function Map_01_createScene(_scene, _camera) {
     box1.type = 'solid';
 
     var box2 = box1.clone("box2");
-    box2.position.x = -50;
-    box2.position.z = -50;
+    box2.position.x = -40;
+    box2.position.z = -40;
 
     var box3 = box1.clone("box3");
-    box3.position.x = -50;
-    box3.position.z = 50;
+    box3.position.x = -40;
+    box3.position.z = 40;
 
     var box4 = box1.clone("box4");
-    box4.position.x = 50;
-    box4.position.z = -50;
+    box4.position.x = 40;
+    box4.position.z = -40;
 
     const shopPosition = {x: 0, y: 0, z: 53}
     const shopMeasurement = {width: 5, height: 10, depth: 4}
