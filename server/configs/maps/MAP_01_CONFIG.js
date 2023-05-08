@@ -12,7 +12,7 @@ const MAP_01_CONFIG = {
     ],
     defaultZombieSpawn: 1, // spawn 1 zombie first time
     defaultZombieHealth: 100, // default zombie health
-    defaultZombieDamage: 1, // default zombie damage
+    defaultZombieDamage: 0.05, // default zombie damage
     defaultZombieShootReward: 1, // default zombie shoot reward (money)
     defaultZombieKillReward: 2, // default zombie kill reward (money)
     defaultZombieWalkSpeed: 1, // default zombie walk speed
@@ -22,8 +22,8 @@ const MAP_01_CONFIG = {
     defaultPlayerSprintSpeed: 5, // default player sprint speed
     defaultPlayerHealth: 100, // default player health (1 ~ 100)
     defaultPlayerJumpHeight: 0.2, // default player jump height (uses less gravity)
-    defaultPlayerGravity: -0.2, // default player gravity
-    defaultPlayerMoney: 0, // default player money
+    defaultPlayerGravity: -0.3, // default player gravity
+    defaultPlayerMoney: 100, // default player money
 
     defaultWeaponId: 'G17', // default weapon id
 

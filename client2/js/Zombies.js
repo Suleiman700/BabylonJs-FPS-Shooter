@@ -29,6 +29,8 @@ class Zombies {
      * update zombies data
      */
     async updateZombiesData() {
+        // return;
+
         let zombieIndex = 0;
         const zombieCreationInterval = setInterval(() => {
 
@@ -149,6 +151,7 @@ class Zombies {
                     // zombieMesh.physicsImpostor = new BABYLON.PhysicsImpostor(zombieMesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, Scene.getScene());
 
                     zombieMesh.checkCollisions = true
+
 
                     // Add zombie mesh to the scene
                     Scene.getScene().addMesh(zombieMesh);

@@ -112,6 +112,17 @@ class Players {
         this.#players[index].coords = {x: _newCoords.x, y: _newCoords.y, z: _newCoords.z};
     }
 
+    updatePlayerHealth(_socketId, _newHealth) {
+        // get player index
+        const index = this.#players.findIndex((player) => player.socketId === _socketId);
+
+        if (index === -1) {
+            // throw new Error(`[Remove Player] Player with socketId ${socketId} not found`);
+        }
+
+        this.#players[index].health += _newHealth;
+    }
+
     updatePlayerCameraRotation(_socketId, _rotationData) {
         // get player index
         const index = this.#players.findIndex((player) => player.socketId === _socketId);

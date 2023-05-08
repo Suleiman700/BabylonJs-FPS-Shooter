@@ -47,7 +47,7 @@ io.on('connection', async (socket) => {
         mapData: mapData,
         roundData: {
             isStarted: false,
-            number: 20
+            number: 1
         },
     }
     Rooms.createRoom(newRoomData)
@@ -151,6 +151,15 @@ io.on('connection', async (socket) => {
         // emit to all players to play wall shop purchase particle
         const particleCoords = Players.getPlayerCoords(socket.id)
         io.sockets.in(socket.roomId).emit('playWallShopPurchaseParticle', particleCoords)
+    })
+
+    socket.on('ClientPlayerAttackedByZombie', () => {
+        // get room data
+        const roomData = Rooms.getRoomData(socket.roomId)
+        // get zombie damage
+        const zombieDamage = roomData.mapData.defaultZombieDamage
+        // update player health
+        Players.updatePlayerHealth(socket.id, -zombieDamage)
     })
 
     /**
@@ -260,7 +269,7 @@ setInterval(() => {
             // no zombies in room
             else {
                 // calculate the amount of zombies to spawn based on difficulty and round number
-                const numberOfZombiesToSpawn = Zombies.calcNumberOfZombiesToSpawn(roomData.difficulty, roomData.roundData.number)
+                const numberOfZombiesToSpawn = 1 // Zombies.calcNumberOfZombiesToSpawn(roomData.difficulty, roomData.roundData.number)
 
                 // create zombies
                 for (let i = 0; i < numberOfZombiesToSpawn; i++) {

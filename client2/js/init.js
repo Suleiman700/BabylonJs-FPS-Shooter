@@ -16,6 +16,7 @@ import Zombies from './Zombies.js';
 import scene from './Scene.js';
 // import Debug from './Debug.js';
 import Materials from './Materials.js';
+import ClientPlayer from './ClientPlayer.js';
 
 Game.initCanvas()
 Game.createDefaultEngine()
@@ -92,7 +93,6 @@ Scene.getScene().registerBeforeRender(() => {
             let direction = zombieWalkTo.subtract(zombiePos);
             direction.normalize();
 
-
             // Check for collisions with other zombies
             zombies.forEach(otherZombieData => {
                 const otherZombieId = otherZombieData.id;
@@ -165,38 +165,50 @@ window.initFunction = async function() {
 
 
 
-const canvas = document.getElementById("mapCanvas");
-const ctx = canvas.getContext("2d");
-
-const mapWidth = 300; // Width of the map in pixels
-const mapHeight = 300; // Height of the map in pixels
-const mapMargin = 0; // Margin between the map and the edge of the canvas
-const mapScale = mapWidth / 300; // Scale factor to convert world coordinates to map coordinates
-
-function drawMap() {
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Draw the map background
-    ctx.fillStyle = "#EEE";
-    ctx.fillRect(mapMargin, mapMargin, mapWidth, mapHeight);
-
-    // Draw the players
-    for (const player of Players.players) {
-        const x = player.coords.z * mapScale + mapMargin;
-        const y = player.coords.x * mapScale + mapMargin;
-        ctx.fillStyle = "blue";
-        ctx.fillRect(x, y, 5, 5);
-    }
 
 
-    // Draw the zombies
-    for (const zombie of Zombies.zombies) {
-        const x = zombie.coords.x * mapScale + mapMargin;
-        const y = zombie.coords.z * mapScale + mapMargin;
-        ctx.fillStyle = "red";
-        ctx.fillRect(x, y, 5, 5);
-    }
-}
-
-setInterval(drawMap, 100); // Update the map every 100 milliseconds
+// const canvas = document.getElementById("mapCanvas");
+// const ctx = canvas.getContext("2d");
+// function drawMap() {
+//     // Clear the canvas
+//     ctx.clearRect(0, 0, canvas.width, canvas.height);
+//
+//     // Define the radar dimensions
+//     const radarSize = 200;
+//     const padding = 10;
+//
+//     // Calculate the top left corner of the radar
+//     const radarX = padding;
+//     const radarY = padding;
+//
+//     // Draw the radar background
+//     ctx.fillStyle = "#EEE";
+//     ctx.fillRect(radarX, radarY, radarSize, radarSize);
+//
+//     // Get the client player's coordinates
+//     const clientX = ClientPlayer.coords.x;
+//     const clientY = ClientPlayer.coords.z;
+//
+//     // Calculate the scale factor for positioning the dots
+//     const scaleFactor = radarSize / (2 * Math.max(canvas.width, canvas.height));
+//
+//     // Draw the targets
+//     ctx.fillStyle = "red";
+//     Zombies.zombies.forEach((target) => {
+//         const targetX = radarX + radarSize / 2 + (target.coords.x - clientX) * scaleFactor;
+//         const targetY = radarY + radarSize / 2 + (target.coords.z - clientY) * scaleFactor;
+//         ctx.fillRect(targetX, targetY, 5, 5);
+//     });
+//
+//     // Draw the axis lines
+//     ctx.strokeStyle = "black";
+//     ctx.beginPath();
+//     ctx.moveTo(radarX, radarY + radarSize / 2);
+//     ctx.lineTo(radarX + radarSize, radarY + radarSize / 2);
+//     ctx.stroke();
+//     ctx.beginPath();
+//     ctx.moveTo(radarX + radarSize / 2, radarY);
+//     ctx.lineTo(radarX + radarSize / 2, radarY + radarSize);
+//     ctx.stroke();
+// }
+// setInterval(drawMap, 100); // Update the map every 100 milliseconds

@@ -3,6 +3,8 @@ import Scene from './Scene.js';
 import Game from './Game.js';
 import Player from './ClientPlayer.js';
 import Weapons from './weapons/Weapons.js';
+import ClientPlayer from './ClientPlayer.js';
+import ClientPlayerAttackedByZombie from './events/ClientPlayerAttackedByZombie.js';
 
 class Camera {
     #camera = {}
@@ -53,9 +55,16 @@ class Camera {
 
         this.#camera.onCollide = _collideMesh => {
             // Player.isOnGround = _collideMesh.structure === 'ground'
-            Player.isOnGround = _collideMesh.jumpAble
+            if (_collideMesh.jumpAble) {
+                Player.isOnGround = _collideMesh.jumpAble
+            }
+            if (_collideMesh.type === 'zombie') {
+                // const newHealth = ClientPlayer.health - 1
+                // ClientPlayer.health = newHealth
+                ClientPlayerAttackedByZombie.eventFired()
+            }
         }
-
+        
 
 
 //         // define roll and pitch angles in radians

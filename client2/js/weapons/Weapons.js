@@ -295,7 +295,10 @@ class Weapons {
         this.ammoSettings.ammoLeftInMag = this.weaponInstance.WEAPON_SETTINGS.ammoLeftInMag
         this.COUNT_firedBullets = 0
 
+        const reloadSpeedBK = this.#weaponInstance.WEAPON_SETTINGS.reloadSpeed
+        this.#weaponInstance.WEAPON_SETTINGS.reloadSpeed = 0
         this.reload()
+        this.#weaponInstance.WEAPON_SETTINGS.reloadSpeed = reloadSpeedBK
     }
 
     set isReloading(_option) {

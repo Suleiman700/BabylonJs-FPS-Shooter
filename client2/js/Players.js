@@ -34,6 +34,10 @@ class Players {
                 if (ClientPlayer.kills !== playerData.kills) {
                     ClientPlayer.kills = playerData.kills
                 }
+                // update client player health - which also will update the GUI health
+                if (ClientPlayer.health !== playerData.health) {
+                    ClientPlayer.health = playerData.health
+                }
                 continue;
             }
 
@@ -89,6 +93,8 @@ class Players {
                 playerMesh.type = 'player';
                 playerMesh.rotation.y = playerData.cameraRotation.y;
                 playerMesh.rotation.x = playerData.cameraRotation.z;
+
+                // playerMesh.checkCollisions = true
 
                 // draw weapon on player body
                 // let weaponClone = undefined

@@ -52,6 +52,8 @@ class Socket {
             ClientPlayer.jumpHeight = _mapData.defaultPlayerJumpHeight
             // set player gravity
             ClientPlayer.gravity = _mapData.defaultPlayerGravity
+            // set client player health - this also sets the UI
+            ClientPlayer.health = _mapData.defaultPlayerHealth
             // set player money - this also sets the UI
             ClientPlayer.money = _mapData.defaultPlayerMoney
             // set client player kills - also sets the UI
