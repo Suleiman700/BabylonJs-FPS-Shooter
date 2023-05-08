@@ -163,3 +163,40 @@ window.initFunction = async function() {
 // initFunction().then(() => {sceneToRender = scene});
 // initFunction();
 
+
+
+const canvas = document.getElementById("mapCanvas");
+const ctx = canvas.getContext("2d");
+
+const mapWidth = 300; // Width of the map in pixels
+const mapHeight = 300; // Height of the map in pixels
+const mapMargin = 0; // Margin between the map and the edge of the canvas
+const mapScale = mapWidth / 300; // Scale factor to convert world coordinates to map coordinates
+
+function drawMap() {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the map background
+    ctx.fillStyle = "#EEE";
+    ctx.fillRect(mapMargin, mapMargin, mapWidth, mapHeight);
+
+    // Draw the players
+    for (const player of Players.players) {
+        const x = player.coords.z * mapScale + mapMargin;
+        const y = player.coords.x * mapScale + mapMargin;
+        ctx.fillStyle = "blue";
+        ctx.fillRect(x, y, 5, 5);
+    }
+
+
+    // Draw the zombies
+    for (const zombie of Zombies.zombies) {
+        const x = zombie.coords.x * mapScale + mapMargin;
+        const y = zombie.coords.z * mapScale + mapMargin;
+        ctx.fillStyle = "red";
+        ctx.fillRect(x, y, 5, 5);
+    }
+}
+
+setInterval(drawMap, 100); // Update the map every 100 milliseconds
