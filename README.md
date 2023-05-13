@@ -34,9 +34,10 @@ The project is still in development, but due to the lack of time I am stoping wo
 ## How to play:
 1. download the repo
 2. navigate to server `cd server`
-3. start server `node server.js`
-4. open /client2/index.html
-5. have fun :)
+3. install packages `npm i`
+4. start server `node server.js`
+5. open /client2/index.html
+6. have fun :)
 
 ## Conclusion
 
