@@ -2,10 +2,15 @@
 
 ![image](https://user-images.githubusercontent.com/25286081/235180354-01573ac5-2377-4730-966f-23f905827880.png)
 
+![image](https://github.com/Suleiman700/BabylonJs-FPS-Shooter/assets/25286081/0ca1ab00-963f-4905-b705-a38ce8c91cf4)
+
+![image](https://github.com/Suleiman700/BabylonJs-FPS-Shooter/assets/25286081/bd3f0a9a-5180-4891-86df-8e8d42ded65b)
+
+
 
 ## Overview
 
-This project involves creating a first-person shooter game with features such as ammo, weapons, a wall shop, and a money system. The game is currently in progress, but we have made significant progress on the zombie system.
+This project involves creating a first-person shooter game with features such as ammo, weapons, a wall shop, and a money system. And of course rounds system.
 
 ## Features
 
@@ -19,15 +24,19 @@ This project involves creating a first-person shooter game with features such as
 
 ## Current Status
 
-The project is still in development, but we have resolved the major issues with the zombie system. The zombies now spawn and follow the player, and players can earn rewards for killing them.
+The project is still in development, but due to the lack of time I am stoping working on this project.
 
-## Next Steps
+## Current bugs
 
-Our next steps include:
+* When a new player joins the game, The ping will be so high (4,000ms instead of 70ms)
+* The zombie walk path is different for each client (this is because zombie walk path in the scene is done on the client side)
 
-* Continuously working on resolving the zombie system issues
-* Implementing additional game features, such as sound effects and music
-* Testing and bug fixing
+## How to play:
+1. download the repo
+2. navigate to server `cd server`
+3. start server `node server.js`
+4. open /client2/index.html
+5. have fun :)
 
 ## Conclusion
 
